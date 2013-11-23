@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="c862fd66-3bb4-4b13-9499-52b7e7ed4a3d" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- for jedit: :mode=xml::folding=indent::indentSize=4::tabSize=4::collapseFolds=2: -->
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para> This topic covers logging aspects of LoggingConsole </para>
+    </introduction>
+    
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+    <section address="General">
+      <title> General </title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+            LoggingConsole offers built-in logging capabilities as well as a a gate to log4net. 
+            Both can be used at the same time without care about collision. 
+            In each case all logged messages go into the one single 
+            <codeEntityReference> P:Rstyx.LoggingConsole.LogBox.MessageStore </codeEntityReference>
+        </para>
+        
+        <para>
+             The number of messages stored in the MessageStore can be limited (see 
+             MessageStore.<codeEntityReference> P:Rstyx.LoggingConsole.MessageStore.MaxLogLength </codeEntityReference>). 
+             The total number of messages logged so far is returned by the 
+             MessageStore.<codeEntityReference> P:Rstyx.LoggingConsole.MessageStore.TotalMessagesCount </codeEntityReference> 
+             property.
+        </para>
+        
+        <para>
+             Besides the message text every stored 
+             <codeEntityReference> T:Rstyx.LoggingConsole.LogEntry </codeEntityReference>
+             has 5 additional fields: Line Number, Date, Time, Level, Source.
+             The <legacyBold>Source</legacyBold> is intended to give a hint to the origin of the created message.
+        </para>
+      </content>
+      <!-- If a section contains a sections element, its content creates
+           sub-sections.  These are not collapsible.
+      <sections>
+          <section address="SubSection1">
+              <title>Sub-section 1</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+          <section address="SubSection2">
+              <title>Sub-section 2</title>
+              <content>
+                  <para>Sub-section content.</para>
+              </content>
+          </section>
+      </sections> -->
+    </section>
+    
+    <section address="The Logger">
+      <title> The Logger </title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+            A <codeEntityReference qualifyHint="false" autoUpgrade="true"> T:Rstyx.LoggingConsole.Logger </codeEntityReference>
+            offers the methods to log messages.
+            Also, a Logger has a <legacyBold><codeEntityReference> P:Rstyx.LoggingConsole.Logger.Name </codeEntityReference></legacyBold>. 
+            When logging a message the Logger sets the LogEntry's
+            <legacyBold><codeEntityReference> P:Rstyx.LoggingConsole.LogEntry.Source </codeEntityReference></legacyBold>
+            field <legacyBold>equal</legacyBold> to it's own <legacyBold><codeEntityReference> P:Rstyx.Logger.Name </codeEntityReference></legacyBold>.
+        </para>
+        
+        <para>
+            You can obtain as many Loggers as You want and with any Name. Even the empty Name is valid.
+            A Logger is obtained by the static method
+            LogBox.<codeEntityReference qualifyHint="false" autoUpgrade="true"> M:Rstyx.LoggingConsole.LogBox.getLogger </codeEntityReference>
+        </para>
+      </content>
+    </section>
+    
+    <section address="Built-in Logging">
+      <title> Built-in Logging </title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+            To use built-in logging capabilities, just obtain a logger and use it's log methods:
+        </para>
+        
+        <para>
+            <code language="vbnet" title="Visual Basic: Log messages using built-in logging">
+                ...
+                'Get a Logger with any name
+                Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Test.built-in")
+                
+                'Log some messages
+                BuiltInLogger.logDebug("Test debug")
+                BuiltInLogger.logInfo("Test Info")
+                BuiltInLogger.logWarning("Test Warning")
+                BuiltInLogger.logError("Test Error")
+            </code>
+        </para>
+      </content>
+    </section>
+    
+    <section address="Log4net Logging">
+      <title> Log4net Logging </title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+            LoggingConsole provides the 
+            <codeEntityReference qualifyHint="false" autoUpgrade="true"> T:Rstyx.LoggingConsole.Log4netAppender </codeEntityReference>. 
+            Log4net messages reaching this appender are forwarded
+            to LoggingConsole's MessageStore by a
+            <codeEntityReference qualifyHint="false" autoUpgrade="true"> T:Rstyx.LoggingConsole.Logger </codeEntityReference>
+            which gets the same Name as the log4net Logger...
+        </para>
+        
+        <para>
+            <code lang="xml" title="log4net sample configuration file section">
+            ...
+            &lt;log4net&gt;
+              &lt;appender name="LoggingConsoleAppender" type="Logging.Log4netAppender, LoggingConsole"/&gt;
+              &lt;root&gt;
+                &lt;appender-ref ref="LoggingConsoleAppender" /&gt;
+              &lt;/root&gt;
+            &lt;/log4net&gt;
+            </code>
+            
+            <code language="vbnet" title="Visual Basic: Log messages using log4net">
+            ...
+            'Get a log4net Logger with any name
+            Dim log As log4net.ILog = log4net.LogManager.GetLogger("any.Name.You.wish")
+            
+            'Log some messages
+            log.Debug("Debug message from log4net")
+            log.Info("Info message from log4net")
+            log.Warning("Warning message from log4net")
+            log.Error("Error message from log4net")
+            </code> 
+        </para>
+      </content>
+    </section>
+    
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on CodePlex</linkText>
+          <linkAlternateText>Go to CodePlex</linkAlternateText>
+          <linkUri>http://shfb.codeplex.com</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+    
+  </developerConceptualDocument>
+</topic>

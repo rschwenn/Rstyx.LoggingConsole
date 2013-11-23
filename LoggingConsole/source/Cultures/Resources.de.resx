@@ -1,0 +1,363 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MessageStore_Initialized" xml:space="preserve">
+    <value>Nachrichtenpool initialisiert.</value>
+  </data>
+  <data name="MessageStore_LimitLogResult" xml:space="preserve">
+    <value>*** Protokoll gekürzt: Old length = {0:0} lines, New length = {1:0} lines.</value>
+  </data>
+  <data name="MessageStore_LogCleared" xml:space="preserve">
+    <value>Alle Einträge gelöscht.</value>
+  </data>
+  <data name="LogBox_LogInitialized" xml:space="preserve">
+    <value>Protokoll initialisiert.</value>
+  </data>
+  <data name="Enum_Dock_Bottom" xml:space="preserve">
+    <value>Unten</value>
+  </data>
+  <data name="Enum_Dock_Left" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="Enum_Dock_Right" xml:space="preserve">
+    <value>Rechts</value>
+  </data>
+  <data name="Enum_Dock_Top" xml:space="preserve">
+    <value>Oben</value>
+  </data>
+  <data name="Enum_LogLevel_Debug" xml:space="preserve">
+    <value>Debug</value>
+  </data>
+  <data name="Enum_LogLevel_Error" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="Enum_LogLevel_Info" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Enum_LogLevel_Warning" xml:space="preserve">
+    <value>Warnung</value>
+  </data>
+  <data name="LogBox_AboutBox_NotAllowedInBrowser" xml:space="preserve">
+    <value>Info über LoggingConsole: Popup-Dialog ist innerhalb des Browsers nicht erlaubt!</value>
+  </data>
+  <data name="LogBox_ClearLogCommand_Caption" xml:space="preserve">
+    <value>Protokoll löschen</value>
+  </data>
+  <data name="LogBox_ClearLogCommand_Description" xml:space="preserve">
+    <value>Löschen des gesamten Protokolls</value>
+  </data>
+  <data name="LogBox_DefaultDisplayName" xml:space="preserve">
+    <value>Protokoll-Konsole</value>
+  </data>
+  <data name="LogBox_EmbedConsoleViewFailed" xml:space="preserve">
+    <value>Die Konsolenansicht ist bereits in ein anderes Fenster eingebettet =&gt; Anzeige im eingebauten Fenster ist nicht möglich!</value>
+  </data>
+  <data name="LogBox_HideFloatingConsoleViewCommand_Caption" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="LogBox_HideFloatingConsoleViewCommand_Description" xml:space="preserve">
+    <value>Schließen des Protokoll-Fensters</value>
+  </data>
+  <data name="LogBox_ResetSettingsCommand_Caption" xml:space="preserve">
+    <value>Optionen zurücksetzen</value>
+  </data>
+  <data name="LogBox_ResetSettingsCommand_Description" xml:space="preserve">
+    <value>Benutzer-Einstellungen auf Vorgabewerte zurücksetzen</value>
+  </data>
+  <data name="LogBox_SaveLogCommand_Caption" xml:space="preserve">
+    <value>Protokoll speichern</value>
+  </data>
+  <data name="LogBox_SaveLogCommand_Description" xml:space="preserve">
+    <value>Speichern der aktuellen Protokollansicht als Textdatei</value>
+  </data>
+  <data name="LogBox_SaveLogDialog_Aborted" xml:space="preserve">
+    <value>Speichern-Dialog abgebrochen.</value>
+  </data>
+  <data name="LogBox_SaveLogDialog_DefaultExt" xml:space="preserve">
+    <value>.log</value>
+  </data>
+  <data name="LogBox_SaveLogDialog_FilenameReturned" xml:space="preserve">
+    <value>Speichern-Dialog ergab Dateiname '{0}'</value>
+  </data>
+  <data name="LogBox_SaveLogDialog_Logfiles" xml:space="preserve">
+    <value>Logdateien</value>
+  </data>
+  <data name="LogBox_SaveLogDialog_Title" xml:space="preserve">
+    <value>{0}-Protokoll speichern als ...</value>
+  </data>
+  <data name="LogBox_SaveLog_FinalErrorMessage" xml:space="preserve">
+    <value>=&gt; Anlegen der Datei '{0}' ist gescheitert.</value>
+  </data>
+  <data name="LogBox_SaveLog_FinalSuccessMessage" xml:space="preserve">
+    <value>{0}-Protokoll gespeichert in Datei '{1}'</value>
+  </data>
+  <data name="LogBox_ShowFloatingConsoleViewCommand_Caption" xml:space="preserve">
+    <value>Protokoll zeigen</value>
+  </data>
+  <data name="LogBox_ShowFloatingConsoleViewCommand_Description" xml:space="preserve">
+    <value>Anzeigen des Protokolls im Fenster</value>
+  </data>
+  <data name="LogBox_ShowAboutBoxCommand_Caption" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="LogBox_ShowAboutBoxCommand_Description" xml:space="preserve">
+    <value>Info über Logging Console</value>
+  </data>
+  <data name="MessagesView_gvch_Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="MessagesView_gvch_Level" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="MessagesView_gvch_Message" xml:space="preserve">
+    <value>Nachricht</value>
+  </data>
+  <data name="MessagesView_gvch_SerialNo" xml:space="preserve">
+    <value>lfd Nr</value>
+  </data>
+  <data name="MessagesView_gvch_Source" xml:space="preserve">
+    <value>Quelle</value>
+  </data>
+  <data name="MessagesView_gvch_Time" xml:space="preserve">
+    <value>Zeit</value>
+  </data>
+  <data name="ConsoleView_Appearence_Language" xml:space="preserve">
+    <value>Sprache:</value>
+  </data>
+  <data name="ConsoleView_Appearence_TabPosition" xml:space="preserve">
+    <value>Lage der Tabs:</value>
+  </data>
+  <data name="ConsoleView_Appearence_OptionpanePosition" xml:space="preserve">
+    <value>Lage der Optionen:</value>
+  </data>
+  <data name="ConsoleView_Appearence_BackgroundColors" xml:space="preserve">
+    <value> Hintergrundfarben</value>
+  </data>
+  <data name="ConsoleView_Appearence_BackgroundColors_ToolTip" xml:space="preserve">
+    <value>verschiedene Hintergrundfarben verwenden</value>
+  </data>
+  <data name="ConsoleView_Appearence_OwnFontSize" xml:space="preserve">
+    <value> Schriftgröße:</value>
+  </data>
+  <data name="ConsoleView_Appearence_OwnFontSize_ToolTip" xml:space="preserve">
+    <value>Wenn deaktiviert, wird die Schriftgröße des Hauptfensters bzw. des Systems verwendet.</value>
+  </data>
+  <data name="ConsoleView_Appearence_Toolbar" xml:space="preserve">
+    <value> Symbolleiste</value>
+  </data>
+  <data name="ConsoleView_Appearence_Toolbar_ToolTip" xml:space="preserve">
+    <value>Aufgaben-Symbolleiste anzeigen</value>
+  </data>
+  <data name="ConsoleView_Header_Tasks" xml:space="preserve">
+    <value>Aufgaben</value>
+  </data>
+  <data name="ConsoleView_Header_ColumnDisplay" xml:space="preserve">
+    <value>Spaltenanzeige</value>
+  </data>
+  <data name="ConsoleView_Header_Behavior" xml:space="preserve">
+    <value>Verhalten</value>
+  </data>
+  <data name="ConsoleView_Header_LogLength" xml:space="preserve">
+    <value>Max. Protokolllänge</value>
+  </data>
+  <data name="ConsoleView_Header_Appearence_General" xml:space="preserve">
+    <value>Erscheinung Allgemein</value>
+  </data>
+  <data name="ConsoleView_Header_Appearence_Textarea" xml:space="preserve">
+    <value>Erscheinung Textbereich</value>
+  </data>
+  <data name="ConsoleView_Tasks_LineNo" xml:space="preserve">
+    <value> Zeile Nr</value>
+  </data>
+  <data name="ConsoleView_Tasks_Date" xml:space="preserve">
+    <value> Datum</value>
+  </data>
+  <data name="ConsoleView_Tasks_Time" xml:space="preserve">
+    <value> Zeit</value>
+  </data>
+  <data name="ConsoleView_Tasks_Level" xml:space="preserve">
+    <value> Typ</value>
+  </data>
+  <data name="ConsoleView_Tasks_Source" xml:space="preserve">
+    <value> Quelle</value>
+  </data>
+  <data name="ConsoleView_Behavior_ErrorPopup" xml:space="preserve">
+    <value> Fehler-Popup</value>
+  </data>
+  <data name="ConsoleView_Behavior_ErrorPopup_ToolTip" xml:space="preserve">
+    <value>Soll die Konsole bei neuen Fehlern automatisch angezeigt werden?</value>
+  </data>
+  <data name="ConsoleView_Behavior_AutoColWidth" xml:space="preserve">
+    <value> Auto-Spaltenbreite</value>
+  </data>
+  <data name="ConsoleView_Behavior_AutoColWidth_ToolTip" xml:space="preserve">
+    <value>Spaltenbreite automatisch anhand des längsten, sichtbaren Eintrages festlegen</value>
+  </data>
+  <data name="ConsoleView_LogLength_Lines" xml:space="preserve">
+    <value>Zeilen</value>
+  </data>
+  <data name="ConsoleView_LogLength_ToolTip" xml:space="preserve">
+    <value>0 = unbegrenzt</value>
+  </data>
+  <data name="ConsoleView_Header_OptionPane" xml:space="preserve">
+    <value>Protokoll: Optionen und Aufgaben</value>
+  </data>
+  <data name="About_Copyright" xml:space="preserve">
+    <value>Copyright:</value>
+  </data>
+  <data name="About_Licence" xml:space="preserve">
+    <value>Lizenz:</value>
+  </data>
+  <data name="About_ProgDescription" xml:space="preserve">
+    <value>eine .NET Protokoll-Komponente</value>
+  </data>
+  <data name="About_ProgTitle" xml:space="preserve">
+    <value>Logging Console</value>
+  </data>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="Console_GetFontsize_ValueChanged" xml:space="preserve">
+    <value>Unpraktikabler Wert ({0:F1}) wird geändert zu {1:F1}.</value>
+  </data>
+  <data name="Console_GetConsoleView_Created" xml:space="preserve">
+    <value>Neuen ConsoleView erzeugt.</value>
+  </data>
+  <data name="Console_SetConsoleView_Connected" xml:space="preserve">
+    <value>Existierenden ConsoleView eingebunden.</value>
+  </data>
+  <data name="ConsoleView_Appearence_OwnFontFamily" xml:space="preserve">
+    <value> Festbreiten-Schrift</value>
+  </data>
+  <data name="ConsoleView_Appearence_OwnFontFamily_ToolTip" xml:space="preserve">
+    <value>Wenn deaktiviert, wird die Schriftart des Hauptfensters bzw. des Systems verwendet, sonst eine nicht proportionale Schrift.</value>
+  </data>
+  <data name="Global_ErrorInEventHandler" xml:space="preserve">
+    <value>Fehler bei der Ereignisbehandlung</value>
+  </data>
+  <data name="Global_ErrorMaybeInEventHandler" xml:space="preserve">
+    <value>Unerwarteter Fehler (eventuell bei der Ereignisbehandlung)</value>
+  </data>
+  <data name="Global_UnexpectedError" xml:space="preserve">
+    <value>Unerwarteter Fehler.</value>
+  </data>
+  <data name="Global_UnexpectedErrorIn" xml:space="preserve">
+    <value>Unerwarteter Fehler in {0}().</value>
+  </data>
+</root>

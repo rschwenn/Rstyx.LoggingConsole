@@ -1,0 +1,303 @@
+﻿<UserControl x:Class="ConsoleView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:Logging="clr-namespace:Rstyx.LoggingConsole;assembly=" 
+    mc:Ignorable="d" 
+    d:DesignHeight="250" d:DesignWidth="550"
+    UseLayoutRounding="True"
+    >
+    
+    <!--
+      DataContext for this UserControl is set to a "LogBox" instance via code.
+      When CultureResources.CurrentCulture is changed the DataContext is reset,
+      hence all Binding targets are updated.
+    -->
+    
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        
+        <Style x:Key="MainBorderStyle" TargetType="{x:Type Border}">
+            <!--<Setter Property="Background" Value="WhiteSmoke" />-->
+            <Setter Property="BorderBrush" Value="DarkGray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="7" />
+        </Style>
+        
+        <Style x:Key="FontSizeTextBoxEnabler" TargetType="{x:Type TextBox}">
+            <Setter Property="IsEnabled" Value="False" />
+            <Style.Triggers>
+                <DataTrigger Value="True" Binding="{Binding Path=Console.useOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
+                    <Setter Property="IsEnabled" Value="True" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="{x:Type GroupBox}">
+            <Setter Property="Padding" Value="2,5,2,2" />
+            <Setter Property="Margin"  Value="4" />
+        </Style>
+        
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        
+        <!--<Style TargetType="{x:Type ContentPresenter}" >
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>-->
+        
+        <!-- TabItem Header: Binding LogLevelEnum Name to Tab Header Caption -->
+        <DataTemplate x:Key="TabItemTemplate">
+            <ContentControl 
+                Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem, AncestorLevel=1}, Path=DataContext.LogLevel, Converter={x:Static Logging:WpfUtils.LogLevelConverter}}"
+                VerticalAlignment="Center" />
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    <Border Style="{StaticResource MainBorderStyle}" >
+        <DockPanel Name="ConsoleViewDockPanel">
+            
+            <Expander Name="SettingsExpander" 
+                DockPanel.Dock="{Binding Path=Console.ExpanderHeaderPlacement}"
+                ExpandDirection="{Binding RelativeSource={RelativeSource Self}, Path=(DockPanel.Dock), Converter={x:Static Logging:WpfUtils.ExpandDirectionConverter}}"
+                HorizontalAlignment="Left" 
+                VerticalContentAlignment="Top" 
+                >
+                <Expander.Header>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                          <RowDefinition Height="Auto" />
+                          <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Name="SettingsExpanderHeaderButtons"
+                            Grid.Row="0"
+                            Orientation="Vertical"
+                            Visibility="{Binding Path=Console.ActionButtonsAlwaysVisible, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            >
+                            
+                            <Button Margin="3" Height="24" Width="24"
+                                Command="{Binding Path=ClearLogCommand}"
+                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}"
+                                >
+                                <Button.Content>
+                                    <Rectangle Height="16" Width="16" Opacity="0.9" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                </Button.Content>
+                            </Button>
+                            
+                            <Button Margin="3" Height="24" Width="24" 
+                                Command="{Binding Path=SaveLogCommand}"
+                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
+                                >
+                                <Button.Content>
+                                    <Rectangle Height="16" Width="16" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                </Button.Content>
+                            </Button>
+                        </StackPanel>
+                        
+                        <!-- This button conflicts with the user option to show/hide tool bar ... -->
+                        <!--<Button Name="HideButton" Margin="3,13,3,3" Height="24" Width="24"
+                            Command="{Binding Path=HideFloatingConsoleViewCommand}"
+                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}"
+                            IsCancel="True"
+                            Grid.Row="1"
+                            VerticalAlignment="Bottom"
+                            Visibility="Visible"
+                            >
+                            <Button.Content>
+                                <Rectangle Height="16" Width="16" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
+                            </Button.Content>
+                        </Button>-->
+                    </Grid>
+                </Expander.Header>
+                
+                <!-- OptionPane -->
+                <Border Style="{StaticResource MainBorderStyle}" Background="#1B000000" Margin="3">
+                    <DockPanel>
+                        
+                        <!-- OptionPane Header -->
+                        <DockPanel DockPanel.Dock="Top" Margin="10,5,10,0" LastChildFill="False">
+                            <TextBlock FontWeight="Bold" FontSize="12" TextWrapping="NoWrap"
+                                       Text="{Binding Path=ConsoleView_Header_OptionPane, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                            
+                            <!-- ShowAboutBoxCommand -->
+                            <TextBlock DockPanel.Dock="Right" Margin="10,0,0,0">
+                                <Hyperlink  TextDecorations="None"
+                                    Command="{Binding Path=ShowAboutBoxCommand}" 
+                                    ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
+                                    >
+                                    <Rectangle Height="15" Width="15" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Hyperlink, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                </Hyperlink>
+                            </TextBlock>
+                        </DockPanel>
+                        
+                        <!-- OptionPane Content -->
+                        <WrapPanel Orientation="Vertical" Margin="5">
+                            
+                            <!-- GroupBox ColumnDisplay -->
+                            <GroupBox Header="{Binding Path=ConsoleView_Header_ColumnDisplay, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_LineNo, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnLineNo, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Date,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnDate,   Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Time,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnTime,   Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Level,  Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnLevel,  Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Source, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnSource, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                </StackPanel>
+                            </GroupBox>
+                            
+                            <!-- GroupBox Behavior -->
+                            <GroupBox Header="{Binding Path=ConsoleView_Header_Behavior, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
+                                <StackPanel Orientation="Vertical">
+                                    <CheckBox Content="{Binding Path=ConsoleView_Behavior_ErrorPopup,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=showConsoleOnError,      Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Behavior_ErrorPopup_ToolTip,   Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Behavior_AutoColWidth, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.autoSizeColumns, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Behavior_AutoColWidth_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                </StackPanel>
+                            </GroupBox>
+                            
+                            <!-- GroupBox LogLength -->
+                            <GroupBox Header="{Binding Path=ConsoleView_Header_LogLength, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" >
+                                    <TextBox Margin="0,0,5,0" Width="50" VerticalContentAlignment="Center"
+                                             Text="{Binding Path=MessageStore.MaxLogLength, NotifyOnValidationError=True, Mode=TwoWay, StringFormat=\{0:D\}, ValidatesOnExceptions=True, UpdateSourceExceptionFilter={x:Static Logging:Console.TextBoxExceptionFilter}}"
+                                             ToolTip="{Binding Path=ConsoleView_LogLength_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                                             HorizontalContentAlignment="Right" />
+                                    <TextBlock Margin="0,3,0,0"
+                                               Text="{Binding Path=ConsoleView_LogLength_Lines, Source={x:Static Logging:CultureResources.ResourceProvider}}" 
+                                               ToolTip="{Binding Path=ConsoleView_LogLength_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                </StackPanel>
+                            </GroupBox>
+                            
+                            <!-- GroupBox Appearence General -->
+                            <GroupBox Header="{Binding Path=ConsoleView_Header_Appearence_General, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
+                                <StackPanel Orientation="Vertical">
+                                    
+                                    <!-- Language -->
+                                    <DockPanel Margin="0,0,0,3" LastChildFill="False">
+                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_Language, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,5,0" />
+                                        <ComboBox DockPanel.Dock="Right"
+                                                  ItemsSource="{Binding Source={x:Static Logging:CultureResources.SupportedCultures}, Converter={x:Static Logging:WpfUtils.CultureInfoConverter}}"
+                                                  SelectedItem="{Binding Path=CurrentCulture, Source={x:Static Logging:CultureResources.InstanceProvider}, Converter={x:Static Logging:WpfUtils.CultureInfoConverter}, Mode=TwoWay}" 
+                                                  >
+                                        </ComboBox>
+                                    </DockPanel>
+                                    
+                                    <!-- Tab Position -->
+                                    <DockPanel Margin="0,0,0,3" LastChildFill="False">
+                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_TabPosition, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,5,0" />
+                                        <ComboBox DockPanel.Dock="Right"
+                                                  ItemsSource="{Binding Path=Console.TabStripPlacementOptions, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}"
+                                                  SelectedItem="{Binding Path=Console.TabStripPlacement, Mode=TwoWay, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}" >
+                                        </ComboBox>
+                                    </DockPanel>
+                                    
+                                    <!-- Optionpane Position -->
+                                    <DockPanel Margin="0,0,0,3" LastChildFill="False">
+                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_OptionpanePosition, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,5,0" />
+                                        <ComboBox DockPanel.Dock="Right"
+                                                  ItemsSource="{Binding Path=Console.ExpanderHeaderPlacementOptions, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}"
+                                                  SelectedItem="{Binding Path=Console.ExpanderHeaderPlacement, Mode=TwoWay, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}" >
+                                        </ComboBox>
+                                    </DockPanel>
+                                    
+                                    <!-- Toolbar -->
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_Toolbar, Source={x:Static Logging:CultureResources.ResourceProvider}}"          Margin="0,3,0,2" IsChecked="{Binding Path=Console.ActionButtonsAlwaysVisible, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_Toolbar_ToolTip,          Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                </StackPanel>
+                            </GroupBox>
+                            
+                            <!-- GroupBox Appearence Textarea -->
+                            <GroupBox Header="{Binding Path=ConsoleView_Header_Appearence_Textarea, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
+                                <StackPanel Orientation="Vertical">
+                                    
+                                    <!-- BackgroundColors -->
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_BackgroundColors, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.useBackgroundColors, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_BackgroundColors_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    
+                                    <!-- Font Family -->
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_OwnFontFamily, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.useOwnFontFamily, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_OwnFontFamily_ToolTip,    Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    
+                                    <!-- Font Size -->
+                                    <DockPanel Margin="0,0,0,1" LastChildFill="False">
+                                        <CheckBox Name="useOwnFontSizeCheckBox"
+                                                  Content="{Binding Path=ConsoleView_Appearence_OwnFontSize, Source={x:Static Logging:CultureResources.ResourceProvider}}" 
+                                                  IsChecked="{Binding Path=Console.useOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" 
+                                                  ToolTip="{Binding Path=ConsoleView_Appearence_OwnFontSize_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" 
+                                                  VerticalAlignment="Center" 
+                                                  />
+                                        <TextBox DockPanel.Dock="Right"
+                                                 MinWidth="30" 
+                                                 Style="{StaticResource FontSizeTextBoxEnabler}"
+                                                 VerticalAlignment="Center"
+                                                 Margin="5,0,0,0"
+                                                 Text="{Binding Path=Console.FontSize, NotifyOnValidationError=True, Mode=TwoWay, StringFormat=\{0:F1\}, ValidatesOnExceptions=True, UpdateSourceExceptionFilter={x:Static Logging:Console.TextBoxExceptionFilter}}" >
+                                        </TextBox>
+                                    </DockPanel>
+                                </StackPanel>
+                            </GroupBox>
+                            
+                            <!-- GroupBox Tasks -->
+                            <GroupBox Header="{Binding Path=ConsoleView_Header_Tasks, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
+                                <StackPanel Orientation="Vertical" >
+                                    
+                                    <!-- ClearLogCommand -->
+                                    <TextBlock>
+                                        <Hyperlink  TextDecorations="None"
+                                            Command="{Binding Path=ClearLogCommand}" 
+                                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
+                                            >
+                                            <DockPanel>
+                                                <Rectangle DockPanel.Dock="Left" Height="16" Width="16" HorizontalAlignment="Left" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Hyperlink, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                                <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Hyperlink, AncestorLevel=1}, Path=Command.Caption}" TextWrapping="NoWrap" Padding="5" VerticalAlignment="Center" />
+                                            </DockPanel>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    
+                                    <!-- SaveLogCommand -->
+                                    <TextBlock>
+                                        <Hyperlink  TextDecorations="None"
+                                            Command="{Binding Path=SaveLogCommand}" 
+                                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
+                                            >
+                                            <DockPanel>
+                                              <Rectangle DockPanel.Dock="Left" Height="16" Width="16" HorizontalAlignment="Left" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Hyperlink, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                              <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Hyperlink, AncestorLevel=1}, Path=Command.Caption}" TextWrapping="NoWrap" Padding="5" VerticalAlignment="Center" />
+                                            </DockPanel>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    
+                                    <!-- ResetSettingsCommand -->
+                                    <TextBlock>
+                                        <Hyperlink  TextDecorations="None"
+                                            Command="{Binding Path=ResetSettingsCommand}" 
+                                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
+                                            >
+                                            <DockPanel>
+                                              <Rectangle DockPanel.Dock="Left" Height="16" Width="16" HorizontalAlignment="Left" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Hyperlink, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                              <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Hyperlink, AncestorLevel=1}, Path=Command.Caption}" TextWrapping="NoWrap" Padding="5" VerticalAlignment="Center" />
+                                            </DockPanel>
+                                        </Hyperlink>
+                                    </TextBlock>
+                                    
+                                </StackPanel>
+                            </GroupBox>
+                            
+                        </WrapPanel>
+                    </DockPanel>
+                </Border>
+            </Expander>
+            
+            <TabControl Name="MessagesTabControl"
+                IsSynchronizedWithCurrentItem="True" 
+                ItemsSource="{Binding Path=Console.MessagesViews, NotifyOnTargetUpdated=False}"
+                ItemTemplate="{StaticResource TabItemTemplate}"
+                Margin="0" 
+                HorizontalContentAlignment="Stretch"
+                TabStripPlacement="{Binding Path=Console.TabStripPlacement}"
+                SelectedIndex="{Binding Path=Console.ActiveView, Converter={x:Static Logging:WpfUtils.LogLevelTabIndexConverter}}" 
+                Padding="1" >
+            </TabControl>
+            <!-- DisplayMemberPath="LogLevel" -->
+            <!-- ItemTemplate="{StaticResource TabItemTemplate}" -->
+        </DockPanel>
+    </Border>
+</UserControl>
+
+<!-- for jEdit:  :collapseFolds=2::tabSize=4::indentSize=4:-->

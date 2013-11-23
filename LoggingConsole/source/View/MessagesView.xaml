@@ -1,0 +1,159 @@
+﻿<UserControl x:Class="MessagesView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:Logging="clr-namespace:Rstyx.LoggingConsole" 
+    mc:Ignorable="d" 
+    d:DesignHeight="100" d:DesignWidth="250"
+    >
+    
+    <!--
+      DataContext for this UserControl is inherited from "ConsoleView" to a "LogBox" instance.
+      When CultureResources.CurrentCulture is changed the DataContext of "ConsoleView" is reset,
+      hence DataContext of this UserControl is reset and all Binding targets are updated.
+    -->
+    
+    <UserControl.Resources>
+        
+        <ResourceDictionary>
+            
+            <CollectionViewSource x:Key="MessagesListViewSource">
+                
+                <CollectionViewSource.Source>
+                    <!-- The particular MessagesList with the LogLevel corresponding to this MessagesView 
+                         is delivered by a IMultiValueConverter (workaround) -->
+                    <MultiBinding Converter="{x:Static Logging:WpfUtils.MessagesListViewSourceConverter}">
+                        <Binding Path="MessageStore" />
+                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="LogLevel" />
+                    </MultiBinding>
+                </CollectionViewSource.Source>
+                
+            </CollectionViewSource>
+            
+            <!-- Filter="LogLevelFilter" *** very poor performance -->
+            <!--<CollectionViewSource
+                x:Key="MessagesListViewSource"
+                Source="{Binding Path=MessageStore.Messages[{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}]}"
+            />-->
+            
+            <!-- Needed in order to justify the line number to the right in conjunction with: TextBlock .. TextAlignment="Right" -->
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
+            
+            <!-- Style for the whole  -->
+            <Style x:Key="MessagesViewStyle" TargetType="ListView">
+                <Style.Triggers>
+                    
+                    <!-- Font Family -->
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.useOwnFontFamily}">
+                        <Setter Property="FontFamily" Value="Courier New" />
+                    </DataTrigger>
+                    
+                    <!-- Font Size -->
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.useOwnFontSize}">
+                        <Setter Property="FontSize" Value="{Binding Path=Console.FontSize, Mode=OneWay}" />
+                    </DataTrigger>
+                    
+                    <MultiDataTrigger>
+                        <MultiDataTrigger.Conditions>
+                            <Condition Binding="{Binding Path=Console.useOwnFontSize}"   Value="False"/>
+                            <Condition Binding="{Binding Path=Console.useOwnFontFamily}" Value="True" />
+                        </MultiDataTrigger.Conditions>
+                        <Setter Property="FontSize" Value="{Binding Path=Console.FontSize, Mode=OneWay}" />
+                    </MultiDataTrigger>
+                    
+                </Style.Triggers>
+            </Style>
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
+    
+    <ListView Name="MessagesListView"
+        ItemsSource="{Binding Source={StaticResource MessagesListViewSource}}"
+        Style="{DynamicResource MessagesViewStyle}"
+        >
+        
+        <ListView.Background>
+            <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelBackgroundConverter}">
+                <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="LogLevel" />
+                <Binding Path="Console.useBackgroundColors" />
+            </MultiBinding>
+        </ListView.Background>
+        
+        <ListView.View>
+            <GridView x:Name="MessagesGridView" >
+                <GridViewColumn
+                    x:Name="gvcSerialNo"
+                    >
+                    <GridViewColumnHeader 
+                        Content="{Binding Path=MessagesView_gvch_SerialNo, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                        TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
+                        Visibility="{Binding Path=Console.showColumnLineNo, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        >
+                    </GridViewColumnHeader>
+                    
+                    <!-- Right align the number -->
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=LineNo}" TextAlignment="Right"/>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                
+                <GridViewColumn
+                    x:Name="gvcDate"
+                    DisplayMemberBinding="{Binding Path=Date}">
+                    <GridViewColumnHeader 
+                        Content="{Binding Path=MessagesView_gvch_Date, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                        TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
+                        Visibility="{Binding Path=Console.showColumnDate, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        > 
+                    </GridViewColumnHeader> 
+                </GridViewColumn>
+                
+                <GridViewColumn
+                    x:Name="gvcTime"
+                    DisplayMemberBinding="{Binding Path=Time}">
+                    <GridViewColumnHeader 
+                        Content="{Binding Path=MessagesView_gvch_Time, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                        TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
+                        Visibility="{Binding Path=Console.showColumnTime, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        > 
+                    </GridViewColumnHeader> 
+                </GridViewColumn>
+                
+                <GridViewColumn
+                    x:Name="gvcLevel"
+                    DisplayMemberBinding="{Binding Path=Level, Converter={x:Static Logging:WpfUtils.LogLevelConverter}}">
+                    <GridViewColumnHeader 
+                        Content="{Binding Path=MessagesView_gvch_Level, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                        TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
+                        Visibility="{Binding Path=Console.showColumnLevel, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        > 
+                    </GridViewColumnHeader> 
+                </GridViewColumn>
+                
+                <GridViewColumn
+                    x:Name="gvcSource"
+                    DisplayMemberBinding="{Binding Path=Source}">
+                    <GridViewColumnHeader 
+                        Content="{Binding Path=MessagesView_gvch_Source, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                        TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
+                        Visibility="{Binding Path=Console.showColumnSource, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        > 
+                    </GridViewColumnHeader> 
+                </GridViewColumn>
+                
+                <GridViewColumn
+                    x:Name="gvcMessage"
+                    Header="{Binding Path=MessagesView_gvch_Message, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                    DisplayMemberBinding="{Binding Path=Message, NotifyOnTargetUpdated=True}">
+                </GridViewColumn>
+            </GridView>
+        </ListView.View>
+    </ListView>
+</UserControl>
+
+<!-- for jEdit:  :collapseFolds=2::tabSize=4::indentSize=4:-->

@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<topic id="4ddd2343-626f-43b1-adfd-4831b7631635" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- for jedit: :mode=xml::folding=indent::indentSize=4::tabSize=4::collapseFolds=2: -->
+    <!--
+    <summary>
+      <para>Optional summary abstract</para>
+    </summary>
+    -->
+    <introduction>
+      <!-- Uncomment this to generate an outline of the section and sub-section
+           titles.  Specify a numeric value as the inner text to limit it to
+           a specific number of sub-topics when creating the outline.  Specify
+           zero (0) to limit it to top-level sections only.  -->
+      <!-- <autoOutline /> -->
+      <para> LoggingConsole supports on-the-fly language switching. Here are some notes on how this is realized. </para>
+    </introduction>
+    <!-- Add one or more top-level section elements.  These are collapsible.
+         If using <autoOutline />, add an address attribute to identify it
+         and specify a title so that it can be jumped to with a hyperlink. -->
+    <section address="Resources">
+      <title> Resources Architecture </title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+            In general the built-in resource infrastructure is used:
+        </para>
+        
+        <para>
+            Strings that should be localized, are defined in English language in the resource file "Resources.resx".
+            That way the English strings are compiled into the main assembly LoggingConsole.dll.
+            German strings are defined in the resource file "Resources.de.resx".
+            If this file belongs to the Visual Studio project, the contained resources are compiled
+            into an additional assembly in a subfolder "de\LoggingConsole.resources.dll".
+        </para>
+        
+        <alert class="note">
+            To <legacyBold>add another language</legacyBold> to LoggingConsole, just copy the file "Resources.de.resx"
+            to file "Resources.[CultureShortcut].resx" and add it to the VisualStudio / SharpDevelop project.
+            Then translate the contained English strings and rebuild the project.
+        </alert>
+        
+        <para>
+            A string is got from resources by calling <quoteInline>My.Resources.Resources.Name_of_Resource_String</quoteInline>.
+            By default the <quoteInline>System.Threading.Thread.CurrentThread.CurrentUICulture</quoteInline> is respected.
+            If there is no corresponding resource found, the resources of the main assembly are used -
+            in case of LoggingConsole this is English.
+            Also, by setting the <quoteInline>My.Resources.Resources.Culture</quoteInline> property
+            this culture is used to retrieve resources - independent of thread settings.
+        </para>
+      </content>
+    </section>
+
+    <section address="On-the-Fly Language Switching">
+      <title> On-the-Fly Language Switching </title>
+      <content>
+        <!-- Uncomment this to create a sub-section outline
+        <autoOutline /> -->
+        <para>
+            Using resources should be enough to localize a program. However, for switching at runtime
+            You have to take care for some things. Here is described what LoggingConsole does.
+        </para>
+      </content>
+      
+      <!-- If a section contains a sections element, its content creates
+           sub-sections.  These are not collapsible. -->
+      <sections>
+          <section address="Initialization">
+              <title> Initialization and Switching </title>
+              <content>
+                  <para>
+                      The <quoteInline>System.Threading.Thread.CurrentThread.CurrentUICulture</quoteInline>
+                      is used to set the initial language - see above.
+                  </para>
+                  <para>
+                      The user can change the language via list box. It's current item is bound to the
+                      CultureResources.<codeEntityReference>P:Rstyx.LoggingConsole.CultureResources.CurrentCulture</codeEntityReference>.
+                      property. This property isn't an application setting and therefore isn't restored at startup. 
+                  </para>
+                  <para>
+                      Changing CultureResources.<codeEntityReference>P:Rstyx.LoggingConsole.CultureResources.CurrentCulture</codeEntityReference>.
+                      means that My.Resources.Resources.<codeEntityReference>P:My.Resources.Resources.Culture</codeEntityReference>
+                      is changed in turn. This causes the resource strings of this Culture to be returned.
+                  </para>
+                  <alert class="note">
+                       LoggingConsole does not change thread environment like
+                      <quoteInline>System.Threading.Thread.CurrentThread.CurrentUICulture</quoteInline>
+                      or <quoteInline>System.Threading.Thread.CurrentThread.CurrentCulture</quoteInline>.
+                  </alert>
+              </content>
+          </section>
+          
+          <section address="Binding to Resource Strings directly to GUI">
+              <title> Binding Resource Strings directly to GUI </title>
+              <content>
+                  <para>
+                      LoggingConsole uses DataBinding wherever possible, even for localized labels.
+                  </para>
+                  <para>
+                      When a Binding source changes it has to notify the Binding engine, otherwise
+                      the Binding target isn't updated. For that the source object can implement and use
+                      the System.ComponentModel.<codeEntityReference>T:System.ComponentModel.INotifyPropertyChanged</codeEntityReference> interface. But this isn't
+                      the case for the <quoteInline>My.Resources.Resources</quoteInline> object
+                      which is an auto-generated helper class.
+                  </para>
+                  <para>
+                      Another way to let the Binding engine refresh changed source data is to wrap
+                      the source object with a System.Windows.Data.<codeEntityReference>T:System.Windows.Data.ObjectDataProvider</codeEntityReference>
+                      and use this as the Binding source object. The ObjectDataProvider exposes automatically
+                      all properties of the wrapped object and provides a <quoteInline>Refresh</quoteInline>
+                      method to update all binding targets.
+                      This is done here with the <quoteInline>My.Resources.Resources</quoteInline> object - 
+                      see: CultureResources.<codeEntityReference>P:Rstyx.LoggingConsole.CultureResources.ResourceProvider</codeEntityReference>.
+                  </para>
+              </content>
+          </section>
+          
+          <section address="Resource Strings via Binding Value Converters">
+              <title> Resource Strings from Binding Value Converters </title>
+              <content>
+                  <para>
+                      As probably almost every application that uses WPF DataBinding,
+                      LoggingConsole takes use of Value Converters, i.e. to convert 
+                      <codeEntityReference>T:Rstyx.LoggingConsole.LogLevelEnum</codeEntityReference>
+                      to String (in every Log Entry) and to convert 
+                      System.Windows.Controls.<codeEntityReference>T:System.Windows.Controls.Dock</codeEntityReference>
+                      to String (in list boxes). 
+                  </para>
+                  <para>
+                      Since the Converters are initialized once to use many times, 
+                      the resources have to be retrieved every time the Converter runs:
+                      When using a Dictionary with resource strings inside a Converter, 
+                      it's not enough to create it once at initialization.
+                  </para>
+              </content>
+          </section>
+          
+          <section address="Indirect use of Resource Strings">
+              <title> Indirect use of Resource Strings </title>
+              <content>
+                  <para>
+                      There are at least two other cases to be payed attention. For example, let's take a look at
+                      the LogBox.<codeEntityReference>P:Rstyx.LoggingConsole.LogBox.DisplayName</codeEntityReference>
+                      property:
+                  </para>
+                  <para>
+                      1. It is initialized using the resouce string <quoteInline>My.Resources.Resources.LogBox_DefaultDisplayName</quoteInline>.
+                      When the desired language changes, it has to be reset "manually".
+                  </para>
+                  <para>
+                      2. This property doesn't belong to the <quoteInline>My.Resources.Resources</quoteInline> object
+                      and that's why the bound target can't be updated by a call to the ObjectDataProvider's Refresh method.
+                      Instead this could be done "manually" via 
+                      <codeEntityReference>E:Rstyx.LoggingConsole.LogBox.PropertyChanged</codeEntityReference> event.
+                      But because there are other properties and cascaded dependencies the hard way is taken: 
+                      Since <codeEntityReference>T:Rstyx.LoggingConsole.LogBox</codeEntityReference> is used as DataContext
+                      of <codeEntityReference>T:Rstyx.LoggingConsole.ConsoleView</codeEntityReference>, this DataContext
+                      is simply reset. Hence, all dependent Bindings are updated.
+                  </para>
+                  <para>
+                      The CultureResources.<codeEntityReference>E:Rstyx.LoggingConsole.CultureResources.CultureChanged</codeEntityReference> event
+                      is monitored to get notified of changed 
+                      CultureResources.<codeEntityReference>P:Rstyx.LoggingConsole.CultureResources.CurrentCulture</codeEntityReference>.
+                  </para>
+              </content>
+          </section>
+      </sections>
+    </section>
+
+    <relatedTopics>
+      <!-- One or more of the following:
+           - A local link
+           - An external link
+           - A code entity reference
+
+      <link xlink:href="Other Topic's ID"/>
+      <link xlink:href="Other Topic's ID">Link inner text</link>
+
+      <externalLink>
+          <linkText>Link text</linkText>
+          <linkAlternateText>Optional alternate link text</linkAlternateText>
+          <linkUri>URI</linkUri>
+      </externalLink>
+
+      <codeEntityReference>API member ID</codeEntityReference>
+
+      Examples:
+
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8270" />
+      <link xlink:href="00e97994-e9e6-46e0-b420-5be86b2f8278">Some other topic</link>
+
+      <externalLink>
+          <linkText>SHFB on CodePlex</linkText>
+          <linkAlternateText>Go to CodePlex</linkAlternateText>
+          <linkUri>http://shfb.codeplex.com</linkUri>
+      </externalLink>
+
+      <codeEntityReference>T:TestDoc.TestClass</codeEntityReference>
+      <codeEntityReference>P:TestDoc.TestClass.SomeProperty</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.#ctor(System.String,System.Int32)</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.ToString</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.FirstMethod</codeEntityReference>
+      <codeEntityReference>M:TestDoc.TestClass.SecondMethod(System.Int32,System.String)</codeEntityReference>
+      -->
+    </relatedTopics>
+  </developerConceptualDocument>
+</topic>
