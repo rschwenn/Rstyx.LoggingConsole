@@ -68,7 +68,7 @@
                 
                 <Label Grid.Row="0" Grid.Column="1" Content="{Binding Path=Version}" />
                 <Label Grid.Row="1" Grid.Column="1" Content="GNU General Public License version 3" />
-                <Label Grid.Row="2" Grid.Column="1" Content="© 2011-2012 Robert Schwenn"      />
+                <Label Grid.Row="2" Grid.Column="1" Content="{Binding Path=Copyright}" />
             </Grid>
         </DockPanel>
     </Border>

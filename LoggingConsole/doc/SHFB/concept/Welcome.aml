@@ -42,8 +42,8 @@
                 </listItem>
                 <listItem>
                     <externalLink>
-                        <linkText> Apache log4net 1.2.11 </linkText>
-                        <linkUri>  http://logging.apache.org/log4net/download.html </linkUri>
+                        <linkText> Apache log4net </linkText>
+                        <linkUri>  http://logging.apache.org/log4net/ </linkUri>
                         <linkTarget>_blank</linkTarget>
                     </externalLink>
                     , which is bundled with LoggingConsole

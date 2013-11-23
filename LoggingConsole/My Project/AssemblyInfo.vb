@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Simple in-memory Logger with integrated viewer and gate to log4net")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Logging Console")> 
-<Assembly: AssemblyCopyright("Copyright © 2011-2013 Robert Schwenn")> 
+<Assembly: AssemblyCopyright("© 2011-2013 Robert Schwenn")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>

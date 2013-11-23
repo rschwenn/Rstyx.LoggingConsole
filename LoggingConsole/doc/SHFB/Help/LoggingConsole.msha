@@ -5,7 +5,7 @@
 <body class="vendor-book">
     <div class="details">
         <span class="vendor">Rstyx</span>
-        <span class="locale">de-de</span>
+        <span class="locale">en-us</span>
         <span class="product">Frameworks and Applications</span>
         <span class="name">LoggingConsole</span>
     </div>

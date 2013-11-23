@@ -17,12 +17,11 @@
     <!-- SHFB properties -->
     <OutputPath>Help\</OutputPath>
     <HtmlHelpName>LoggingConsole</HtmlHelpName>
-    <Language>de-DE</Language>
+    <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\..\..\..\_ThirdPartyAssemblies\log4net-1.2.11\bin\net\4.0\release\log4net.dll" />
-      <DocumentationSource sourceFile="..\..\..\..\..\_ThirdPartyAssemblies\log4net-1.2.11\bin\net\4.0\release\log4net.xml" />
-      <DocumentationSource sourceFile="..\..\Rstyx.LoggingConsole.vbproj" />
-    </DocumentationSources>
+      <DocumentationSource sourceFile="..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll" />
+<DocumentationSource sourceFile="..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.xml" />
+<DocumentationSource sourceFile="..\..\Rstyx.LoggingConsole.vbproj" /></DocumentationSources>
     <HtmlHelp1xCompilerPath>C:\Program Files (x86)\HTML Help Workshop\</HtmlHelp1xCompilerPath>
     <ProjectSummary>
     </ProjectSummary>
@@ -34,12 +33,12 @@
     </NamespaceSummaries>
     <HelpTitle>LoggingConsole</HelpTitle>
     <NamingMethod>MemberName</NamingMethod>
-    <SyntaxFilters>Standard</SyntaxFilters>
+    <SyntaxFilters>CSharp, VisualBasic</SyntaxFilters>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, Protected, SealedProtected</VisibleItems>
     <ApiFilter>
     </ApiFilter>
     <IndentHtml>False</IndentHtml>
-    <PresentationStyle>vs2010</PresentationStyle>
+    <PresentationStyle>VS2010</PresentationStyle>
     <ComponentConfigurations>
       <ComponentConfig id="Code Block Component" enabled="False">
         <component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
@@ -95,7 +94,7 @@
     </ComponentConfigurations>
     <IncludeFavorites>False</IncludeFavorites>
     <FeedbackEMailAddress>devel%40rstyx.de</FeedbackEMailAddress>
-    <CopyrightText>Copyright &amp;#169%3b 2011-2012 Robert Schwenn</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2011-2013 Robert Schwenn</CopyrightText>
     <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
     <PlugInConfigurations>
       <PlugInConfig id="Hierarchical Table of Contents" enabled="True">
@@ -126,6 +125,7 @@
     <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
+    <SdkLinkTarget>Blank</SdkLinkTarget>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional

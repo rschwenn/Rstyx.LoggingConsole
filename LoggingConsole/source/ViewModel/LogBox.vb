@@ -80,15 +80,28 @@ Public NotInheritable Class LogBox
             'Log some info.
             InternalLogger = getLogger("LogBox")
             
-            Dim ThisAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly
-            Dim MainModule As System.Diagnostics.ProcessModule = Process.GetCurrentProcess().MainModule
+            Dim ThisAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+            Dim ThisProcess  As System.Diagnostics.Process = Process.GetCurrentProcess()
+            Dim MainModule   As System.Diagnostics.ProcessModule = ThisProcess.MainModule
             
             InternalLogger.logDebug("ExecutingAssembly FullName = "  & ThisAssembly.FullName)
             InternalLogger.logDebug("ExecutingAssembly Location = "  & ThisAssembly.Location)
-            InternalLogger.logDebug("ExecutingAssembly Directory = " & System.IO.Path.GetDirectoryName(ThisAssembly.Location))
             
-            InternalLogger.logDebug("MainModule FileName = " & MainModule.FileName)
-            InternalLogger.logDebug("MainModule Directory = " & System.IO.Path.GetDirectoryName(MainModule.FileName))
+            InternalLogger.logDebug("Main Module = " & MainModule.FileName)
+            InternalLogger.logDebug("Command Line = " & System.Environment.CommandLine)
+            InternalLogger.logDebug("Current Directory = " & System.Environment.CurrentDirectory)
+            InternalLogger.logDebug("Current Process = " & If(System.Environment.Is64BitProcess, "x64", "x32"))
+            
+            Try
+                InternalLogger.logDebug("Operating System = " & System.Environment.OSVersion.ToString() & " (" & If(System.Environment.Is64BitOperatingSystem, "x64", "x32") & ")")
+                InternalLogger.logDebug(".NET Framework = " & System.Environment.Version.ToString())
+                InternalLogger.logDebug("Processor Count = " & System.Environment.ProcessorCount.ToString())
+                InternalLogger.logDebug("Machine Name = " & System.Environment.MachineName)
+                InternalLogger.logDebug("UserDomain = " & System.Environment.UserDomainName)
+            Catch ex As Exception
+            End Try
+            InternalLogger.logDebug("User = " & System.Environment.UserName)
+            InternalLogger.logDebug("interactive Session = " & System.Environment.UserInteractive.ToString())
             
             InternalLogger.logDebug("CultureInfo.InstalledUICulture = " & System.Globalization.CultureInfo.InstalledUICulture.Name)
             InternalLogger.logDebug("CultureInfo.CurrentCulture = "     & System.Globalization.CultureInfo.CurrentCulture.Name)
@@ -131,7 +144,16 @@ Public NotInheritable Class LogBox
          ''' <returns> Version As String </returns>
         Public Shared ReadOnly Property Version() As String
             Get
-                Return System.Reflection.Assembly.GetExecutingAssembly.GetName().Version.ToString()
+                Return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString()
+            End Get
+        End Property
+        
+        ''' <summary> Returns the Copyright of LoggingConsole. </summary>
+         ''' <returns> Copyright String </returns>
+        Public Shared ReadOnly Property Copyright() As String
+            Get
+                Return DirectCast(System.Reflection.Assembly.GetExecutingAssembly(). _
+                    GetCustomAttributes(GetType(System.Reflection.AssemblyCopyrightAttribute), False)(0), System.Reflection.AssemblyCopyrightAttribute).Copyright
             End Get
         End Property
         
@@ -543,9 +565,9 @@ Public NotInheritable Class LogBox
                 
                 ' Logs the about information at info level.
                 InternalLogger.logInfo(My.Resources.Resources.About_ProgTitle & " - " & My.Resources.Resources.About_ProgDescription)
-                InternalLogger.logInfo(My.Resources.Resources.About_Version   & " " & System.Reflection.Assembly.GetExecutingAssembly.GetName().Version.ToString())
+                InternalLogger.logInfo(My.Resources.Resources.About_Version   & " " & LogBox.Version)
                 InternalLogger.logInfo(My.Resources.Resources.About_Licence   & " GNU General Public License version 3")
-                InternalLogger.logInfo(My.Resources.Resources.About_Copyright & " © 2011-2012 Robert Schwenn")
+                InternalLogger.logInfo(My.Resources.Resources.About_Copyright & " " & LogBox.Copyright)
                 
                 ' Show About box if possible
                 If (AppType = "XPAB") then
