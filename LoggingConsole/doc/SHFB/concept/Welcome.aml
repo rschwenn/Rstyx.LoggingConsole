@@ -46,7 +46,7 @@
                         <linkUri>  http://logging.apache.org/log4net/ </linkUri>
                         <linkTarget>_blank</linkTarget>
                     </externalLink>
-                    , which is bundled with LoggingConsole
+                    (only at design time)
                 </listItem>
             </list>
         </content>

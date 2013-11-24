@@ -25,7 +25,7 @@
         <!-- Uncomment this to create a sub-section outline
         <autoOutline /> -->
         <para>
-            LoggingConsole offers built-in logging capabilities as well as a a gate to log4net. 
+            LoggingConsole offers built-in logging capabilities as well as a a gate from log4net. 
             Both can be used at the same time without care about collision. 
             In each case all logged messages go into the one single 
             <codeEntityReference> P:Rstyx.LoggingConsole.LogBox.MessageStore </codeEntityReference>
@@ -75,7 +75,7 @@
             Also, a Logger has a <legacyBold><codeEntityReference> P:Rstyx.LoggingConsole.Logger.Name </codeEntityReference></legacyBold>. 
             When logging a message the Logger sets the LogEntry's
             <legacyBold><codeEntityReference> P:Rstyx.LoggingConsole.LogEntry.Source </codeEntityReference></legacyBold>
-            field <legacyBold>equal</legacyBold> to it's own <legacyBold><codeEntityReference> P:Rstyx.Logger.Name </codeEntityReference></legacyBold>.
+            field to it's own <legacyBold><codeEntityReference> P:Rstyx.Logger.Name </codeEntityReference></legacyBold>.
         </para>
         
         <para>

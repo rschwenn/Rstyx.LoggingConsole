@@ -19,9 +19,8 @@
     <HtmlHelpName>LoggingConsole</HtmlHelpName>
     <Language>en-US</Language>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll" />
-<DocumentationSource sourceFile="..\..\..\packages\log4net.2.0.3\lib\net40-full\log4net.xml" />
-<DocumentationSource sourceFile="..\..\Rstyx.LoggingConsole.vbproj" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\..\Rstyx.LoggingConsole.vbproj" />
+    </DocumentationSources>
     <HtmlHelp1xCompilerPath>C:\Program Files (x86)\HTML Help Workshop\</HtmlHelp1xCompilerPath>
     <ProjectSummary>
     </ProjectSummary>
