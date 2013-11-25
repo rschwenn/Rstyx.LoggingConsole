@@ -16,6 +16,13 @@ obj/
 # NuGet Packages
 packages/
 
+# SHFB
+HelpLibraryManagerLauncher.exe
+*.shfbproj_*
+*.msha
+*.mshc
+
+
 ### ****************************************************************************
 ### from original GitHub .gitignore file:
 

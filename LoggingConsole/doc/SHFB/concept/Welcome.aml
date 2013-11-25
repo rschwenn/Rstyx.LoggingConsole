@@ -13,7 +13,7 @@
       as well as a <legacyBold>log viewer</legacyBold> to Your WPF or Windows Forms application.
       </para>
       <para> 
-      The viewer is mainly meant to present messages to the user. It is called <literal>Console</literal> 
+      The viewer is called <literal>Console</literal> 
       here because it also contains the interface for complete user interaction with the logger: 
       changing options and solve maintaining tasks.
       </para>
@@ -116,6 +116,13 @@
                 </entry>
               </row>
             </table>
+            
+            <alert class="note">
+                The viewer is intented to present messages both to the <legacyBold>developer and user</legacyBold>, which needs to make compromises. 
+                A notably compromise is <legacyBold>unusual exception logging</legacyBold>: While the user (when viewing error or info log) will be
+                confronted with messages like "xxxException in xxx method..", the stacktrace is logged at debug level.
+                Hence the user won't see it, but the dveloper will find it only in debug log.
+            </alert>
         </content>
       
       <!-- If a section contains a sections element, its content creates
