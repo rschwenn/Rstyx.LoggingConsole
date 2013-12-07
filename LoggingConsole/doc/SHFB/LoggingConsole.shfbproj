@@ -125,6 +125,10 @@
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
     <SdkLinkTarget>Blank</SdkLinkTarget>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CppCommentsFixup>False</CppCommentsFixup>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
        order for Visual Studio to perform the build.  The others are optional
@@ -153,7 +157,7 @@
     <ContentLayout Include="concept\Content Layout.content" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="concept\Licence Agreement.aml" />
+    <None Include="concept\License Agreement.aml" />
     <None Include="concept\Welcome.aml" />
     <None Include="concept\Welcome.aml" />
     <None Include="concept\Using LoggingConsole.aml" />
@@ -172,10 +176,6 @@
     <None Include="concept\Rstyx.LoggingConsole.aml" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Images\Logo_LGPL3.png">
-      <ImageId>Logo_LGPL3</ImageId>
-      <AlternateText>Logo LGPL 3</AlternateText>
-    </Image>
     <Image Include="Images\Screen_LoggingConsole-Settings.png">
       <ImageId>Screen_LoggingConsole-Settings</ImageId>
       <AlternateText>Screen Logging Console-Settings</AlternateText>

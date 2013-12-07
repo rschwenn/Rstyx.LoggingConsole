@@ -566,7 +566,7 @@ Public NotInheritable Class LogBox
                 ' Logs the about information at info level.
                 InternalLogger.logInfo(My.Resources.Resources.About_ProgTitle & " - " & My.Resources.Resources.About_ProgDescription)
                 InternalLogger.logInfo(My.Resources.Resources.About_Version   & " " & LogBox.Version)
-                InternalLogger.logInfo(My.Resources.Resources.About_Licence   & " GNU General Public License version 3")
+                InternalLogger.logInfo(My.Resources.Resources.About_License   & " The MIT License (MIT)")
                 InternalLogger.logInfo(My.Resources.Resources.About_Copyright & " " & LogBox.Copyright)
                 
                 ' Show About box if possible
