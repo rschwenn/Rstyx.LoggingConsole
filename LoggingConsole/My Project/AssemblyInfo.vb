@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 ' Die Werte der Assemblyattribute überprüfen
 
 <Assembly: AssemblyTitle("LoggingConsole")> 
-<Assembly: AssemblyDescription("Simple in-memory Logger with integrated viewer and gate to log4net")> 
+<Assembly: AssemblyDescription("Simple in-memory Logger with integrated viewer")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Logging Console")> 
 <Assembly: AssemblyCopyright("© 2011-2013 Robert Schwenn")> 
@@ -33,7 +33,7 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.3.0")> 
-<Assembly: AssemblyFileVersion("1.0.3.0")> 
+<Assembly: AssemblyVersion("1.0.4.0")> 
+<Assembly: AssemblyFileVersion("1.0.4.0")> 
 
 <assembly: NeutralResourcesLanguageAttribute("en")>

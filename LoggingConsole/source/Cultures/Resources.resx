@@ -318,8 +318,8 @@
   <data name="About_Copyright" xml:space="preserve">
     <value>Copyright:</value>
   </data>
-  <data name="About_Licence" xml:space="preserve">
-    <value>Licence:</value>
+  <data name="About_License" xml:space="preserve">
+    <value>License:</value>
   </data>
   <data name="About_ProgDescription" xml:space="preserve">
     <value>a .NET Logging Component</value>

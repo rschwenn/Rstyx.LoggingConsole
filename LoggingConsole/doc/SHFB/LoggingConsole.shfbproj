@@ -153,7 +153,7 @@
     <ContentLayout Include="concept\Content Layout.content" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="concept\Licence Agreement.aml" />
+    <None Include="concept\License Agreement.aml" />
     <None Include="concept\Welcome.aml" />
     <None Include="concept\Welcome.aml" />
     <None Include="concept\Using LoggingConsole.aml" />

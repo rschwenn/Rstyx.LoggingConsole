@@ -18,6 +18,8 @@ packages/
 
 # SHFB
 HelpLibraryManagerLauncher.exe
+Install_LoggingConsole.bat
+Remove_LoggingConsole.bat
 *.shfbproj_*
 *.msha
 *.mshc

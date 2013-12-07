@@ -74,11 +74,11 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Licence: ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die License: ähnelt.
         '''</summary>
-        Public Shared ReadOnly Property About_Licence() As String
+        Public Shared ReadOnly Property About_License() As String
             Get
-                Return ResourceManager.GetString("About_Licence", resourceCulture)
+                Return ResourceManager.GetString("About_License", resourceCulture)
             End Get
         End Property
         
