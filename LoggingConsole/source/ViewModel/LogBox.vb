@@ -113,7 +113,7 @@ Public NotInheritable Class LogBox
         ''' <summary> Instantiates the one and only LogBox instance and initializes instance fields. </summary>
          ''' <remarks> 
          ''' Initially a default DisplayName is used, but this can be changed by setting the 
-         ''' <see cref="P:DisplayName"/> property.
+         ''' <see cref="Console.DisplayName"/> property.
          ''' </remarks>
         Private Sub New()
             IsDisplayNameResource = True

@@ -25,11 +25,11 @@ Imports System.Globalization
  ''' <list type="bullet">
  ''' <item><description> Ported to Visual Basic. </description></item>
  ''' <item><description> Moved creation of ObjectDataProvider's from XAML to code in order to have easy access to ODP's from code and from more than one XAML file. </description></item>
- ''' <item><description> Added <see cref="P:InstanceProvider"/> property to allow WPF two way binding to this class. </description></item>
+ ''' <item><description> Added <see cref="CultureResources.InstanceProvider"/> property to allow WPF two way binding to this class. </description></item>
  ''' <item><description> Moved initilization code from constructor to properties. </description></item>
- ''' <item><description> Added Culture of main assembly resources to the <see cref="P:SupportedCultures"/> List. </description></item>
- ''' <item><description> Added <see cref="P:MainAssemblyCulture"/> property for convenience. </description></item>
- ''' <item><description> Changed <c>ChangeCulture()</c> method to <see cref="P:CurrentCulture"/> property to allow binding. </description></item>
+ ''' <item><description> Added Culture of main assembly resources to the <see cref="CultureResources.SupportedCultures"/> List. </description></item>
+ ''' <item><description> Added <see cref="CultureResources.MainAssemblyCulture"/> property for convenience. </description></item>
+ ''' <item><description> Changed <c>ChangeCulture()</c> method to <see cref="CultureResources.CurrentCulture"/> property to allow binding. </description></item>
  ''' <item><description> Removed <c>GetResourceInstance()</c> method. </description></item>
  ''' </list>
  ''' </para>

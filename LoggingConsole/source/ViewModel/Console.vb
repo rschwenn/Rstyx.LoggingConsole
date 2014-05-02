@@ -459,7 +459,7 @@ Public NotInheritable Class Console
             If (Me.activateErrorViewOnError) Then Me.ActiveView = LogLevelEnum.Error
         End Sub
         
-        ''' <summary> Detects changing to another Messages Tab by the user via UI and synchronizes the <see cref="P:ActiveView"/> property. </summary>
+        ''' <summary> Detects changing to another Messages Tab by the user via UI and synchronizes the <see cref="Console.ActiveView"/> property. </summary>
          ''' <param name="sender"> Me.ConsoleView.MessagesTabControl </param>
          ''' <param name="e">      SelectionChangedEventArgs </param>
          ''' <remarks> This is needed because Binding/SourceUpdate of Me.ActiveView isn't working (for what reason ever). </remarks>
