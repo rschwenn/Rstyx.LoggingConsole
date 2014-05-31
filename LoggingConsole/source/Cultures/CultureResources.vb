@@ -1,5 +1,6 @@
 ﻿
 Imports System
+Imports System.Resources
 Imports System.Collections.Generic
 Imports System.Diagnostics
 Imports System.Globalization
@@ -109,7 +110,7 @@ Public NotInheritable Class CultureResources
             End Get
         End Property
         
-        ''' <summary> List of available cultures, enumerated if not exists yet </summary>
+        ''' <summary> List of available cultures, enumerated if not exists yet. </summary>
          ''' <value>   List(Of CultureInfo) </value>
          ''' <returns> List(Of CultureInfo) </returns>
          ''' <remarks> 
@@ -128,36 +129,61 @@ Public NotInheritable Class CultureResources
                         Debug.WriteLine("Get Installed cultures:")
                         _SupportedCultures = New List(Of CultureInfo)
                         
-                        'Add Culture of neutral resources of main assembly, if it's not the invariant culture.
-                        'If (Not MainAssemblyCulture.Equals(CultureInfo.InvariantCulture)) Then
-                        _SupportedCultures.Add(MainAssemblyCulture)
-                        'End If
+                        ' 1. Trial: File based search (look for resource files)
+                        '    => This will fail, if LoggingConsole.dll hasn't been loaded from file system (i.e. packed ExcelDNA AddIn)!!!
+                        Try
+                            Dim tCulture             As CultureInfo = Nothing
+                            Dim ThisAssembly         As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                            Dim ThisAssemblyFileName As String = ThisAssembly.Location
+                            Dim ThisAssemblyDirName  As String = System.IO.Path.GetDirectoryName(ThisAssemblyFileName)
+                            
+                            ' Add Culture of main assembly.
+                            _SupportedCultures.Add(MainAssemblyCulture)
+                            
+                            ' Add Cultures of sattelite assemblies (".resources.dll").
+                            For Each dir As String In System.IO.Directory.GetDirectories(ThisAssemblyDirName)
+                                Try
+                                    ' See if this directory corresponds to a valid culture name
+                                    Dim dirinfo As New System.IO.DirectoryInfo(dir)
+                                    tCulture = CultureInfo.GetCultureInfo(dirinfo.Name)
+                                    
+                                    ' Determine if a resources dll exists in this directory that matches the executable name
+                                    If (dirinfo.GetFiles(System.IO.Path.GetFileNameWithoutExtension(ThisAssemblyFileName) & ".resources.dll").Length > 0) Then
+                                        if (not _SupportedCultures.Contains(tCulture))
+                                            _SupportedCultures.Add(tCulture)
+                                            Debug.WriteLine(String.Format(" Found Culture: {0} [{1}]", tCulture.DisplayName, tCulture.Name))
+                                        end if
+                                    End If
+                                Catch generatedExceptionName As ArgumentException
+                                    ' Ignore exceptions generated for any unrelated directories in the bin folder
+                                End Try
+                            Next
+                        Catch ex As Exception
+                            'Debug.WriteLine(ex.ToString())
+                        End Try 
                         
-                        'Add Cultures of sattelite assemblies
-                        Dim tCulture             As CultureInfo = Nothing
-                        Dim ThisAssembly         As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
-                        Dim ThisAssemblyFileName As String = ThisAssembly.Location
-                        Dim ThisAssemblyDirName  As String = System.IO.Path.GetDirectoryName(ThisAssemblyFileName)
                         
-                        For Each dir As String In System.IO.Directory.GetDirectories(ThisAssemblyDirName)
-                            Try
-                                'see if this directory corresponds to a valid culture name
-                                Dim dirinfo As New System.IO.DirectoryInfo(dir)
-                                tCulture = CultureInfo.GetCultureInfo(dirinfo.Name)
-                                
-                                'determine if a resources dll exists in this directory that matches the executable name
-                                If (dirinfo.GetFiles(System.IO.Path.GetFileNameWithoutExtension(ThisAssemblyFileName) & ".resources.dll").Length > 0) Then
-                                    if (not _SupportedCultures.Contains(tCulture))
-                                        _SupportedCultures.Add(tCulture)
-                                        Debug.WriteLine(String.Format(" Found Culture: {0} [{1}]", tCulture.DisplayName, tCulture.Name))
-                                    end if
-                                End If
-                            Catch generatedExceptionName As ArgumentException
-                                'ignore exceptions generated for any unrelated directories in the bin folder
-                            End Try
-                        Next
+                        ' 2. Trial: Resource based search.
+                        ' Add available Cultures by trying to create a ResourceSet for every .NET culture.
+                        ' The resulting list contains all Cultures, that have a resource in this project,
+                        ' BUT: Cultures which sattelite assemblies are missed, are listed nevertheless!!!
+                        If (_SupportedCultures.Count = 0) Then
+                            Dim rm As ResourceManager = My.Resources.Resources.ResourceManager
+                            For Each cult As CultureInfo In CultureInfo.GetCultures(CultureTypes.AllCultures)
+                                Try
+                                    Dim rs As ResourceSet = rm.GetResourceSet(cult, createIfNotExists:=True, tryParents:=False)
+                                    If (rs IsNot Nothing) Then
+                                        If ((Not _SupportedCultures.Contains(cult)) AndAlso (Not cult.Equals(CultureInfo.InvariantCulture))) Then
+                                            _SupportedCultures.Add(cult)
+                                        End If
+                                    End If
+                                Catch ex As Exception
+                                    Debug.Print(ex.ToString())
+                                End Try
+                            Next
+                        End If
                         
-                        'Log supported cultures to LoggingConsole
+                        ' Log supported cultures to LoggingConsole
                         InternalLogger.logDebug("Supported languages:")
                         For Each ci as CultureInfo in _SupportedCultures
                             InternalLogger.logDebug(String.Format(" - {0} [{1}]", ci.NativeName, ci.Name))

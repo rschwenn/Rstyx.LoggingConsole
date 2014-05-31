@@ -53,6 +53,12 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Rstyx.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -116,8 +122,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="source\Cultures\Resources.de.resx">
-    </EmbeddedResource>
+    <EmbeddedResource Include="source\Cultures\Resources.de.resx" />
     <EmbeddedResource Include="source\Cultures\Resources.resx">
       <!--<Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>-->
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -141,6 +146,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
+    <None Include="Rstyx.snk" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="source\Resources\IconResources.xaml">
