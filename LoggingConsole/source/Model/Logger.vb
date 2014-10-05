@@ -87,28 +87,33 @@ Public Class Logger
             If (ex IsNot Nothing) Then
                 
                 ' Gather exception source information.
-                Dim TargetName          As String = "?"
-                Dim TargetDeclaringType As String = ex.Source
+                'Dim TargetName          As String = "?"
                 'Dim TargetReflectedType As String = Nothing
+                Dim TargetDeclaringType As String = ex.Source
                 
                 If (ex.TargetSite IsNot Nothing) Then
-                    TargetName = ex.TargetSite.Name
-                    If (ex.TargetSite.DeclaringType IsNot Nothing) Then TargetDeclaringType = ex.TargetSite.DeclaringType.FullName
+                    'TargetName = ex.TargetSite.Name
                     'If (ex.TargetSite.ReflectedType IsNot Nothing) Then TargetReflectedType = ex.TargetSite.ReflectedType.FullName
+                    If (ex.TargetSite.DeclaringType IsNot Nothing) Then TargetDeclaringType = ex.TargetSite.DeclaringType.FullName
                 End If
                 
-                ' Type-dependent error message.
+                ' Type-dependent header message.
+                Dim ExHeaderLevel As LogLevelEnum = IIf(Me.LogBox.ExceptionHeaderAsDebug AndAlso (Not String.IsNullOrWhiteSpace(ex.Message)), LogLevelEnum.Debug, LogLevelEnum.Error)
                 If (TypeOf ex Is System.IO.FileNotFoundException) Then
-                    logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}():{3}{4} ({5})", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), vbNewLine, ex.Message, CType(ex, System.IO.FileNotFoundException).FileName))
+                    'logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}():{3}{4} ({5})", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), vbNewLine, ex.Message, CType(ex, System.IO.FileNotFoundException).FileName))
+                    logMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}():", ex.GetType().Name, TargetDeclaringType, getTargetName(ex)))
+                    logMessage(LogLevelEnum.Error, String.Format("{0} ({1})", ex.Message, CType(ex, System.IO.FileNotFoundException).FileName))
                     
                 ElseIf (TypeOf ex Is System.Data.OleDb.OleDbException) Then
                     Dim OleDbEx As System.Data.OleDb.OleDbException = CType(ex, System.Data.OleDb.OleDbException)
-                    logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}() (FehlerCode={3}, FehlerAnzahl={4}):", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), OleDbEx.ErrorCode, OleDbEx.Errors.Count))
+                    logMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}() (FehlerCode={3}, FehlerAnzahl={4}):", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), OleDbEx.ErrorCode, OleDbEx.Errors.Count))
                     For Each OleDbErr As System.Data.OleDb.OleDbError In OleDbEx.Errors
                         logMessage(LogLevelEnum.Error, String.Format(" - {0}: {1}", OleDbErr.Source, OleDbErr.Message))
                     Next
                 Else
-                    logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}():{3}{4}", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), vbNewLine, ex.Message))
+                    'logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}():{3}{4}", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), vbNewLine, ex.Message))
+                    logMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}():", ex.GetType().Name, TargetDeclaringType, getTargetName(ex)))
+                    logMessage(LogLevelEnum.Error, ex.Message)
                 End If
                 
                 ' Test **************

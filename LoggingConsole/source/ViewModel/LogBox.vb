@@ -219,10 +219,17 @@ Public NotInheritable Class LogBox
             End Get
         End Property
         
+        ''' <summary> Indicates whether or not exception header lines should be logged as debug level. Defaults to "true". </summary>
+         ''' <remarks>
+         ''' The exception header line is the one that begins with "***Exception in ...".
+         ''' If the exception message is empty, the header line will be handled as error level anyway.
+         ''' </remarks>
+        Public Property ExceptionHeaderAsDebug() As Boolean = True
+        
         ''' <summary> Indicates whether or not the floating ConsoleWindow should be shown modal. Defaults to "false"</summary>
-        Public Property isFloatingConsoleModal() As Boolean
+        Public Property IsFloatingConsoleModal() As Boolean
             Get
-                isFloatingConsoleModal = _isFloatingConsoleModal
+                IsFloatingConsoleModal = _isFloatingConsoleModal
             End Get
             Set(value As Boolean)
                 _isFloatingConsoleModal = value
@@ -694,7 +701,7 @@ Public NotInheritable Class LogBox
                 'Embed the ConsoleView
                 FloatingWindow.LoggingConsolePanel.Content = Me.Console.ConsoleView
                 
-                If (Me.isFloatingConsoleModal) then
+                If (Me.IsFloatingConsoleModal) then
                     FloatingWindow.ShowDialog()
                 Else
                     FloatingWindow.Show()

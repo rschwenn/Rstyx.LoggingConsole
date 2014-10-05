@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Rstyx.LoggingConsole", "LoggingConsole\Rstyx.LoggingConsole.vbproj", "{EC5E7811-45A6-49CB-B473-F986DD12B38C}"
 EndProject
@@ -45,6 +45,7 @@ Global
 		{2F6B7937-A931-499F-87C9-3EA606725870}.Debug|x86.ActiveCfg = Debug|x86
 		{2F6B7937-A931-499F-87C9-3EA606725870}.Debug|x86.Build.0 = Debug|x86
 		{2F6B7937-A931-499F-87C9-3EA606725870}.Release|Any CPU.ActiveCfg = Release|x86
+		{2F6B7937-A931-499F-87C9-3EA606725870}.Release|Any CPU.Build.0 = Release|x86
 		{2F6B7937-A931-499F-87C9-3EA606725870}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{2F6B7937-A931-499F-87C9-3EA606725870}.Release|Mixed Platforms.Build.0 = Release|x86
 		{2F6B7937-A931-499F-87C9-3EA606725870}.Release|x86.ActiveCfg = Release|x86
@@ -56,6 +57,7 @@ Global
 		{291D62DA-7FD8-466F-8C84-D8920355F727}.Debug|x86.ActiveCfg = Debug|x86
 		{291D62DA-7FD8-466F-8C84-D8920355F727}.Debug|x86.Build.0 = Debug|x86
 		{291D62DA-7FD8-466F-8C84-D8920355F727}.Release|Any CPU.ActiveCfg = Release|x86
+		{291D62DA-7FD8-466F-8C84-D8920355F727}.Release|Any CPU.Build.0 = Release|x86
 		{291D62DA-7FD8-466F-8C84-D8920355F727}.Release|Mixed Platforms.ActiveCfg = Release|x86
 		{291D62DA-7FD8-466F-8C84-D8920355F727}.Release|Mixed Platforms.Build.0 = Release|x86
 		{291D62DA-7FD8-466F-8C84-D8920355F727}.Release|x86.ActiveCfg = Release|x86
