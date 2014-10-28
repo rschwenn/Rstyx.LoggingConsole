@@ -98,7 +98,7 @@ Public Class Logger
                 End If
                 
                 ' Type-dependent header message.
-                Dim ExHeaderLevel As LogLevelEnum = IIf(Me.LogBox.ExceptionHeaderAsDebug AndAlso (Not String.IsNullOrWhiteSpace(ex.Message)), LogLevelEnum.Debug, LogLevelEnum.Error)
+                Dim ExHeaderLevel As LogLevelEnum = If(Me.LogBox.ExceptionHeaderAsDebug AndAlso (Not String.IsNullOrWhiteSpace(ex.Message)), LogLevelEnum.Debug, LogLevelEnum.Error)
                 If (TypeOf ex Is System.IO.FileNotFoundException) Then
                     'logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}():{3}{4} ({5})", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), vbNewLine, ex.Message, CType(ex, System.IO.FileNotFoundException).FileName))
                     logMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}():", ex.GetType().Name, TargetDeclaringType, getTargetName(ex)))

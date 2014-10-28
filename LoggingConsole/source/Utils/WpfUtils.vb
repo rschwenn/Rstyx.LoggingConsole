@@ -337,7 +337,7 @@ Public Class WpfUtils
             Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IValueConverter.Convert
                 'Boolean => Width
                 Try
-                    Return IIf(cBool(value), Double.NaN, 0.0)
+                    Return If(cBool(value), Double.NaN, 0.0)
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
                     Return value
@@ -353,7 +353,7 @@ Public Class WpfUtils
             Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IValueConverter.ConvertBack
                 'Width => Boolean
                 Try
-                    Return IIf(CDbl(value) = 0.0, False, True)
+                    Return If(CDbl(value) = 0.0, False, True)
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
                     Return value
@@ -378,7 +378,7 @@ Public Class WpfUtils
             Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IValueConverter.Convert
                 'Boolean => System.Windows.Visibility
                 Try
-                    Return IIf(cBool(value), System.Windows.Visibility.Visible, System.Windows.Visibility.Collapsed)
+                    Return If(cBool(value), System.Windows.Visibility.Visible, System.Windows.Visibility.Collapsed)
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
                     Return value
@@ -394,7 +394,7 @@ Public Class WpfUtils
             Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IValueConverter.ConvertBack
                 'System.Windows.Visibility => Boolean
                 Try
-                    Return IIf((value = System.Windows.Visibility.Visible), True, False)
+                    Return If((value = System.Windows.Visibility.Visible), True, False)
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
                     Return value
