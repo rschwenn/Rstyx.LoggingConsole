@@ -523,7 +523,8 @@ Public NotInheritable Class LogBox
          ''' </remarks>
         Public Sub showFloatingConsoleView(suppressErrorOnFail As Boolean)
             Try
-                Me.ShowFloatingConsoleViewAction.Invoke(suppressErrorOnFail)
+                'Me.ShowFloatingConsoleViewAction.Invoke(suppressErrorOnFail)
+                Me.Console.ConsoleView.Dispatcher.Invoke(Me.ShowFloatingConsoleViewAction, suppressErrorOnFail)
             Catch ex As System.Exception
                 InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
@@ -542,7 +543,8 @@ Public NotInheritable Class LogBox
          ''' </remarks>
         Public Sub hideFloatingConsoleView()
             Try
-                Me.HideFloatingConsoleViewAction.Invoke()
+                'Me.HideFloatingConsoleViewAction.Invoke()
+                Me.Console.ConsoleView.Dispatcher.Invoke(Me.HideFloatingConsoleViewAction)
             Catch ex As System.Exception
                 InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
