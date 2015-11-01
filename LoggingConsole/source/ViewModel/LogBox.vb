@@ -242,7 +242,7 @@ Public NotInheritable Class LogBox
          ''' It defaults to <see cref="LogBox.showBuiltinFloatingConsoleView"/>. 
          ''' </para>
          ''' <para>
-         ''' CAUTION: If this property is set to a custom Action, then the corresponding
+         ''' CAUTION: If this property is set to a custom Action, Then the corresponding
          ''' <see cref="LoggingConsole.LogBox.HideFloatingConsoleViewAction"/> property must be set, too. 
          ''' </para>
          ''' </remarks>
@@ -267,7 +267,7 @@ Public NotInheritable Class LogBox
          ''' This property corresponds to the <see cref="LoggingConsole.LogBox.ShowFloatingConsoleViewAction"/> property. 
          ''' </para>
          ''' <para>
-         ''' CAUTION: If this property is set to a custom Action, then the corresponding
+         ''' CAUTION: If this property is set to a custom Action, Then the corresponding
          ''' <see cref="LoggingConsole.LogBox.ShowFloatingConsoleViewAction"/> property must be set, too. 
          ''' </para>
          ''' </remarks>
@@ -394,7 +394,7 @@ Public NotInheritable Class LogBox
          ''' <para> This is an "application setting". </para>
          ''' <para> If this is enabled and an error message is logged, the following happens: </para>
          ''' <para> If the <see cref="LoggingConsole.ConsoleView"/> isn't embedded into any other window yet,
-         ''' then the built-in <see cref="LoggingConsole.ConsoleWindow"/> is shown. 
+         ''' Then the built-in <see cref="LoggingConsole.ConsoleWindow"/> is shown. 
          ''' If the ConsoleView is already embedded into any other window, nothing happens unless 
          ''' the parent application responds to this setting in an appropriate manner. 
          ''' </para>
@@ -446,7 +446,7 @@ Public NotInheritable Class LogBox
                 dialog.Filter = String.Format("{0} (*{1})| *{1}", My.Resources.Resources.LogBox_SaveLogDialog_Logfiles, My.Resources.Resources.LogBox_SaveLogDialog_DefaultExt)
                 'Sample Filter: "Log files (*.log)| *.log"
                 
-                if (dialog.ShowDialog()) then
+                if (dialog.ShowDialog()) Then
                     LogFilePath = dialog.FileName
                     InternalLogger.logDebug(String.Format(String.Format("Logging Console: {0}.", My.Resources.Resources.LogBox_SaveLogDialog_FilenameReturned), LogFilePath))
                 else
@@ -474,11 +474,11 @@ Public NotInheritable Class LogBox
                         oLogEntry = Me.MessageStore.Messages.item(LogLevel).item(i)
                         'Create message
                         TextLine = String.Empty
-                        if (includeLineNo) then TextLine = TextLine & String.Format("{0,10}", oLogEntry.LineNo)
-                        if (includeDate)   then TextLine = TextLine & String.Format("{0,12}", oLogEntry.Date)
-                        if (includeTime)   then TextLine = TextLine & String.Format("{0,10}", oLogEntry.Time)
-                        if (includeLevel)  then TextLine = TextLine & String.Format("  {0,-12}", "[" & WpfUtils.LogLevelConverter.Convert(oLogEntry.Level, GetType(String), Nothing, Nothing) & "]")
-                        if (includeSource) then TextLine = TextLine & String.Format("{0,-30}", oLogEntry.Source)
+                        if (includeLineNo) Then TextLine = TextLine & String.Format("{0,10}", oLogEntry.LineNo)
+                        if (includeDate)   Then TextLine = TextLine & String.Format("{0,12}", oLogEntry.Date)
+                        if (includeTime)   Then TextLine = TextLine & String.Format("{0,10}", oLogEntry.Time)
+                        if (includeLevel)  Then TextLine = TextLine & String.Format("  {0,-12}", "[" & WpfUtils.LogLevelConverter.Convert(oLogEntry.Level, GetType(String), Nothing, Nothing) & "]")
+                        if (includeSource) Then TextLine = TextLine & String.Format("{0,-30}", oLogEntry.Source)
                         TextLine = TextLine & oLogEntry.Message
                         
                         'Write message
@@ -509,7 +509,7 @@ Public NotInheritable Class LogBox
         End Sub
         
         ''' <summary> Shows a floating window with embedded <see cref="LoggingConsole.ConsoleView"/> if possible. </summary>
-         ''' <param name="suppressErrorOnFail"> If "false", then an error should be logged, if the <see cref="LoggingConsole.ConsoleView"/> is already embedded into any other window. </param>
+         ''' <param name="suppressErrorOnFail"> If "false", Then an error should be logged, if the <see cref="LoggingConsole.ConsoleView"/> is already embedded into any other window. </param>
          ''' <remarks>
          ''' <para>
          ''' There can be only one instance of <see cref="LoggingConsole.ConsoleView"/>. 
@@ -558,16 +558,16 @@ Public NotInheritable Class LogBox
                 Dim OwnerWindow  As System.Windows.Window = Nothing
                 
                 ' Get application type
-                If (System.Windows.Application.Current isNot Nothing) then
+                If (System.Windows.Application.Current IsNot Nothing) Then
                     'WPF Application (standalone or XPAB)
-                    If (System.Diagnostics.Process.GetCurrentProcess().MainModule.ModuleName = "PresentationHost.exe") then
+                    If (System.Diagnostics.Process.GetCurrentProcess().MainModule.ModuleName = "PresentationHost.exe") Then
                         'WPF Browser Application
                         AppType = "XPAB"
                     Else
                         'WPF standalone Application
                         AppType = "WPF"
                     End If
-                ElseIf (System.Windows.Forms.Application.OpenForms.Count > 0) then
+                ElseIf (System.Windows.Forms.Application.OpenForms.Count > 0) Then
                     'Windows Forms Application" (hopefully since there is at least one Windows Form)
                     AppType = "WinForm"
                 End If
@@ -579,23 +579,30 @@ Public NotInheritable Class LogBox
                 InternalLogger.logInfo(My.Resources.Resources.About_Copyright & " " & LogBox.Copyright)
                 
                 ' Show About box if possible
-                If (AppType = "XPAB") then
+                If (AppType = "XPAB") Then
                     InternalLogger.logWarning(My.Resources.Resources.LogBox_AboutBox_NotAllowedInBrowser)
                 Else
                     'Initialize and show AboutBox
                     Dim AboutBox As New AboutBox
                     AboutBox.DataContext = Me
                     
-                    If (AppType = "WPF") then
+                    If (AppType = "WPF") Then
                         OwnerWindow = System.Windows.Application.Current.MainWindow
-                        If (Not OwnerWindow.IsInitialized) then
+                        If (Not OwnerWindow?.IsInitialized) Then
                             OwnerWindow = Nothing
                         End If
-                    Else 
-                        AboutBox.WindowStartupLocation = WindowStartupLocation.CenterScreen 
                     End If
                     
-                    AboutBox.Owner = OwnerWindow
+                    Try
+                        AboutBox.Owner = OwnerWindow
+                    Catch ex As Exception
+                        Debug.Print(ex.Message)
+                    End Try
+                    
+                    If (AboutBox.Owner Is Nothing) Then
+                        AboutBox.WindowStartupLocation = WindowStartupLocation.CenterScreen
+                    End If
+                    
                     AboutBox.ShowDialog()
                 End If
             Catch ex As System.Exception
@@ -635,7 +642,7 @@ Public NotInheritable Class LogBox
         ''' <summary> This method is called after an error is logged. </summary>
          ''' <param name="sender"> LogBox.Logger </param>
          ''' <param name="e"> Empty </param>
-         ''' <remarks> If the "showConsoleOnError" property is "true", then this method activates the floating ConsoleView. </remarks>
+         ''' <remarks> If the "showConsoleOnError" property is "true", Then this method activates the floating ConsoleView. </remarks>
         Private Sub OnNewErrorLogged(sender As System.Object , e As System.EventArgs)
             If (Me.showConsoleOnError) Then showFloatingConsoleView(suppressErrorOnFail:=true)
         End Sub
@@ -648,7 +655,7 @@ Public NotInheritable Class LogBox
          ''' In order to update these bindings with another language the datacontext of ConsoleView is reloaded.
          ''' </remarks>
         Private Sub OnCultureChanged(sender As System.Object , e As System.EventArgs)
-            'If DisplayName is from resource then reset
+            'If DisplayName is from resource Then reset
             If (IsDisplayNameResource) Then MyBase.DisplayName = My.Resources.Resources.LogBox_DefaultDisplayName
             
             'Reset DataContext of ConsoleView, which in turn resets DataContexts in MessagesViews
@@ -667,19 +674,19 @@ Public NotInheritable Class LogBox
     #Region "Private Routines"
         
         ''' <summary> Shows the built-in floating window with embedded <see cref="LoggingConsole.ConsoleView"/> if possible. </summary>
-         ''' <param name="suppressErrorOnFail"> If "false", then an error is logged, if the <see cref="LoggingConsole.ConsoleView"/> is already embedded into any other window. </param>
+         ''' <param name="suppressErrorOnFail"> If "false", Then an error is logged, if the <see cref="LoggingConsole.ConsoleView"/> is already embedded into any other window. </param>
          ''' <remarks> 
          ''' There can be only one instance of <see cref="LoggingConsole.ConsoleView"/>. 
          ''' That's why this method fails when the <see cref="LoggingConsole.ConsoleView"/> is already embedded into any other window.
          ''' </remarks>
         Private Sub showBuiltinFloatingConsoleView(suppressErrorOnFail As Boolean)
-            If ((Me.Console.ConsoleView.Parent isNot Nothing) And ((FloatingWindow is Nothing) OrElse (FloatingWindow.LoggingConsolePanel.Content is Nothing))) Then
+            If ((Me.Console.ConsoleView.Parent IsNot Nothing) And ((FloatingWindow Is Nothing) OrElse (FloatingWindow.LoggingConsolePanel.Content is Nothing))) Then
                 'The ConsoleView is already embedded inside another window
-                if (suppressErrorOnFail) then
+                If (suppressErrorOnFail) Then
                     InternalLogger.logDebug(My.Resources.Resources.LogBox_EmbedConsoleViewFailed)
                 Else
                     InternalLogger.logError(My.Resources.Resources.LogBox_EmbedConsoleViewFailed)
-                end if
+                End If
             Else
                 'Initialize FloatingWindow if needed
                 If (FloatingWindow Is Nothing) Then
@@ -689,21 +696,24 @@ Public NotInheritable Class LogBox
                     
                     'Set WFP MainWindow as Owner, if possible
                     Try
-                        OwnerWindow = Application.Current.MainWindow
-                        If (Not OwnerWindow.IsInitialized) then
+                        OwnerWindow = Application.Current?.MainWindow
+                        If (Not OwnerWindow?.IsInitialized) Then
                             OwnerWindow = Nothing
                         End If
-                    Catch e As Exception
-                        'FloatingWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen 
-                    Finally
                         FloatingWindow.Owner = OwnerWindow
+                    Catch ex As Exception
+                        Debug.Print(ex.Message)
                     End Try
+                End If
+                
+                If (FloatingWindow.Owner Is Nothing) Then
+                    FloatingWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen
                 End If
                 
                 'Embed the ConsoleView
                 FloatingWindow.LoggingConsolePanel.Content = Me.Console.ConsoleView
                 
-                If (Me.IsFloatingConsoleModal) then
+                If (Me.IsFloatingConsoleModal) Then
                     FloatingWindow.ShowDialog()
                 Else
                     FloatingWindow.Show()

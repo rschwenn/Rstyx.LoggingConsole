@@ -34,6 +34,17 @@
             </Style.Triggers>
         </Style>
         
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}" >
+            <Setter Property="Padding" Value="2"/>
+            <Setter Property="Margin"  Value="3" />
+        </Style>
+        
+        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}" >
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        
         <Style TargetType="{x:Type GroupBox}">
             <Setter Property="Padding" Value="2,5,2,2" />
             <Setter Property="Margin"  Value="4" />
@@ -82,7 +93,7 @@
                                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}"
                                 >
                                 <Button.Content>
-                                    <Rectangle Height="16" Width="16" Opacity="0.9" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                    <Rectangle Stretch="UniformToFill" Opacity="0.9" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
                                 </Button.Content>
                             </Button>
                             
@@ -91,7 +102,7 @@
                                 ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
                                 >
                                 <Button.Content>
-                                    <Rectangle Height="16" Width="16" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
+                                    <Rectangle Stretch="UniformToFill" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
                                 </Button.Content>
                             </Button>
                         </StackPanel>
