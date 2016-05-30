@@ -93,7 +93,7 @@
     </ComponentConfigurations>
     <IncludeFavorites>False</IncludeFavorites>
     <FeedbackEMailAddress>devel%40rstyx.de</FeedbackEMailAddress>
-    <CopyrightText>Copyright &amp;#169%3b 2011-2013 Robert Schwenn</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2011-2015 Robert Schwenn</CopyrightText>
     <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
     <PlugInConfigurations>
       <PlugInConfig id="Hierarchical Table of Contents" enabled="True">
@@ -116,7 +116,7 @@
     <HelpFileFormat>HtmlHelp1, MSHelpViewer</HelpFileFormat>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CleanIntermediates>True</CleanIntermediates>
-    <CatalogName>VisualStudio12</CatalogName>
+    <CatalogName>VisualStudio14</CatalogName>
     <TocParentId>-1</TocParentId>
     <TocParentVersion>100</TocParentVersion>
     <TopicVersion>100</TopicVersion>
