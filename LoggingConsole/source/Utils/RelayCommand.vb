@@ -1,6 +1,5 @@
 ﻿
 Imports System
-Imports System.ComponentModel
 Imports System.Windows.Input
 Imports System.Windows.Media.Imaging
 

@@ -27,12 +27,12 @@ Public Class MessageStore
     
     #Region "Private Fields"
         
-        Private InternalLogger      As Logger = LogBox.getLogger("LogBox.MessageStore")
+        Private ReadOnly InternalLogger As Logger = LogBox.GetLogger("LogBox.MessageStore")
         
-        Private _HighestLevelInLog  As LogLevelEnum = LogLevelEnum.Debug
-        Private _LogBox             As LogBox = Nothing
-        Private _Messages           As Collection(Of ObservableCollection(Of LogEntry)) = Nothing
-        Private _TotalMessagesCount As Long = 0
+        Private ReadOnly _LogBox        As LogBox = Nothing
+        Private _HighestLevelInLog      As LogLevelEnum = LogLevelEnum.Debug
+        Private _Messages               As Collection(Of ObservableCollection(Of LogEntry)) = Nothing
+        Private _TotalMessagesCount     As Long = 0
         
     #End Region
     
@@ -117,7 +117,7 @@ Public Class MessageStore
             Set(value As UInteger)
                 If (Not (value = My.Settings.MaxLogLength)) Then
                     My.Settings.MaxLogLength = value
-                    limitLog()
+                    LimitLog()
                 End If 
             End Set
         End Property
@@ -131,10 +131,10 @@ Public Class MessageStore
          ''' <param name="Source">  This is passed to the <see cref="LoggingConsole.LogEntry"/> constructor. </param>
          ''' <param name="Message"> This is passed to the <see cref="LoggingConsole.LogEntry"/> constructor. </param>
          ''' <remarks> This is called internally only. </remarks>
-        Friend Sub addMessage(ByVal Level As LogLevelEnum, ByVal Source As String, ByVal Message As String)
+        Friend Sub AddMessage(ByVal Level As LogLevelEnum, ByVal Source As String, ByVal Message As String)
             
             ' Adds a new Message with the specified level to every relevant Messages Collection.
-            _TotalMessagesCount = _TotalMessagesCount + 1
+            _TotalMessagesCount += 1
             Dim oLogEntry as LogEntry = New LogEntry(_TotalMessagesCount, Level, Source, Message)
             
             _Messages(LogLevelEnum.Debug).Add(oLogEntry)
@@ -143,7 +143,7 @@ Public Class MessageStore
             If (Not (Level < LogLevelEnum.Error))   Then _Messages(LogLevelEnum.Error).Add(oLogEntry)
             
             ' Cut the Log if it exceeds Me.MaxLogLength.
-            limitLog()
+            LimitLog()
             
             ' Update Me.HighestLevelInLog.
             If (Level > _HighestLevelInLog) Then
@@ -158,17 +158,17 @@ Public Class MessageStore
         End Sub
         
         ''' <summary> Clears the entire Log. </summary>
-        Friend Sub clearLog()
+        Friend Sub ClearLog()
             For each LogList as ObservableCollection(Of LogEntry) in _Messages
                 LogList.Clear
             Next
             _HighestLevelInLog = LogLevelEnum.Debug
             _TotalMessagesCount = 0
-            InternalLogger.logDebug(My.Resources.Resources.MessageStore_LogCleared)
+            InternalLogger.LogDebug(My.Resources.Resources.MessageStore_LogCleared)
         End Sub
         
         ''' <summary> Removes old messages from the Log to respect the <see cref="MaxLogLength"/> Property. </summary>
-        Friend Sub limitLog()
+        Friend Sub LimitLog()
             'Cuts the Collection if it exceeds the maximum number of lines.
             Const cutPercent As Long = 20  'part to cut away in percent (ca.)
             
@@ -188,7 +188,7 @@ Public Class MessageStore
                         LogList.RemoveAt(0)
                       Next
                       
-                      InternalLogger.logDebug(String.Format(My.Resources.Resources.MessageStore_LimitLogResult, OldLen, LogList.Count))
+                      InternalLogger.LogDebug(String.Format(My.Resources.Resources.MessageStore_LimitLogResult, OldLen, LogList.Count))
                     End If
                 Next
             End If
@@ -208,7 +208,7 @@ Public Class MessageStore
             Try
                 RaiseEvent ErrorLogged(Me, New System.EventArgs)
             Catch ex As System.Exception
-                InternalLogger.logError(ex, "OnErrorLogged: " & My.Resources.Resources.Global_ErrorInEventHandler)
+                InternalLogger.LogError(ex, "OnErrorLogged: " & My.Resources.Resources.Global_ErrorInEventHandler)
             End Try
         End Sub
         

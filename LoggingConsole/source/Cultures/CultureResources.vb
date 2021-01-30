@@ -44,7 +44,7 @@ Public NotInheritable Class CultureResources
         Private Shared _MainAssemblyCulture    As CultureInfo = Nothing
         Private Shared _SupportedCultures      As List(Of CultureInfo) = Nothing
         
-        Private Shared InternalLogger          As Logger = LogBox.getLogger("LogBox.CultureResources")
+        Private Shared ReadOnly InternalLogger As Logger = LogBox.GetLogger("LogBox.CultureResources")
         
         Private Shared ReadOnly SyncHandle     As New Object
         
@@ -78,7 +78,7 @@ Public NotInheritable Class CultureResources
                     If (_InstanceProvider Is Nothing) Then
                         _InstanceProvider = New System.Windows.Data.ObjectDataProvider
                         _InstanceProvider.ObjectInstance = New CultureResources
-                        InternalLogger.logDebug("CultureResources instantiated to allow WPF two way binding.")
+                        InternalLogger.LogDebug("CultureResources instantiated to allow WPF two way binding.")
                     End If
                     Return _InstanceProvider
                 End SyncLock
@@ -184,9 +184,9 @@ Public NotInheritable Class CultureResources
                         End If
                         
                         ' Log supported cultures to LoggingConsole
-                        InternalLogger.logDebug("Supported languages:")
+                        InternalLogger.LogDebug("Supported languages:")
                         For Each ci as CultureInfo in _SupportedCultures
-                            InternalLogger.logDebug(String.Format(" - {0} [{1}]", ci.NativeName, ci.Name))
+                            InternalLogger.LogDebug(String.Format(" - {0} [{1}]", ci.NativeName, ci.Name))
                         Next
                     End If
                     Return _SupportedCultures
@@ -245,22 +245,22 @@ Public NotInheritable Class CultureResources
                     
                     If (My.Resources.Resources.Culture isNot Nothing) then
                         resCulture = My.Resources.Resources.Culture
-                        InternalLogger.logDebug(String.Format("CurrentCulture[Get]: My.Resources.Resources.Culture = [{0}]", resCulture.Name))
+                        InternalLogger.LogDebug(String.Format("CurrentCulture[Get]: My.Resources.Resources.Culture = [{0}]", resCulture.Name))
                     Else
-                        InternalLogger.logDebug("CurrentCulture[Get]: My.Resources.Resources.Culture = null")
+                        InternalLogger.LogDebug("CurrentCulture[Get]: My.Resources.Resources.Culture = null")
                         resCulture = CultureInfo.CurrentUICulture
-                        InternalLogger.logDebug(String.Format("CurrentCulture[Get]: CultureInfo.CurrentUICulture = [{0}]", resCulture.Name))
+                        InternalLogger.LogDebug(String.Format("CurrentCulture[Get]: CultureInfo.CurrentUICulture = [{0}]", resCulture.Name))
                     End If
                     
                     'Try fallback to match a suported culture.
                     if (not SupportedCultures.Contains(resCulture)) then
-                        InternalLogger.logDebug(String.Format("CurrentCulture[Get]: [{0}] is not supported.", resCulture.Name))
+                        InternalLogger.LogDebug(String.Format("CurrentCulture[Get]: [{0}] is not supported.", resCulture.Name))
                         if (SupportedCultures.Contains(resCulture.Parent)) then
                             resCulture = resCulture.Parent
                         else
                             resCulture = _SupportedCultures(0)
                         end if
-                        InternalLogger.logDebug(String.Format("CurrentCulture[Get]: Instead use [{0}].", resCulture.Name))
+                        InternalLogger.LogDebug(String.Format("CurrentCulture[Get]: Instead use [{0}].", resCulture.Name))
                     end if
                     Return resCulture
                 End SyncLock
@@ -270,10 +270,10 @@ Public NotInheritable Class CultureResources
                     If (value isNot My.Resources.Resources.Culture) Then
                         If (not SupportedCultures.Contains(value)) Then
                             Debug.WriteLine(String.Format("Culture [{0}] not available - not changed anything.", value))
-                            InternalLogger.logDebug(String.Format("Culture [{0}] not available - not changed anything.", value))
+                            InternalLogger.LogDebug(String.Format("Culture [{0}] not available - not changed anything.", value))
                         Else
                             Debug.WriteLine(String.Format("Switch to Culture [{0}]", value))
-                            InternalLogger.logDebug(String.Format("Switch to Culture [{0}]", value))
+                            InternalLogger.LogDebug(String.Format("Switch to Culture [{0}]", value))
                             
                             My.Resources.Resources.Culture = value
                             InstanceProvider.Refresh()
@@ -298,7 +298,7 @@ Public NotInheritable Class CultureResources
             Try
                 RaiseEvent CultureChanged(InstanceProvider, New System.EventArgs)
             Catch ex As System.Exception
-                InternalLogger.logError(ex, "OnCultureChanged: " & My.Resources.Resources.Global_ErrorInEventHandler)
+                InternalLogger.LogError(ex, "OnCultureChanged: " & My.Resources.Resources.Global_ErrorInEventHandler)
             End Try
         End Sub
         

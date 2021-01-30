@@ -9,16 +9,16 @@ Partial Class MainWindow
     ''' Built-in logging
     ''' </summary>
     Private Sub Button1_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles Button1.Click
-        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Test.for Demo")
+        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Test.for Demo")
         
         'To not change the active view when an error is logged (see corresponding CheckBox):
         'Rstyx.LoggingConsole.LogBox.Instance.Console.activateErrorViewOnError = False 
         
         for i As ULong = 1 to 1000
-          BuiltInLogger.logDebug("Test debug")
-          BuiltInLogger.logInfo("Test Info")
-          BuiltInLogger.logWarning("Test Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning")
-          BuiltInLogger.logError("Test Error")
+          BuiltInLogger.LogDebug("Test debug")
+          BuiltInLogger.LogInfo("Test Info")
+          BuiltInLogger.LogWarning("Test Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning")
+          BuiltInLogger.LogError("Test Error")
         next
     End Sub
     
@@ -32,7 +32,7 @@ Partial Class MainWindow
         window.LoggingConsolePanel.Content = Nothing
         
         'Show built-in standalone Window.
-        Rstyx.LoggingConsole.LogBox.Instance.showFloatingConsoleView(suppressErrorOnFail:=false)
+        Rstyx.LoggingConsole.LogBox.Instance.ShowFloatingConsoleView(suppressErrorOnFail:=false)
     End Sub
     
     
@@ -54,7 +54,7 @@ Partial Class MainWindow
     ''' </summary>
     Private Sub Button4_Click(sender As System.Object , e As System.Windows.RoutedEventArgs) Handles Button4.Click
         'Ensure that the built-in window isn't shown
-        Rstyx.LoggingConsole.LogBox.Instance.hideFloatingConsoleView()
+        Rstyx.LoggingConsole.LogBox.Instance.HideFloatingConsoleView()
         
         'Embed the ConsoleView into the MainWíndow (which has a ContentControl with Name="LoggingConsolePanel")
         Dim window As MainWindow = Application.Current.MainWindow

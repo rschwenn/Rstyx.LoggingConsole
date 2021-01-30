@@ -81,14 +81,14 @@ Public Class Log4netAppender
          ''' </remarks>
         Protected Overrides Sub Append(loggingEvent As log4net.Core.LoggingEvent)
             
-            Dim oLogger As Rstyx.LoggingConsole.Logger = LogBox.getLogger(loggingEvent.LoggerName)
+            Dim oLogger As Rstyx.LoggingConsole.Logger = LogBox.GetLogger(loggingEvent.LoggerName)
             Dim message As String = loggingEvent.RenderedMessage
             
             Select Case loggingEvent.Level.Value
-                Case Is <= log4net.Core.Level.Debug.Value: oLogger.logDebug(message)
-                Case Is <= log4net.Core.Level.Info.Value:  oLogger.logInfo(message)
-                Case Is <= log4net.Core.Level.Warn.Value:  oLogger.logWarning(message)
-                Case Else: oLogger.logError(message)
+                Case Is <= log4net.Core.Level.Debug.Value: oLogger.LogDebug(message)
+                Case Is <= log4net.Core.Level.Info.Value:  oLogger.LogInfo(message)
+                Case Is <= log4net.Core.Level.Warn.Value:  oLogger.LogWarning(message)
+                Case Else: oLogger.LogError(message)
             End Select
         End Sub
         

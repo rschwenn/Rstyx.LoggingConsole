@@ -22,12 +22,11 @@ Public Class Logger
     
     #Region "Private Fields"
         
-        Private _LogBox             As LogBox = Nothing
-        Private _Name               As String = Nothing
+        Private ReadOnly _LogBox            As LogBox = Nothing
+        Private ReadOnly _Name              As String = Nothing
         
-        Private ConsoleDispatcher   As System.Windows.Threading.Dispatcher = Nothing
-        Private Operation           As System.Windows.Threading.DispatcherOperation = Nothing
-        Private AddOneLineDelegate  As addOneLine = Nothing
+        Private ReadOnly AddOneLineDelegate As addOneLine = Nothing
+        Private ConsoleDispatcher           As System.Windows.Threading.Dispatcher = Nothing
         
     #End Region
     
@@ -48,7 +47,7 @@ Public Class Logger
             _LogBox = parentLogBox
             
             ' Delegate for running in the UI thread.
-            AddOneLineDelegate = New addOneLine(AddressOf addMessageLine)
+            AddOneLineDelegate = New addOneLine(AddressOf AddMessageLine)
         End Sub
         
     #End Region
@@ -82,7 +81,7 @@ Public Class Logger
          ''' The exception's stack trace is added to DEBUG log.
          ''' All inner exceptions will be logged.
          ''' </remarks>
-        Public Sub logError(ex As System.Exception, ByVal Message As String)
+        Public Sub LogError(ex As System.Exception, ByVal Message As String)
             ' Log exception.
             If (ex IsNot Nothing) Then
                 
@@ -101,19 +100,19 @@ Public Class Logger
                 Dim ExHeaderLevel As LogLevelEnum = If(Me.LogBox.ExceptionHeaderAsDebug AndAlso (Not String.IsNullOrWhiteSpace(ex.Message)), LogLevelEnum.Debug, LogLevelEnum.Error)
                 If (TypeOf ex Is System.IO.FileNotFoundException) Then
                     'logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}():{3}{4} ({5})", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), vbNewLine, ex.Message, CType(ex, System.IO.FileNotFoundException).FileName))
-                    logMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}():", ex.GetType().Name, TargetDeclaringType, getTargetName(ex)))
-                    logMessage(LogLevelEnum.Error, String.Format("{0} ({1})", ex.Message, CType(ex, System.IO.FileNotFoundException).FileName))
+                    LogMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}():", ex.GetType().Name, TargetDeclaringType, GetTargetName(ex)))
+                    LogMessage(LogLevelEnum.Error, String.Format("{0} ({1})", ex.Message, CType(ex, System.IO.FileNotFoundException).FileName))
                     
                 ElseIf (TypeOf ex Is System.Data.OleDb.OleDbException) Then
                     Dim OleDbEx As System.Data.OleDb.OleDbException = CType(ex, System.Data.OleDb.OleDbException)
-                    logMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}() (FehlerCode={3}, FehlerAnzahl={4}):", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), OleDbEx.ErrorCode, OleDbEx.Errors.Count))
+                    LogMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}() (FehlerCode={3}, FehlerAnzahl={4}):", ex.GetType().Name, TargetDeclaringType, GetTargetName(ex), OleDbEx.ErrorCode, OleDbEx.Errors.Count))
                     For Each OleDbErr As System.Data.OleDb.OleDbError In OleDbEx.Errors
-                        logMessage(LogLevelEnum.Error, String.Format(" - {0}: {1}", OleDbErr.Source, OleDbErr.Message))
+                        LogMessage(LogLevelEnum.Error, String.Format(" - {0}: {1}", OleDbErr.Source, OleDbErr.Message))
                     Next
                 Else
                     'logMessage(LogLevelEnum.Error, String.Format("{0} in {1}/{2}():{3}{4}", ex.GetType().Name, TargetDeclaringType, getTargetName(ex), vbNewLine, ex.Message))
-                    logMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}():", ex.GetType().Name, TargetDeclaringType, getTargetName(ex)))
-                    logMessage(LogLevelEnum.Error, ex.Message)
+                    LogMessage(ExHeaderLevel, String.Format("{0} in {1}/{2}():", ex.GetType().Name, TargetDeclaringType, GetTargetName(ex)))
+                    LogMessage(LogLevelEnum.Error, ex.Message)
                 End If
                 
                 ' Test **************
@@ -121,46 +120,46 @@ Public Class Logger
                 ' Test **************
                 
                 ' Stack trace only with debug level.
-                logMessage(LogLevelEnum.Debug, ex.StackTrace)
+                LogMessage(LogLevelEnum.Debug, ex.StackTrace)
                 
                 ' Discover inner exceptions.
                 If (TypeOf ex Is AggregateException) Then
                     For Each InnerEx As Exception In CType(ex, AggregateException).InnerExceptions
-                        logError(InnerEx, Nothing)
+                        LogError(InnerEx, Nothing)
                     Next
                 ElseIf (ex.InnerException IsNot Nothing) Then
                     ' Recursive discover inner exceptions - last first :-(.
-                    logError(ex.InnerException, Nothing)
+                    LogError(ex.InnerException, Nothing)
                 End If 
             End If
             
             ' Log given Message.
             'If (Not String.IsNullOrEmpty(Message)) Then logMessage(LogLevelEnum.Error, Message)
-            If (Message IsNot Nothing) Then logMessage(LogLevelEnum.Error, Message)
+            If (Message IsNot Nothing) Then LogMessage(LogLevelEnum.Error, Message)
         End Sub
         
         ''' <summary> Adds a message of Error level to the log. </summary>
          ''' <param name="Message"> The message itself (may contain line breaks). </param>
-        Public Sub logError(ByVal Message As String)
-            logMessage(LogLevelEnum.Error, Message)
+        Public Sub LogError(ByVal Message As String)
+            LogMessage(LogLevelEnum.Error, Message)
         End Sub
         
         ''' <summary> Adds a message of Warning level to the log. </summary>
          ''' <param name="Message"> The message itself (may contain line breaks). </param>
-        Public Sub logWarning(ByVal Message As String)
-            logMessage(LogLevelEnum.Warning, Message)
+        Public Sub LogWarning(ByVal Message As String)
+            LogMessage(LogLevelEnum.Warning, Message)
         End Sub
         
         ''' <summary> Adds a message of Info level to the log. </summary>
          ''' <param name="Message"> The message itself (may contain line breaks). </param>
-        Public Sub logInfo(ByVal Message As String)
-            logMessage(LogLevelEnum.Info, Message)
+        Public Sub LogInfo(ByVal Message As String)
+            LogMessage(LogLevelEnum.Info, Message)
         End Sub
         
         ''' <summary> Adds a message of Debug level to the log. </summary>
          ''' <param name="Message"> The message itself (may contain line breaks). </param>
-        Public Sub logDebug(ByVal Message As String)
-            logMessage(LogLevelEnum.Debug, Message)
+        Public Sub LogDebug(ByVal Message As String)
+            LogMessage(LogLevelEnum.Debug, Message)
         End Sub
         
     #End Region
@@ -171,7 +170,7 @@ Public Class Logger
          ''' <param name="Level"> The LogLevel </param>
          ''' <param name="Message"> The message itself (may contain line breaks). </param>
          ''' <remarks> If the message contains line breaks, every contained line is logged as a separate LogEntry. </remarks>
-        Private Sub logMessage(ByVal Level As LogLevelEnum, ByVal Message As String)
+        Private Sub LogMessage(ByVal Level As LogLevelEnum, ByVal Message As String)
             Try
                 Dim MsgLines() As String
                 
@@ -209,8 +208,8 @@ Public Class Logger
         ''' <summary> Adds one line of the message to the log. It's encapsulated for use as <see cref="addOneLine"/> Delegate. </summary>
          ''' <param name="Level">       The log Level. </param>
          ''' <param name="MessageLine"> The text of the message line. </param>
-        Private Sub addMessageLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
-            _LogBox.MessageStore.addMessage(Level, Me.Name, MessageLine)
+        Private Sub AddMessageLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
+            _LogBox.MessageStore.AddMessage(Level, Me.Name, MessageLine)
         End Sub
         
         ''' <summary> Returns the Logger instance with the empty <see cref="LoggingConsole.Logger.Name"/>. </summary>
@@ -219,7 +218,7 @@ Public Class Logger
          ''' If the Logger with the empty Name doesn't exist yet, 
          ''' it will be created and stored in the internal set of Loggers. 
          ''' </remarks>
-        Private Function getTargetName(ex as Exception) As String
+        Private Function GetTargetName(ex as Exception) As String
             Return If(ex.TargetSite Is Nothing, "?", ex.TargetSite.Name)
         End Function
         

@@ -4,7 +4,7 @@ Imports System
 Partial Public Class ConsoleView
     Inherits System.Windows.Controls.UserControl
     
-    Private InternalLogger      As Logger  = LogBox.getLogger("LogBox.ConsoleView")
+    Private InternalLogger      As Logger  = LogBox.GetLogger("LogBox.ConsoleView")
     Private _ConnectToConsole   As Boolean = False
     
     Public Sub New()
@@ -37,7 +37,7 @@ Partial Public Class ConsoleView
                 End If
             End If
         Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
         End Try
     End Sub
     

@@ -12,12 +12,12 @@ Public Class LogEntry
     
     #Region "Private Fields"
         
-        Private _LineNo   As Long
-        Private _Date     As Date = DateAndTime.Today
-        Private _Time     As Date = DateAndTime.TimeOfDay
-        Private _Level    As LogLevelEnum = LogLevelEnum.Info
-        Private _Source   As String = String.Empty
-        Private _Message  As String = String.Empty
+        Private ReadOnly _LineNo    As Long
+        Private ReadOnly _Date      As Date = DateAndTime.Today
+        Private ReadOnly _Time      As Date = DateAndTime.TimeOfDay
+        Private ReadOnly _Level     As LogLevelEnum = LogLevelEnum.Info
+        Private ReadOnly _Source    As String = String.Empty
+        Private ReadOnly _Message   As String = String.Empty
         
     #End Region
     

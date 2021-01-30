@@ -174,7 +174,7 @@ Public Class WpfUtils
         ''' <summary> creates a BitmapImage from a file path </summary>
          ''' <param name="path">File path, i.e. for a project resource: "/ProjectName;component/Resources/save.png"</param>
          ''' <returns> The BitmapImage generated from the given file. </returns>
-        Public Shared Function getImageFromPath(path As String) As System.Windows.Media.Imaging.BitmapImage
+        Public Shared Function GetImageFromPath(path As String) As System.Windows.Media.Imaging.BitmapImage
             Dim bi As New System.Windows.Media.Imaging.BitmapImage()
             SyncLock (SyncHandle)
                 bi.BeginInit()
@@ -201,7 +201,7 @@ Public Class WpfUtils
             ''' Returns the conversion dictionary.
             ''' It's newly created everytime in order to get the correct language resource strings always.
             ''' </summary>
-            Private Function getConvertDictionary As Dictionary(Of LogLevelEnum, String)
+            Private Function GetConvertDictionary As Dictionary(Of LogLevelEnum, String)
                 Dim ConvertDictionary As New Dictionary(Of LogLevelEnum, String)
                 ConvertDictionary.add(LogLevelEnum.Debug,   My.Resources.Resources.Enum_LogLevel_Debug)
                 ConvertDictionary.add(LogLevelEnum.Info,    My.Resources.Resources.Enum_LogLevel_Info)
@@ -218,7 +218,7 @@ Public Class WpfUtils
              ''' <returns>                 The display string. On error the input value itself is returned. </returns>
             Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IValueConverter.Convert
                 Try
-                    Return getConvertDictionary().Item(value)
+                    Return GetConvertDictionary().Item(value)
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
                     Return value
@@ -277,15 +277,15 @@ Public Class WpfUtils
         Private Class LogLevelBackgroundValueConverter
             Implements IMultiValueConverter
             
-            Private ConvertDict        As New Dictionary(Of LogLevelEnum, System.Windows.Media.SolidColorBrush)
-            Private SystemWindowColor  As New System.Windows.Media.SolidColorBrush(System.Windows.SystemColors.WindowColor)
+            Private ReadOnly ConvertDict        As New Dictionary(Of LogLevelEnum, System.Windows.Media.SolidColorBrush)
+            Private ReadOnly SystemWindowColor  As New System.Windows.Media.SolidColorBrush(System.Windows.SystemColors.WindowColor)
             
             Public Sub New()
-                ConvertDict.add(LogLevelEnum.Debug,   new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LightGray))
-                'ConvertDict.add(LogLevelEnum.Info,    new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Honeydew))
+                ConvertDict.add(LogLevelEnum.Debug,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LightGray))
+                'ConvertDict.add(LogLevelEnum.Info,    New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Honeydew))
                 ConvertDict.add(LogLevelEnum.Info,    SystemWindowColor)
-                ConvertDict.add(LogLevelEnum.Warning, new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.PeachPuff))
-                ConvertDict.add(LogLevelEnum.Error,   new System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Pink))
+                ConvertDict.add(LogLevelEnum.Warning, New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.PeachPuff))
+                ConvertDict.add(LogLevelEnum.Error,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Pink))
             End Sub
             
             ''' <summary> Converts a LogLevelEnum value to a SolidColorBrush. </summary>
@@ -353,7 +353,7 @@ Public Class WpfUtils
             Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IValueConverter.ConvertBack
                 'Width => Boolean
                 Try
-                    Return If(CDbl(value) = 0.0, False, True)
+                    Return (CDbl(value) <> 0.0)
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
                     Return value
@@ -394,7 +394,7 @@ Public Class WpfUtils
             Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IValueConverter.ConvertBack
                 'System.Windows.Visibility => Boolean
                 Try
-                    Return If((value = System.Windows.Visibility.Visible), True, False)
+                    Return (value = System.Windows.Visibility.Visible)
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
                     Return value
@@ -459,7 +459,7 @@ Public Class WpfUtils
             ''' Returns the conversion dictionary.
             ''' It's newly created everytime in order to get the correct language resource strings always.
             ''' </summary>
-            Private Function getConvertDictionary As Dictionary(Of System.Windows.Controls.Dock, String)
+            Private Function GetConvertDictionary As Dictionary(Of System.Windows.Controls.Dock, String)
                 Dim ConvertDictionary As New Dictionary(Of System.Windows.Controls.Dock, String)
                 ConvertDictionary.add(System.Windows.Controls.Dock.Top,    My.Resources.Resources.Enum_Dock_Top)
                 ConvertDictionary.add(System.Windows.Controls.Dock.Left,   My.Resources.Resources.Enum_Dock_Left)
@@ -472,7 +472,7 @@ Public Class WpfUtils
             ''' Returns the back conversion dictionary.
             ''' It's newly created everytime in order to get the correct language resource strings always.
             ''' </summary>
-            Private Function getConvertBackDictionary As Dictionary(Of String, System.Windows.Controls.Dock)
+            Private Function GetConvertBackDictionary As Dictionary(Of String, System.Windows.Controls.Dock)
                 Dim ConvertBackDictionary = New Dictionary(Of String, System.Windows.Controls.Dock)
                 ConvertBackDictionary.add(My.Resources.Resources.Enum_Dock_Top   , System.Windows.Controls.Dock.Top)
                 ConvertBackDictionary.add(My.Resources.Resources.Enum_Dock_Left  , System.Windows.Controls.Dock.Left)
@@ -504,11 +504,11 @@ Public Class WpfUtils
                                 Dim ub As Long = UBound(value)
                                 Dim retArray(ub) As String
                                 For i as long = 0 to ub
-                                    retArray(i) = getConvertDictionary().item(value(i))
+                                    retArray(i) = GetConvertDictionary().item(value(i))
                                 Next
                                 ret = retArray
                             Else
-                                ret = getConvertDictionary().item(value)
+                                ret = GetConvertDictionary().item(value)
                             End if
                         Else
                             'String => Dock
@@ -517,11 +517,11 @@ Public Class WpfUtils
                                     Dim ub As Long = UBound(value)
                                     Dim retArray(ub) As System.Windows.Controls.Dock
                                     For i as long = 0 to ub
-                                        retArray(i) = getConvertBackDictionary().item(value(i))
+                                        retArray(i) = GetConvertBackDictionary().item(value(i))
                                     Next
                                     ret = retArray
                                 Else
-                                    ret = getConvertBackDictionary().item(value)
+                                    ret = GetConvertBackDictionary().item(value)
                                 End if
                             End if
                         End if
@@ -550,7 +550,7 @@ Public Class WpfUtils
         Private Class ExpandDirectionValueConverter
             Implements IValueConverter
             
-            Private ConvertDict  As Dictionary(Of System.Windows.Controls.Dock, System.Windows.Controls.ExpandDirection)
+            Private ReadOnly ConvertDict As Dictionary(Of System.Windows.Controls.Dock, System.Windows.Controls.ExpandDirection)
             
             Public Sub New()
                 ConvertDict = New Dictionary(Of System.Windows.Controls.Dock, System.Windows.Controls.ExpandDirection)
@@ -633,7 +633,7 @@ Public Class WpfUtils
         Private Class CultureInfoValueConverter
             Implements IValueConverter
             
-            Private NativeName2CultureInfo  As New Dictionary(Of String, CultureInfo)
+            Private ReadOnly NativeName2CultureInfo As New Dictionary(Of String, CultureInfo)
             
             Public Sub New()
             End Sub

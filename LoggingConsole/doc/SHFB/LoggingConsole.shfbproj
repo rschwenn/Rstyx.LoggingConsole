@@ -52,7 +52,7 @@
     </ComponentConfigurations>
     <IncludeFavorites>False</IncludeFavorites>
     <FeedbackEMailAddress>devel%40rstyx.de</FeedbackEMailAddress>
-    <CopyrightText>Copyright &amp;#169%3b 2011-2015 Robert Schwenn</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2011-2021 Robert Schwenn</CopyrightText>
     <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
     <PlugInConfigurations>
       <PlugInConfig id="Additional Reference Links" enabled="False">
@@ -68,7 +68,7 @@
     <ProductTitle>
     </ProductTitle>
     <VendorName>Rstyx</VendorName>
-    <HelpFileFormat>MSHelpViewer</HelpFileFormat>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CleanIntermediates>True</CleanIntermediates>
     <CatalogName>
@@ -86,7 +86,7 @@
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
-    <HelpFileVersion>1.1.3.0</HelpFileVersion>
+    <HelpFileVersion>1.1.4.0</HelpFileVersion>
     <NamespaceGrouping>True</NamespaceGrouping>
     <MaximumGroupParts>2</MaximumGroupParts>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>

@@ -2,10 +2,6 @@
 Imports System
 Imports System.Diagnostics
 Imports System.Windows
-Imports System.Windows.Controls
-Imports System.Windows.Data
-Imports System.Windows.Input
-Imports System.Collections.ObjectModel
 Imports System.Collections.Generic
 
 ''' <summary> The LogBox is the <b>Hub of LoggingConsole</b>, because it's the main view model, the hub, the dispatcher. </summary>
@@ -29,7 +25,7 @@ Imports System.Collections.Generic
  ''' <b>Console:</b> Almost all viewer related tasks are done with the one <see cref="LoggingConsole.Console"/>
  ''' connected to this LogBox instance. You can get it by the <see cref="LogBox.Console"/> property. 
  ''' There is one exception: To show the <b>built-in floating window with embedded ConsoleView</b> 
- ''' call <see cref="LogBox.showFloatingConsoleView"/>.
+ ''' call <see cref="LogBox.ShowFloatingConsoleView"/>.
  ''' The title of this window is <see cref="LogBox.DisplayName"/>.
  ''' </para>
  ''' </remarks>
@@ -39,17 +35,17 @@ Public NotInheritable Class LogBox
     #Region "Private Fields"
         
         Private Shared ReadOnly SyncHandle          As Object
-        Private Shared _LogBox                      As LogBox
-        Private Shared InternalLogger               As Logger
+        Private Shared ReadOnly _LogBox             As LogBox
+        Private Shared ReadOnly InternalLogger      As Logger
         
+        Private ReadOnly LoggerSet                  As Dictionary(Of String, Logger)
         Private _MessageStore                       As MessageStore = Nothing
         Private _Console                            As Console = Nothing
-        Private LoggerSet                           As Dictionary(Of String, Logger)
         Private FloatingWindow                      As ConsoleWindow = Nothing
         Private OwnerWindow                         As Window = Nothing
         
         Private _isFloatingConsoleModal             As Boolean = false
-        Private IsDisplayNameResource               As Boolean = false
+        Private ReadOnly IsDisplayNameResource      As Boolean = false
         
         Private _showFloatingConsoleViewAction      As Action(Of Boolean) = Nothing
         Private _hideFloatingConsoleViewAction      As Action = Nothing
@@ -78,36 +74,36 @@ Public NotInheritable Class LogBox
             AddHandler CultureResources.CultureChanged,  AddressOf _LogBox.OnCultureChanged
             
             'Log some info.
-            InternalLogger = getLogger("LogBox")
+            InternalLogger = GetLogger("LogBox")
             
             Dim ThisAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
             Dim ThisProcess  As System.Diagnostics.Process = Process.GetCurrentProcess()
             Dim MainModule   As System.Diagnostics.ProcessModule = ThisProcess.MainModule
             
-            InternalLogger.logDebug("ExecutingAssembly FullName = "  & ThisAssembly.FullName)
-            InternalLogger.logDebug("ExecutingAssembly Location = "  & ThisAssembly.Location)
+            InternalLogger.LogDebug("ExecutingAssembly FullName = "  & ThisAssembly.FullName)
+            InternalLogger.LogDebug("ExecutingAssembly Location = "  & ThisAssembly.Location)
             
-            InternalLogger.logDebug("Main Module = " & MainModule.FileName)
-            InternalLogger.logDebug("Command Line = " & System.Environment.CommandLine)
-            InternalLogger.logDebug("Current Directory = " & System.Environment.CurrentDirectory)
-            InternalLogger.logDebug("Current Process = " & If(System.Environment.Is64BitProcess, "x64", "x32"))
+            InternalLogger.LogDebug("Main Module = " & MainModule.FileName)
+            InternalLogger.LogDebug("Command Line = " & System.Environment.CommandLine)
+            InternalLogger.LogDebug("Current Directory = " & System.Environment.CurrentDirectory)
+            InternalLogger.LogDebug("Current Process = " & If(System.Environment.Is64BitProcess, "x64", "x32"))
             
             Try
-                InternalLogger.logDebug("Operating System = " & System.Environment.OSVersion.ToString() & " (" & If(System.Environment.Is64BitOperatingSystem, "x64", "x32") & ")")
-                InternalLogger.logDebug(".NET Framework = " & System.Environment.Version.ToString())
-                InternalLogger.logDebug("Processor Count = " & System.Environment.ProcessorCount.ToString())
-                InternalLogger.logDebug("Machine Name = " & System.Environment.MachineName)
-                InternalLogger.logDebug("UserDomain = " & System.Environment.UserDomainName)
+                InternalLogger.LogDebug("Operating System = " & System.Environment.OSVersion.ToString() & " (" & If(System.Environment.Is64BitOperatingSystem, "x64", "x32") & ")")
+                InternalLogger.LogDebug(".NET Framework = " & System.Environment.Version.ToString())
+                InternalLogger.LogDebug("Processor Count = " & System.Environment.ProcessorCount.ToString())
+                InternalLogger.LogDebug("Machine Name = " & System.Environment.MachineName)
+                InternalLogger.LogDebug("UserDomain = " & System.Environment.UserDomainName)
             Catch ex As Exception
             End Try
-            InternalLogger.logDebug("User = " & System.Environment.UserName)
-            InternalLogger.logDebug("interactive Session = " & System.Environment.UserInteractive.ToString())
+            InternalLogger.LogDebug("User = " & System.Environment.UserName)
+            InternalLogger.LogDebug("interactive Session = " & System.Environment.UserInteractive.ToString())
             
-            InternalLogger.logDebug("CultureInfo.InstalledUICulture = " & System.Globalization.CultureInfo.InstalledUICulture.Name)
-            InternalLogger.logDebug("CultureInfo.CurrentCulture = "     & System.Globalization.CultureInfo.CurrentCulture.Name)
-            InternalLogger.logDebug("CultureInfo.CurrentUICulture = "   & System.Globalization.CultureInfo.CurrentUICulture.Name)
+            InternalLogger.LogDebug("CultureInfo.InstalledUICulture = " & System.Globalization.CultureInfo.InstalledUICulture.Name)
+            InternalLogger.LogDebug("CultureInfo.CurrentCulture = "     & System.Globalization.CultureInfo.CurrentCulture.Name)
+            InternalLogger.LogDebug("CultureInfo.CurrentUICulture = "   & System.Globalization.CultureInfo.CurrentUICulture.Name)
             
-            InternalLogger.logDebug(My.Resources.Resources.LogBox_LogInitialized)
+            InternalLogger.LogDebug(My.Resources.Resources.LogBox_LogInitialized)
         End Sub
         
         ''' <summary> Instantiates the one and only LogBox instance and initializes instance fields. </summary>
@@ -160,9 +156,9 @@ Public NotInheritable Class LogBox
         ''' <summary> Returns the Logger instance with the empty <see cref="LoggingConsole.Logger.Name"/>. </summary>
          ''' <returns> The requested <see cref="LoggingConsole.Logger"/> instance. </returns>
          ''' <remarks> If the Logger with the empty Name doesn't exist yet, it will be created and stored in the internal set of Loggers. </remarks>
-        Public Shared Function getLogger() As Logger
+        Public Shared Function GetLogger() As Logger
             SyncLock (SyncHandle)
-                Return getLogger(String.Empty)
+                Return GetLogger(String.Empty)
             End SyncLock
         End Function
         
@@ -170,7 +166,7 @@ Public NotInheritable Class LogBox
          ''' <param name="LoggerName"> The Name of the requested Logger. If <see langword="null"/>, empty or white space, the empty name is used. </param>
          ''' <returns> The requested <see cref="LoggingConsole.Logger"/> instance. </returns>
          ''' <remarks>  If the Logger with the given Name doesn't exist yet, it will be created and stored in the internal set of Loggers.  </remarks>
-        Public Shared Function getLogger(ByVal LoggerName As String) As Logger
+        Public Shared Function GetLogger(ByVal LoggerName As String) As Logger
             SyncLock (SyncHandle)
                 ' Key for this new Logger in LoggerSet Dictionary.
                 Dim LoggerKey As String
@@ -236,10 +232,10 @@ Public NotInheritable Class LogBox
             End Set
         End Property
         
-        ''' <summary> Gets or sets the Action to perform, when <see cref="LogBox.showFloatingConsoleView"/> is invoked. </summary>
+        ''' <summary> Gets or sets the Action to perform, when <see cref="LogBox.ShowFloatingConsoleView"/> is invoked. </summary>
          ''' <remarks> 
          ''' <para>
-         ''' It defaults to <see cref="LogBox.showBuiltinFloatingConsoleView"/>. 
+         ''' It defaults to <see cref="LogBox.ShowBuiltinFloatingConsoleView"/>. 
          ''' </para>
          ''' <para>
          ''' CAUTION: If this property is set to a custom Action, Then the corresponding
@@ -249,7 +245,7 @@ Public NotInheritable Class LogBox
         Public Property ShowFloatingConsoleViewAction() As Action(Of Boolean)
             Get
                 If (_showFloatingConsoleViewAction is Nothing) Then
-                    _showFloatingConsoleViewAction = AddressOf showBuiltinFloatingConsoleView
+                    _showFloatingConsoleViewAction = AddressOf ShowBuiltinFloatingConsoleView
                 End If
                 ShowFloatingConsoleViewAction = _showFloatingConsoleViewAction
             End Get
@@ -258,10 +254,10 @@ Public NotInheritable Class LogBox
             End Set
         End Property
         
-        ''' <summary> Gets or sets the Action to perform, when <see cref="LogBox.hideFloatingConsoleView"/> is invoked. </summary>
+        ''' <summary> Gets or sets the Action to perform, when <see cref="LogBox.HideFloatingConsoleView"/> is invoked. </summary>
          ''' <remarks> 
          ''' <para>
-         ''' It defaults to <see cref="LogBox.hideBuiltinFloatingConsoleView"/>. 
+         ''' It defaults to <see cref="LogBox.HideBuiltinFloatingConsoleView"/>. 
          ''' </para>
          ''' <para>
          ''' This property corresponds to the <see cref="LoggingConsole.LogBox.ShowFloatingConsoleViewAction"/> property. 
@@ -274,7 +270,7 @@ Public NotInheritable Class LogBox
         Public Property HideFloatingConsoleViewAction() As Action
             Get
                 If (_hideFloatingConsoleViewAction is Nothing) Then
-                    _hideFloatingConsoleViewAction = AddressOf hideBuiltinFloatingConsoleView
+                    _hideFloatingConsoleViewAction = AddressOf HideBuiltinFloatingConsoleView
                 End If
                 HideFloatingConsoleViewAction = _hideFloatingConsoleViewAction
             End Get
@@ -286,12 +282,12 @@ Public NotInheritable Class LogBox
         #Region "Commands"
             
             ''' <summary> Returns the Command which clears the whole log. </summary>
-             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.clearLog"/> </remarks>
+             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.ClearLog"/> </remarks>
             Public ReadOnly Property ClearLogCommand() As RelayCommand
                 Get
                     If _ClearLogCommand Is Nothing Then
                         '_ClearLogCommand = New RelayCommand(AddressOf Me.clearLog, AddressOf Me.CanClearLog)
-                        _ClearLogCommand = New RelayCommand(AddressOf Me.clearLog)
+                        _ClearLogCommand = New RelayCommand(AddressOf Me.ClearLog)
                         _ClearLogCommand.CaptionResourceName = "LogBox_ClearLogCommand_Caption"
                         _ClearLogCommand.DescriptionResourceName = "LogBox_ClearLogCommand_Description"
                         _ClearLogCommand.IconBrush = UIResources.IconBrush("Handmade_delete2")
@@ -302,11 +298,11 @@ Public NotInheritable Class LogBox
             End Property
             
             ''' <summary> Returns the Command which saves the currently shown log to a file. </summary>
-             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.saveActiveLog"/> </remarks>
+             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.SaveActiveLog"/> </remarks>
             Public ReadOnly Property SaveLogCommand() As RelayCommand
                 Get
                     If _SaveLogCommand Is Nothing Then
-                        _SaveLogCommand = New RelayCommand(AddressOf Me.saveActiveLog)
+                        _SaveLogCommand = New RelayCommand(AddressOf Me.SaveActiveLog)
                         _SaveLogCommand.CaptionResourceName = "LogBox_SaveLogCommand_Caption"
                         _SaveLogCommand.DescriptionResourceName = "LogBox_SaveLogCommand_Description"
                         _SaveLogCommand.IconBrush = UIResources.IconBrush("Tango_DocumentSave1")
@@ -317,11 +313,11 @@ Public NotInheritable Class LogBox
             End Property
             
             ''' <summary> Returns the Command which saves all application settings. </summary>
-             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.resetSettings"/> </remarks>
+             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.ResetSettings"/> </remarks>
             Public ReadOnly Property ResetSettingsCommand() As RelayCommand
                 Get
                     If _ResetSettingsCommand Is Nothing Then
-                        _ResetSettingsCommand = New RelayCommand(AddressOf Me.resetSettings)
+                        _ResetSettingsCommand = New RelayCommand(AddressOf Me.ResetSettings)
                         _ResetSettingsCommand.CaptionResourceName = "LogBox_ResetSettingsCommand_Caption"
                         _ResetSettingsCommand.DescriptionResourceName = "LogBox_ResetSettingsCommand_Description"
                         _ResetSettingsCommand.IconBrush = UIResources.IconBrush("Tango_Gear1")
@@ -332,11 +328,11 @@ Public NotInheritable Class LogBox
             End Property
             
             ''' <summary> Returns the Command which hides the floating ConsoleView. </summary>
-             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.hideFloatingConsoleView"/> </remarks>
+             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.HideFloatingConsoleView"/> </remarks>
             Public ReadOnly Property HideFloatingConsoleViewCommand() As RelayCommand
                 Get
                     If _HideFloatingConsoleViewCommand Is Nothing Then
-                        _HideFloatingConsoleViewCommand = New RelayCommand(AddressOf Me.hideFloatingConsoleView)
+                        _HideFloatingConsoleViewCommand = New RelayCommand(AddressOf Me.HideFloatingConsoleView)
                         _HideFloatingConsoleViewCommand.CaptionResourceName = "LogBox_HideFloatingConsoleViewCommand_Caption"
                         _HideFloatingConsoleViewCommand.DescriptionResourceName = "LogBox_HideFloatingConsoleViewCommand_Description"
                         _HideFloatingConsoleViewCommand.IconBrush = UIResources.IconBrush("Handmade_Power4")
@@ -347,11 +343,11 @@ Public NotInheritable Class LogBox
             End Property
             
             ''' <summary> Returns the Command which shows the floating ConsoleView. </summary>
-             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.showFloatingConsoleView"/> </remarks>
+             ''' <remarks> The Command will be created if it doesn't exist yet. It utilizes <see cref="LogBox.ShowFloatingConsoleView"/> </remarks>
             Public ReadOnly Property ShowFloatingConsoleViewCommand() As RelayCommand
                 Get
                     If _ShowFloatingConsoleViewCommand Is Nothing Then
-                        _ShowFloatingConsoleViewCommand = New RelayCommand(AddressOf Me.showFloatingConsoleView)
+                        _ShowFloatingConsoleViewCommand = New RelayCommand(AddressOf Me.ShowFloatingConsoleView)
                         _ShowFloatingConsoleViewCommand.CaptionResourceName = "LogBox_ShowFloatingConsoleViewCommand_Caption"
                         _ShowFloatingConsoleViewCommand.DescriptionResourceName = "LogBox_ShowFloatingConsoleViewCommand_Description"
                         _ShowFloatingConsoleViewCommand.IconBrush = UIResources.IconBrush("SheetPenx1")
@@ -399,9 +395,9 @@ Public NotInheritable Class LogBox
          ''' the parent application responds to this setting in an appropriate manner. 
          ''' </para>
          ''' </remarks>
-        Public Property showConsoleOnError() As Boolean
+        Public Property ShowConsoleOnError() As Boolean
             Get
-                showConsoleOnError = My.Settings.showConsoleOnError
+                ShowConsoleOnError = My.Settings.showConsoleOnError
             End Get
             Set(value As Boolean)
                 My.Settings.showConsoleOnError = value
@@ -413,12 +409,12 @@ Public NotInheritable Class LogBox
     #Region "Instance Methods"
         
         ''' <summary> Clears the whole log. </summary>
-        Public Sub clearLog()
+        Public Sub ClearLog()
             Try
                 'Clears the complete message list.
-                Me.MessageStore.clearLog()
+                Me.MessageStore.ClearLog()
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -427,7 +423,7 @@ Public NotInheritable Class LogBox
          ''' <param name="LogFilePath"> The target file. If omitted or empty, a file dialog is shown. </param>
          ''' <returns> The file path, which the log has been written to. </returns>
          ''' <remarks> The current view settings are used to determine, which fields of each <see cref="LoggingConsole.LogEntry"/> are written! </remarks>
-        Public Function saveLog(byVal LogLevel As LogLevelEnum, Optional ByVal LogFilePath As String = "") As String
+        Public Function SaveLog(byVal LogLevel As LogLevelEnum, Optional ByVal LogFilePath As String = "") As String
             Dim oLogEntry     As LogEntry
             Dim LogLevelName  As String = WpfUtils.LogLevelConverter.Convert(LogLevel, GetType(String), Nothing, Nothing)
             
@@ -448,22 +444,22 @@ Public NotInheritable Class LogBox
                 
                 if (dialog.ShowDialog()) Then
                     LogFilePath = dialog.FileName
-                    InternalLogger.logDebug(String.Format(String.Format("Logging Console: {0}.", My.Resources.Resources.LogBox_SaveLogDialog_FilenameReturned), LogFilePath))
+                    InternalLogger.LogDebug(String.Format(String.Format("Logging Console: {0}.", My.Resources.Resources.LogBox_SaveLogDialog_FilenameReturned), LogFilePath))
                 else
-                    InternalLogger.logDebug(String.Format("Logging Console: {0}.", My.Resources.Resources.LogBox_SaveLogDialog_Aborted))
+                    InternalLogger.LogDebug(String.Format("Logging Console: {0}.", My.Resources.Resources.LogBox_SaveLogDialog_Aborted))
                 end if
             End If
             
             'Write log file
             If (not (LogFilePath = String.Empty)) Then
                 'Options
-                Dim includeLineNo   As Boolean = Me.Console.showColumnLineNo
-                Dim includeDate     As Boolean = Me.Console.showColumnDate
-                Dim includeTime     As Boolean = Me.Console.showColumnTime
-                Dim includeLevel    As Boolean = Me.Console.showColumnLevel
-                Dim includeSource   As Boolean = Me.Console.showColumnSource
+                Dim includeLineNo   As Boolean = Me.Console.ShowColumnLineNo
+                Dim includeDate     As Boolean = Me.Console.ShowColumnDate
+                Dim includeTime     As Boolean = Me.Console.ShowColumnTime
+                Dim includeLevel    As Boolean = Me.Console.ShowColumnLevel
+                Dim includeSource   As Boolean = Me.Console.ShowColumnSource
                 
-                Dim TextLine        As String = String.Empty
+                Dim TextLine        As String
                 
                 'Open file
                 Try
@@ -474,12 +470,12 @@ Public NotInheritable Class LogBox
                         oLogEntry = Me.MessageStore.Messages.item(LogLevel).item(i)
                         'Create message
                         TextLine = String.Empty
-                        if (includeLineNo) Then TextLine = TextLine & String.Format("{0,10}", oLogEntry.LineNo)
-                        if (includeDate)   Then TextLine = TextLine & String.Format("{0,12}", oLogEntry.Date)
-                        if (includeTime)   Then TextLine = TextLine & String.Format("{0,10}", oLogEntry.Time)
-                        if (includeLevel)  Then TextLine = TextLine & String.Format("  {0,-12}", "[" & WpfUtils.LogLevelConverter.Convert(oLogEntry.Level, GetType(String), Nothing, Nothing) & "]")
-                        if (includeSource) Then TextLine = TextLine & String.Format("{0,-30}", oLogEntry.Source)
-                        TextLine = TextLine & oLogEntry.Message
+                        if (includeLineNo) Then TextLine &= String.Format("{0,10}", oLogEntry.LineNo)
+                        if (includeDate)   Then TextLine &= String.Format("{0,12}", oLogEntry.Date)
+                        if (includeTime)   Then TextLine &= String.Format("{0,10}", oLogEntry.Time)
+                        if (includeLevel)  Then TextLine &= String.Format("  {0,-12}", "[" & WpfUtils.LogLevelConverter.Convert(oLogEntry.Level, GetType(String), Nothing, Nothing) & "]")
+                        if (includeSource) Then TextLine &= String.Format("{0,-30}", oLogEntry.Source)
+                        TextLine &= oLogEntry.Message
                         
                         'Write message
                         oSW.WriteLine(TextLine)
@@ -488,10 +484,10 @@ Public NotInheritable Class LogBox
                     'Close file
                     oSW.Flush()
                     oSW.Close()
-                    InternalLogger.logInfo(String.Format(My.Resources.Resources.LogBox_SaveLog_FinalSuccessMessage, LogLevelName, LogFilePath))
+                    InternalLogger.LogInfo(String.Format(My.Resources.Resources.LogBox_SaveLog_FinalSuccessMessage, LogLevelName, LogFilePath))
                     
                 Catch e As Exception
-                    InternalLogger.logError(String.Format(My.Resources.Resources.LogBox_SaveLog_FinalErrorMessage, LogLevelName))
+                    InternalLogger.LogError(String.Format(My.Resources.Resources.LogBox_SaveLog_FinalErrorMessage, LogLevelName))
                 End Try
             End If
             
@@ -499,12 +495,12 @@ Public NotInheritable Class LogBox
         End Function
         
         ''' <summary> Resets all application settings to it's defaults. </summary>
-        Public Sub resetSettings()
+        Public Sub ResetSettings()
             Try
                 My.MySettings.Default.Reset()
                 'Me.ActionButtonsAlwaysVisible = My.Settings.Properties.Item("ActionButtonsAlwaysVisible").DefaultValue
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -521,12 +517,12 @@ Public NotInheritable Class LogBox
          ''' This way the host application can use it's own window logic.
          ''' </para>
          ''' </remarks>
-        Public Sub showFloatingConsoleView(suppressErrorOnFail As Boolean)
+        Public Sub ShowFloatingConsoleView(suppressErrorOnFail As Boolean)
             Try
                 'Me.ShowFloatingConsoleViewAction.Invoke(suppressErrorOnFail)
                 Me.Console.ConsoleView.Dispatcher.Invoke(Me.ShowFloatingConsoleViewAction, suppressErrorOnFail)
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -541,17 +537,17 @@ Public NotInheritable Class LogBox
          ''' should be removed to allow it to re-embed to another window. 
          ''' </para>
          ''' </remarks>
-        Public Sub hideFloatingConsoleView()
+        Public Sub HideFloatingConsoleView()
             Try
                 'Me.HideFloatingConsoleViewAction.Invoke()
                 Me.Console.ConsoleView.Dispatcher.Invoke(Me.HideFloatingConsoleViewAction)
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
         ''' <summary> Shows the "About LoggingConsole" box. </summary>
-        Public Sub showAboutBox()
+        Public Sub ShowAboutBox()
             Try
                 ' Shows About box if possible (and logs the about information at info level).
                 Dim AppType      As String = String.Empty
@@ -573,14 +569,14 @@ Public NotInheritable Class LogBox
                 End If
                 
                 ' Logs the about information at info level.
-                InternalLogger.logInfo(My.Resources.Resources.About_ProgTitle & " - " & My.Resources.Resources.About_ProgDescription)
-                InternalLogger.logInfo(My.Resources.Resources.About_Version   & " " & LogBox.Version)
-                InternalLogger.logInfo(My.Resources.Resources.About_License   & " The MIT License (MIT)")
-                InternalLogger.logInfo(My.Resources.Resources.About_Copyright & " " & LogBox.Copyright)
+                InternalLogger.LogInfo(My.Resources.Resources.About_ProgTitle & " - " & My.Resources.Resources.About_ProgDescription)
+                InternalLogger.LogInfo(My.Resources.Resources.About_Version   & " " & LogBox.Version)
+                InternalLogger.LogInfo(My.Resources.Resources.About_License   & " The MIT License (MIT)")
+                InternalLogger.LogInfo(My.Resources.Resources.About_Copyright & " " & LogBox.Copyright)
                 
                 ' Show About box if possible
                 If (AppType = "XPAB") Then
-                    InternalLogger.logWarning(My.Resources.Resources.LogBox_AboutBox_NotAllowedInBrowser)
+                    InternalLogger.LogWarning(My.Resources.Resources.LogBox_AboutBox_NotAllowedInBrowser)
                 Else
                     'Initialize and show AboutBox
                     Dim AboutBox As New AboutBox
@@ -606,7 +602,7 @@ Public NotInheritable Class LogBox
                     AboutBox.ShowDialog()
                 End If
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -614,12 +610,12 @@ Public NotInheritable Class LogBox
     
     #Region "ICommand Delegates"
         
-        ''' <summary> Utilizes <see cref="LogBox.saveLog"/> to save the currently shown log to a file. </summary>
-        Private Sub saveActiveLog()
+        ''' <summary> Utilizes <see cref="LogBox.SaveLog"/> to save the currently shown log to a file. </summary>
+        Private Sub SaveActiveLog()
             Try
-                saveLog(Me.Console.ActiveView)
+                SaveLog(Me.Console.ActiveView)
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -633,9 +629,9 @@ Public NotInheritable Class LogBox
         Private Sub OnFloatingWindowClosing(sender As System.Object , e As System.ComponentModel.CancelEventArgs)
             Try
                 e.Cancel = True
-                Me.hideFloatingConsoleView()
+                Me.HideFloatingConsoleView()
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -644,7 +640,7 @@ Public NotInheritable Class LogBox
          ''' <param name="e"> Empty </param>
          ''' <remarks> If the "showConsoleOnError" property is "true", Then this method activates the floating ConsoleView. </remarks>
         Private Sub OnNewErrorLogged(sender As System.Object , e As System.EventArgs)
-            If (Me.showConsoleOnError) Then showFloatingConsoleView(suppressErrorOnFail:=true)
+            If (Me.ShowConsoleOnError) Then ShowFloatingConsoleView(suppressErrorOnFail:=true)
         End Sub
         
         ''' <summary> This method is called after <see cref="LoggingConsole.CultureResources.CurrentCulture" /> has changed. </summary>
@@ -679,13 +675,13 @@ Public NotInheritable Class LogBox
          ''' There can be only one instance of <see cref="LoggingConsole.ConsoleView"/>. 
          ''' That's why this method fails when the <see cref="LoggingConsole.ConsoleView"/> is already embedded into any other window.
          ''' </remarks>
-        Private Sub showBuiltinFloatingConsoleView(suppressErrorOnFail As Boolean)
+        Private Sub ShowBuiltinFloatingConsoleView(suppressErrorOnFail As Boolean)
             If ((Me.Console.ConsoleView.Parent IsNot Nothing) And ((FloatingWindow Is Nothing) OrElse (FloatingWindow.LoggingConsolePanel.Content is Nothing))) Then
                 'The ConsoleView is already embedded inside another window
                 If (suppressErrorOnFail) Then
-                    InternalLogger.logDebug(My.Resources.Resources.LogBox_EmbedConsoleViewFailed)
+                    InternalLogger.LogDebug(My.Resources.Resources.LogBox_EmbedConsoleViewFailed)
                 Else
-                    InternalLogger.logError(My.Resources.Resources.LogBox_EmbedConsoleViewFailed)
+                    InternalLogger.LogError(My.Resources.Resources.LogBox_EmbedConsoleViewFailed)
                 End If
             Else
                 'Initialize FloatingWindow if needed
@@ -724,7 +720,7 @@ Public NotInheritable Class LogBox
         
         ''' <summary> Hides the built-in floating window if it's shown. </summary>
          ''' <remarks> The embedded ConsoleView is removed to allow it to re-embed to another window. </remarks>
-        Private Sub hideBuiltinFloatingConsoleView()
+        Private Sub HideBuiltinFloatingConsoleView()
             If (FloatingWindow IsNot Nothing) Then
                 FloatingWindow.Hide()
                 FloatingWindow.LoggingConsolePanel.Content = Nothing

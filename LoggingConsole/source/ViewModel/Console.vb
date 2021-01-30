@@ -1,9 +1,7 @@
 ﻿
 Imports System
-Imports System.Windows
 Imports System.Windows.Controls
 Imports System.Windows.Data
-Imports System.Windows.Input
 Imports System.Collections.ObjectModel
 
 ''' <summary> The Console ViewModel: It encapsulates all Console related stuff. </summary>
@@ -32,7 +30,7 @@ Public NotInheritable Class Console
     
     #Region "Private Fields"
         
-        Private _LogBox                     As LogBox
+        Private ReadOnly _LogBox            As LogBox
         Private _MessagesViews              As ObservableCollection(Of MessagesView)
         Private _ConsoleView                As ConsoleView
         
@@ -40,7 +38,7 @@ Public NotInheritable Class Console
         Private isActiveViewInitialized     As Boolean = False
         Private _activateErrorViewOnError   As Boolean = True
         
-        Private InternalLogger              As Logger = LogBox.getLogger("LogBox.Console")
+        Private ReadOnly InternalLogger     As Logger = LogBox.GetLogger("LogBox.Console")
         
         Private Shared ReadOnly SyncHandle  As New Object()
         
@@ -59,7 +57,7 @@ Public NotInheritable Class Console
             MyBase.DisplayName = _LogBox.DisplayName
             
             'Activate error view if there are already errors in the MessageStore.
-            If (Me.activateErrorViewOnError and Me.LogBox.MessageStore.HighestLevelInLog = LogLevelEnum.Error) Then Me.ActiveView = LogLevelEnum.Error
+            If (Me.ActivateErrorViewOnError and Me.LogBox.MessageStore.HighestLevelInLog = LogLevelEnum.Error) Then Me.ActiveView = LogLevelEnum.Error
             
             'Listen for logging of new error messages
             AddHandler Me.LogBox.MessageStore.ErrorLogged, AddressOf OnNewErrorLogged
@@ -104,7 +102,7 @@ Public NotInheritable Class Console
                    'Workaround: Detect of chosing another Tab of MessagesTabControl
                    AddHandler _ConsoleView.MessagesTabControl.SelectionChanged, AddressOf OnMessagesTabChanged
                    
-                   InternalLogger.logDebug(String.Format("ConsoleView[Get]: {0}", My.Resources.Resources.Console_GetConsoleView_Created))
+                   InternalLogger.LogDebug(String.Format("ConsoleView[Get]: {0}", My.Resources.Resources.Console_GetConsoleView_Created))
                 End If
                 Return _ConsoleView
             End Get
@@ -124,7 +122,7 @@ Public NotInheritable Class Console
                         'Workaround: Detect of chosing another Tab of MessagesTabControl
                         AddHandler _ConsoleView.MessagesTabControl.SelectionChanged, AddressOf OnMessagesTabChanged
                         
-                        InternalLogger.logDebug(String.Format("ConsoleView[Set]: {0}", My.Resources.Resources.Console_SetConsoleView_Connected))
+                        InternalLogger.LogDebug(String.Format("ConsoleView[Set]: {0}", My.Resources.Resources.Console_SetConsoleView_Connected))
                     End if
                 End if
             End Set
@@ -135,7 +133,7 @@ Public NotInheritable Class Console
          ''' <remarks> This is for internal use only. </remarks>
         Public ReadOnly Property ConsoleViewExists() As Boolean
             Get
-                Return (Not _ConsoleView Is Nothing)
+                Return (_ConsoleView IsNot Nothing)
             End Get
         End Property
         
@@ -201,7 +199,7 @@ Public NotInheritable Class Console
          ''' The Default is "true" and causes error messages to be shown immediately inside the ConsoleView. 
          ''' It does NOT cause a hidden window to be shown!
          ''' </remarks>
-        Public Property activateErrorViewOnError() As Boolean
+        Public Property ActivateErrorViewOnError() As Boolean
             Get
                 Return _activateErrorViewOnError
             End Get
@@ -212,29 +210,37 @@ Public NotInheritable Class Console
                 End if
             End Set
         End Property
-        
-    #End Region
-    
-    #Region "Settings"
-        
-        ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
-         ''' <value>   Boolean </value>
-         ''' <returns> Boolean </returns>
-         ''' <remarks> This is an "application setting". </remarks>
-        Public Property autoSizeColumns() As Boolean
-            Get
-                Return My.Settings.autoSizeColumns
-            End Get
-            Set(value As Boolean)
-                My.Settings.autoSizeColumns = value
-            End Set
-        End Property
-        
-        ''' <summary> Show the "Line No" column in the Log View? </summary>
-         ''' <value>   Boolean </value>
-         ''' <returns> Boolean </returns>
-         ''' <remarks> This is an "application setting". </remarks>
-        Public Property showColumnLineNo() As Boolean
+
+#End Region
+#Region "Settings"
+
+#End Region
+
+#Region "Settings"
+
+    ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
+    ''' <returns>   Boolean </returns>
+    ''' <remarks> This is an "application setting". </remarks>
+    Public Function GetautoSizeColumns() As Boolean
+        Return My.Settings.autoSizeColumns
+    End Function
+
+#End Region
+
+#Region "Settings"
+
+    ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
+    ''' <param name="Value">   Boolean </param>
+    ''' <remarks> This is an "application setting". </remarks>
+    Public Sub SetautoSizeColumns(value As Boolean)
+        My.Settings.autoSizeColumns = value
+    End Sub
+
+    ''' <summary> Show the "Line No" column in the Log View? </summary>
+    ''' <value>   Boolean </value>
+    ''' <returns> Boolean </returns>
+    ''' <remarks> This is an "application setting". </remarks>
+    Public Property ShowColumnLineNo() As Boolean
             Get
                 Return My.Settings.showColumnLineNo
             End Get
@@ -249,7 +255,7 @@ Public NotInheritable Class Console
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>
          ''' <remarks> This is an "application setting". </remarks>
-        Public Property showColumnDate() As Boolean
+        Public Property ShowColumnDate() As Boolean
             Get
                 Return My.Settings.showColumnDate
             End Get
@@ -264,7 +270,7 @@ Public NotInheritable Class Console
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>
          ''' <remarks> This is an "application setting". </remarks>
-        Public Property showColumnTime() As Boolean
+        Public Property ShowColumnTime() As Boolean
             Get
                 Return My.Settings.showColumnTime
             End Get
@@ -279,7 +285,7 @@ Public NotInheritable Class Console
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>
          ''' <remarks> This is an "application setting". </remarks>
-        Public Property showColumnLevel() As Boolean
+        Public Property ShowColumnLevel() As Boolean
             Get
                 Return My.Settings.showColumnLevel
             End Get
@@ -294,7 +300,7 @@ Public NotInheritable Class Console
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>
          ''' <remarks> This is an "application setting". </remarks>
-        Public Property showColumnSource() As Boolean
+        Public Property ShowColumnSource() As Boolean
             Get
                 Return My.Settings.showColumnSource
             End Get
@@ -309,7 +315,7 @@ Public NotInheritable Class Console
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>
          ''' <remarks> This is an "application setting". </remarks>
-        Public Property useBackgroundColors() As Boolean
+        Public Property UseBackgroundColors() As Boolean
             Get
                 Return My.Settings.useBackgroundColors
             End Get
@@ -324,7 +330,7 @@ Public NotInheritable Class Console
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>
          ''' <remarks> This is an "application setting". </remarks>
-        Public Property useOwnFontFamily() As Boolean
+        Public Property UseOwnFontFamily() As Boolean
             Get
                 Return My.Settings.useOwnFontFamily
             End Get
@@ -342,7 +348,7 @@ Public NotInheritable Class Console
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>
          ''' <remarks> This is an "application setting". </remarks>
-        Public Property useOwnFontSize() As Boolean
+        Public Property UseOwnFontSize() As Boolean
             Get
                 Return My.Settings.useOwnFontSize
             End Get
@@ -361,7 +367,7 @@ Public NotInheritable Class Console
          ''' <returns> Boolean </returns>
          ''' <remarks> 
          ''' <para>
-         ''' Get: If <see cref="LoggingConsole.Console.useOwnFontSize" /> is enabled, 
+         ''' Get: If <see cref="LoggingConsole.Console.UseOwnFontSize" /> is enabled, 
          ''' the "FontSize" application setting is returned. Otherwise the inherited value is
          ''' retrieved. But if this fails, the "FontSize" application setting is returned, too.
          ''' This means, that in a Windows Forms applications inheritance of FontSize isn't possible.
@@ -377,19 +383,19 @@ Public NotInheritable Class Console
                 SyncLock (SyncHandle)
                     Dim size As Double
                     
-                    If (Me.useOwnFontSize) then
+                    If (Me.UseOwnFontSize) then
                         size = My.Settings.FontSize
                     Else
-                        size = getInheritedFontSize(_ConsoleView)
+                        size = GetInheritedFontSize(_ConsoleView)
                     End if
                         
                     If ((size < 6) or (size > 20)) then
-                        InternalLogger.logDebug("Fontsize[Get]: " & String.Format(My.Resources.Resources.Console_GetFontsize_ValueChanged, size, 10))
+                        InternalLogger.LogDebug("Fontsize[Get]: " & String.Format(My.Resources.Resources.Console_GetFontsize_ValueChanged, size, 10))
                         size = 11
                     End If
                     
-                    If ((Not Me.useOwnFontSize) AndAlso Me.useOwnFontFamily) then
-                        size = size * 1.1
+                    If ((Not Me.UseOwnFontSize) AndAlso Me.UseOwnFontFamily) then
+                        size *= 1.1
                     End if
                     
                     Return size
@@ -456,7 +462,7 @@ Public NotInheritable Class Console
          ''' <param name="e"> Empty </param>
          ''' <remarks> If the "activateErrorViewOnError" property is "true", then this method activates the error view. </remarks>
         Private Sub OnNewErrorLogged(sender As System.Object, e As System.EventArgs)
-            If (Me.activateErrorViewOnError) Then Me.ActiveView = LogLevelEnum.Error
+            If (Me.ActivateErrorViewOnError) Then Me.ActiveView = LogLevelEnum.Error
         End Sub
         
         ''' <summary> Detects changing to another Messages Tab by the user via UI and synchronizes the <see cref="Console.ActiveView"/> property. </summary>
@@ -471,7 +477,7 @@ Public NotInheritable Class Console
                     End if
                 End If
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -523,7 +529,7 @@ Public NotInheritable Class Console
          ''' 3. If point 2) failed, then System.Windows.SystemFonts.MessageFontSize is returned.
          ''' </para>
          ''' </remarks>
-        Private Function getInheritedFontSize(StartObject As System.Windows.FrameworkElement) As Double
+        Private Function GetInheritedFontSize(StartObject As System.Windows.FrameworkElement) As Double
             Dim retFontSize As Nullable(Of Double) = Nothing
             
             If (StartObject isNot Nothing) then
@@ -540,7 +546,7 @@ Public NotInheritable Class Console
                     
                     'Check next parent
                     If (retFontSize is Nothing) then
-                        retFontSize = getInheritedFontSize(ParentObject)
+                        retFontSize = GetInheritedFontSize(ParentObject)
                     End if
                 End if
                 

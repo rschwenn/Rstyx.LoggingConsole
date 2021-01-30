@@ -11,7 +11,7 @@ Imports System.Collections.Generic
         
         #Region "Private Fields"
             
-            Private Shared Logger                   As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger(My.Settings.UIResources_LoggerName)
+            Private Shared ReadOnly Logger          As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger(My.Settings.UIResources_LoggerName)
             
             Private Shared ReadOnly SyncHandle      As New Object
             
@@ -39,13 +39,13 @@ Imports System.Collections.Generic
                     SyncLock (SyncHandle)
                         If (_Icons Is Nothing) Then
                             Try
-                                Logger.logDebug("Icons [Get]: Read IconResources.xaml.")
+                                Logger.LogDebug("Icons [Get]: Read IconResources.xaml.")
                                 Dim u As Uri = new Uri(My.Settings.UIResources_IconResourcesUri, UriKind.Relative)
                                 Dim tmp  = Application.LoadComponent(u)
                                 _Icons = CType(tmp, ResourceDictionary)
-                                Logger.logDebug("Icons [Get]: Icon resources initialized.")
+                                Logger.LogDebug("Icons [Get]: Icon resources initialized.")
                             Catch ex As Exception 
-                                Logger.logError(ex, "Icons [Get]: IconResources.xaml konnte nicht gelesen werden.")
+                                Logger.LogError(ex, "Icons [Get]: IconResources.xaml konnte nicht gelesen werden.")
                             End Try 
                         End If
                         Return _Icons
@@ -62,7 +62,7 @@ Imports System.Collections.Generic
                                 _IconRectangles = New Dictionary(Of String, System.Windows.Shapes.Rectangle)
                                 
                                 For Each de As DictionaryEntry in Icons
-                                    Dim Rect As System.Windows.Shapes.Rectangle = getIconRectangle(de.Key)
+                                    Dim Rect As System.Windows.Shapes.Rectangle = GetIconRectangle(de.Key)
                                     If (Rect IsNot Nothing) Then
                                         Dim IconName As String = de.Key
                                         If (IconName.EndsWith(IconBrushSuffix) AndAlso (IconName.Length > IconBrushSuffix.Length)) Then 
@@ -72,7 +72,7 @@ Imports System.Collections.Generic
                                     End If
                                 Next
                             Catch ex As Exception 
-                                Logger.logError(ex, "IconRectangles [Get]: unerwateter Fehler.")
+                                Logger.LogError(ex, "IconRectangles [Get]: unerwateter Fehler.")
                             End Try 
                         End If
                         Return _IconRectangles
@@ -85,7 +85,7 @@ Imports System.Collections.Generic
              ''' <returns>                   A DrawingBrush for an icon of the given name, or Null. </returns>
             Public Shared ReadOnly Property IconBrush(byVal ResourceName As String) As System.Windows.Media.DrawingBrush
                 Get
-                    Return getIconBrush(ResourceName)
+                    Return GetIconBrush(ResourceName)
                 End Get
             End Property
             
@@ -94,7 +94,7 @@ Imports System.Collections.Generic
              ''' <returns>                   A rectangle with an icon of the given name, or Null. </returns>
             Public Shared ReadOnly Property IconRectangle(byVal ResourceName As String) As System.Windows.Shapes.Rectangle
                 Get
-                    Return getIconRectangle(ResourceName)
+                    Return GetIconRectangle(ResourceName)
                 End Get
             End Property
             
@@ -105,7 +105,7 @@ Imports System.Collections.Generic
             ''' <summary> Creates a rectangle filled with an icon of the given resource name from <see cref="Icons"/>. </summary>
              ''' <param name="ResourceName"> Resource name of the DrawingBrush resource in <see cref="Icons"/> (The "_IconBrush" suffix can be omitted). </param>
              ''' <returns>                   A rectangle with an icon of the given name, or Null. </returns>
-            Private Shared Function getIconBrush(byVal ResourceName As String) As System.Windows.Media.DrawingBrush
+            Private Shared Function GetIconBrush(byVal ResourceName As String) As System.Windows.Media.DrawingBrush
                 Dim RetBrush As System.Windows.Media.DrawingBrush = Nothing
                 SyncLock (SyncHandle)
                     Try
@@ -120,7 +120,7 @@ Imports System.Collections.Generic
                             End If
                         End If
                     Catch ex As Exception 
-                        Logger.logError(ex, "getIconBrush: Fehler beim Erstellen des Icon-DrawingBrush.")
+                        Logger.LogError(ex, "getIconBrush: Fehler beim Erstellen des Icon-DrawingBrush.")
                     End Try 
                     Return RetBrush
                 End SyncLock
@@ -129,7 +129,7 @@ Imports System.Collections.Generic
             ''' <summary> Creates a rectangle filled with an icon of the given resource name from <see cref="Icons"/>. </summary>
              ''' <param name="ResourceName"> Resource name of the DrawingBrush resource in <see cref="Icons"/> (The "_IconBrush" suffix can be omitted). </param>
              ''' <returns>                   A rectangle with an icon of the given name, or Null. </returns>
-            Private Shared Function getIconRectangle(byVal ResourceName As String) As System.Windows.Shapes.Rectangle
+            Private Shared Function GetIconRectangle(byVal ResourceName As String) As System.Windows.Shapes.Rectangle
                 Dim RetRectangle As System.Windows.Shapes.Rectangle = Nothing
                 SyncLock (SyncHandle)
                     Try
@@ -145,7 +145,7 @@ Imports System.Collections.Generic
                             End If
                         End If
                     Catch ex As Exception 
-                        Logger.logError(ex, "getIconRectangle: Fehler beim Erstellen des Icon-Rechtecks.")
+                        Logger.LogError(ex, "getIconRectangle: Fehler beim Erstellen des Icon-Rechtecks.")
                     End Try
                     Return RetRectangle
                 End SyncLock

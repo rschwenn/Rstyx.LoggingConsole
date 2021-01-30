@@ -7,7 +7,7 @@ Partial Public Class MessagesView
     
     #Region "Private Fields"
         
-        Private Shared InternalLogger  As Logger = LogBox.getLogger("LogBox.MessagesView")
+        Private Shared InternalLogger  As Logger = LogBox.GetLogger("LogBox.MessagesView")
         
         Private _LogLevel              As LogLevelEnum = LogLevelEnum.Info
         
@@ -62,7 +62,7 @@ Partial Public Class MessagesView
                 'CType(Me.FindResource("MessagesListViewSource"), System.Windows.Data.CollectionViewSource).Source = CType(Me.DataContext, LogBox).MessageStore.Messages(Me.LogLevel)
                 
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -82,7 +82,7 @@ Partial Public Class MessagesView
                 'LastSelectedIndex = MessagesListView.SelectedIndex
                 
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -111,7 +111,7 @@ Partial Public Class MessagesView
                     DeferredAdjustAction.Defer(AdjustDelay)
                 End If
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -126,7 +126,7 @@ Partial Public Class MessagesView
                     End If
                 End If
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -139,7 +139,7 @@ Partial Public Class MessagesView
                     If (header IsNot Nothing) Then syncColumnVisibilityWithHeader(header)
                 End If
             Catch ex As System.Exception
-                InternalLogger.logError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
+                InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
             End Try
         End Sub
         
@@ -189,7 +189,7 @@ Partial Public Class MessagesView
             Try
                 ' Me.DataContext is Null when this is called for the leaved tab...
                 If (Not Me.DataContext Is Nothing) Then
-                    If (CType(Me.DataContext, LogBox).Console.autoSizeColumns) then
+                    If (CType(Me.DataContext, LogBox).Console.GetautoSizeColumns()) then
                         For Each column As System.Windows.Controls.GridViewColumn In Me.MessagesGridView.Columns
                             If (column.ActualWidth > 0) then
                                 column.Width = column.ActualWidth + 1

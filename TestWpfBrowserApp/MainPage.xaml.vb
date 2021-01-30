@@ -8,16 +8,16 @@ Class MainPage
     ''' Built-in logging
     ''' </summary>
     Private Sub Button1_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles Button1.Click
-        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Test.for Demo")
+        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Test.for Demo")
         
         'To not change the active view when an error is logged (see corresponding CheckBox):
         'Rstyx.LoggingConsole.LogBox.Instance.Console.activateErrorViewOnError = False 
         
         for i As ULong = 1 to 1000
-          BuiltInLogger.logDebug("Test debug")
-          BuiltInLogger.logInfo("Test Info")
-          BuiltInLogger.logWarning("Test Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning")
-          BuiltInLogger.logError("Test Error")
+          BuiltInLogger.LogDebug("Test debug")
+          BuiltInLogger.LogInfo("Test Info")
+          BuiltInLogger.LogWarning("Test Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning")
+          BuiltInLogger.LogError("Test Error")
         next
     End Sub
     
