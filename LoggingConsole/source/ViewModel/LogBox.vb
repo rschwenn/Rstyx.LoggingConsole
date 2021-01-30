@@ -397,10 +397,10 @@ Public NotInheritable Class LogBox
          ''' </remarks>
         Public Property ShowConsoleOnError() As Boolean
             Get
-                ShowConsoleOnError = My.Settings.showConsoleOnError
+                ShowConsoleOnError = My.Settings.ShowConsoleOnError
             End Get
             Set(value As Boolean)
-                My.Settings.showConsoleOnError = value
+                My.Settings.ShowConsoleOnError = value
             End Set
         End Property
         
@@ -638,7 +638,7 @@ Public NotInheritable Class LogBox
         ''' <summary> This method is called after an error is logged. </summary>
          ''' <param name="sender"> LogBox.Logger </param>
          ''' <param name="e"> Empty </param>
-         ''' <remarks> If the "showConsoleOnError" property is "true", Then this method activates the floating ConsoleView. </remarks>
+         ''' <remarks> If the "ShowConsoleOnError" property is "true", Then this method activates the floating ConsoleView. </remarks>
         Private Sub OnNewErrorLogged(sender As System.Object , e As System.EventArgs)
             If (Me.ShowConsoleOnError) Then ShowFloatingConsoleView(suppressErrorOnFail:=true)
         End Sub

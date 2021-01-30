@@ -35,8 +35,8 @@ Public NotInheritable Class Console
         Private _ConsoleView                As ConsoleView
         
         Private _ActiveView                 As LogLevelEnum = LogLevelEnum.Info
-        Private isActiveViewInitialized     As Boolean = False
-        Private _activateErrorViewOnError   As Boolean = True
+        Private IsActiveViewInitialized     As Boolean = False
+        Private _ActivateErrorViewOnError   As Boolean = True
         
         Private ReadOnly InternalLogger     As Logger = LogBox.GetLogger("LogBox.Console")
         
@@ -180,7 +180,7 @@ Public NotInheritable Class Console
          ''' <remarks> This is used as the index of TabControlItems Collection as well as the index of the MessagesViews Collection </remarks>
         Public Property ActiveView() As LogLevelEnum
             Get
-                isActiveViewInitialized = true
+                IsActiveViewInitialized = true
                 Return _ActiveView
             End Get
             Set(value As LogLevelEnum)
@@ -201,12 +201,12 @@ Public NotInheritable Class Console
          ''' </remarks>
         Public Property ActivateErrorViewOnError() As Boolean
             Get
-                Return _activateErrorViewOnError
+                Return _ActivateErrorViewOnError
             End Get
             Set(value As Boolean)
-                If (Not (value = _activateErrorViewOnError)) then
-                    _activateErrorViewOnError = value
-                    Me.OnPropertyChanged("activateErrorViewOnError")
+                If (Not (value = _ActivateErrorViewOnError)) then
+                    _ActivateErrorViewOnError = value
+                    Me.OnPropertyChanged("ActivateErrorViewOnError")
                 End if
             End Set
         End Property
@@ -219,10 +219,10 @@ Public NotInheritable Class Console
 #Region "Settings"
 
     ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
-    ''' <returns>   Boolean </returns>
+    ''' <returns> Boolean </returns>
     ''' <remarks> This is an "application setting". </remarks>
-    Public Function GetautoSizeColumns() As Boolean
-        Return My.Settings.autoSizeColumns
+    Public Function GetAutoSizeColumns() As Boolean
+        Return My.Settings.AutoSizeColumns
     End Function
 
 #End Region
@@ -230,10 +230,10 @@ Public NotInheritable Class Console
 #Region "Settings"
 
     ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
-    ''' <param name="Value">   Boolean </param>
+    ''' <param name="Value"> Boolean </param>
     ''' <remarks> This is an "application setting". </remarks>
-    Public Sub SetautoSizeColumns(value As Boolean)
-        My.Settings.autoSizeColumns = value
+    Public Sub SetAutoSizeColumns(value As Boolean)
+        My.Settings.AutoSizeColumns = value
     End Sub
 
     ''' <summary> Show the "Line No" column in the Log View? </summary>
@@ -242,11 +242,11 @@ Public NotInheritable Class Console
     ''' <remarks> This is an "application setting". </remarks>
     Public Property ShowColumnLineNo() As Boolean
             Get
-                Return My.Settings.showColumnLineNo
+                Return My.Settings.ShowColumnLineNo
             End Get
             Set(value As Boolean)
-                If (value XOR My.Settings.showColumnLineNo) Then
-                    My.Settings.showColumnLineNo = value
+                If (value XOR My.Settings.ShowColumnLineNo) Then
+                    My.Settings.ShowColumnLineNo = value
                 End If
             End Set
         End Property
@@ -257,11 +257,11 @@ Public NotInheritable Class Console
          ''' <remarks> This is an "application setting". </remarks>
         Public Property ShowColumnDate() As Boolean
             Get
-                Return My.Settings.showColumnDate
+                Return My.Settings.ShowColumnDate
             End Get
             Set(value As Boolean)
-                If (value XOR My.Settings.showColumnDate) Then
-                    My.Settings.showColumnDate = value
+                If (value XOR My.Settings.ShowColumnDate) Then
+                    My.Settings.ShowColumnDate = value
                 End If
             End Set
         End Property
@@ -272,11 +272,11 @@ Public NotInheritable Class Console
          ''' <remarks> This is an "application setting". </remarks>
         Public Property ShowColumnTime() As Boolean
             Get
-                Return My.Settings.showColumnTime
+                Return My.Settings.ShowColumnTime
             End Get
             Set(value As Boolean)
-                If (value XOR My.Settings.showColumnTime) Then
-                    My.Settings.showColumnTime = value
+                If (value XOR My.Settings.ShowColumnTime) Then
+                    My.Settings.ShowColumnTime = value
                 End If
             End Set
         End Property
@@ -287,11 +287,11 @@ Public NotInheritable Class Console
          ''' <remarks> This is an "application setting". </remarks>
         Public Property ShowColumnLevel() As Boolean
             Get
-                Return My.Settings.showColumnLevel
+                Return My.Settings.ShowColumnLevel
             End Get
             Set(value As Boolean)
-                If (value XOR My.Settings.showColumnLevel) Then
-                    My.Settings.showColumnLevel = value
+                If (value XOR My.Settings.ShowColumnLevel) Then
+                    My.Settings.ShowColumnLevel = value
                 End If
             End Set
         End Property
@@ -302,11 +302,11 @@ Public NotInheritable Class Console
          ''' <remarks> This is an "application setting". </remarks>
         Public Property ShowColumnSource() As Boolean
             Get
-                Return My.Settings.showColumnSource
+                Return My.Settings.ShowColumnSource
             End Get
             Set(value As Boolean)
-                If (value XOR My.Settings.showColumnSource) Then
-                    My.Settings.showColumnSource = value
+                If (value XOR My.Settings.ShowColumnSource) Then
+                    My.Settings.ShowColumnSource = value
                 End If
             End Set
         End Property
@@ -317,11 +317,11 @@ Public NotInheritable Class Console
          ''' <remarks> This is an "application setting". </remarks>
         Public Property UseBackgroundColors() As Boolean
             Get
-                Return My.Settings.useBackgroundColors
+                Return My.Settings.UseBackgroundColors
             End Get
             Set(value As Boolean)
-                If (value XOR My.Settings.useBackgroundColors) Then
-                    My.Settings.useBackgroundColors = value
+                If (value XOR My.Settings.UseBackgroundColors) Then
+                    My.Settings.UseBackgroundColors = value
                 End If
             End Set
         End Property
@@ -332,11 +332,11 @@ Public NotInheritable Class Console
          ''' <remarks> This is an "application setting". </remarks>
         Public Property UseOwnFontFamily() As Boolean
             Get
-                Return My.Settings.useOwnFontFamily
+                Return My.Settings.UseOwnFontFamily
             End Get
             Set(value As Boolean)
-                if (value XOR My.Settings.useOwnFontFamily) then
-                    My.Settings.useOwnFontFamily = value
+                if (value XOR My.Settings.UseOwnFontFamily) then
+                    My.Settings.UseOwnFontFamily = value
                     
                     ' Since this setting could change the font size to use, force it to update.
                     Me.OnPropertyChanged("FontSize")
@@ -350,11 +350,11 @@ Public NotInheritable Class Console
          ''' <remarks> This is an "application setting". </remarks>
         Public Property UseOwnFontSize() As Boolean
             Get
-                Return My.Settings.useOwnFontSize
+                Return My.Settings.UseOwnFontSize
             End Get
             Set(value As Boolean)
-                if (value XOR My.Settings.useOwnFontSize) then
-                    My.Settings.useOwnFontSize = value
+                if (value XOR My.Settings.UseOwnFontSize) then
+                    My.Settings.UseOwnFontSize = value
                     
                     ' Since this setting could change the font size to use, force it to update.
                     Me.OnPropertyChanged("FontSize")
@@ -460,7 +460,7 @@ Public NotInheritable Class Console
         ''' <summary> This method is called after an error is logged. </summary>
          ''' <param name="sender"> LogBox.Logger </param>
          ''' <param name="e"> Empty </param>
-         ''' <remarks> If the "activateErrorViewOnError" property is "true", then this method activates the error view. </remarks>
+         ''' <remarks> If the "ActivateErrorViewOnError" property is "true", then this method activates the error view. </remarks>
         Private Sub OnNewErrorLogged(sender As System.Object, e As System.EventArgs)
             If (Me.ActivateErrorViewOnError) Then Me.ActiveView = LogLevelEnum.Error
         End Sub
@@ -472,7 +472,7 @@ Public NotInheritable Class Console
         Private Sub OnMessagesTabChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs)
             Try
                 If (sender.Equals(e.OriginalSource)) then
-                    If (isActiveViewInitialized) then
+                    If (IsActiveViewInitialized) then
                         Me.ActiveView = _ConsoleView.MessagesTabControl.SelectedIndex
                     End if
                 End If

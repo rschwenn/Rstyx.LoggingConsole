@@ -184,12 +184,12 @@ Partial Public Class MessagesView
             End if
         End Sub
         
-        ''' <summary> Adjust the width of all visible GridViewColumns to fit the largest visible (!) item (if Console.autoSizeColumns = True). </summary>
+        ''' <summary> Adjust the width of all visible GridViewColumns to fit the largest visible (!) item (if Console.AutoSizeColumns = True). </summary>
         Private Sub adjustGridViewColumnWidths()
             Try
                 ' Me.DataContext is Null when this is called for the leaved tab...
                 If (Not Me.DataContext Is Nothing) Then
-                    If (CType(Me.DataContext, LogBox).Console.GetautoSizeColumns()) then
+                    If (CType(Me.DataContext, LogBox).Console.GetAutoSizeColumns()) then
                         For Each column As System.Windows.Controls.GridViewColumn In Me.MessagesGridView.Columns
                             If (column.ActualWidth > 0) then
                                 column.Width = column.ActualWidth + 1

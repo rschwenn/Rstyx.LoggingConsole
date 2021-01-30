@@ -2,16 +2,16 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
-    <Setting Name="showColumnTime" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowColumnTime" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="showColumnDate" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowColumnDate" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="showColumnLevel" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowColumnLevel" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="showColumnSource" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowColumnSource" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="MaxLogLength" Type="System.UInt32" Scope="User">
@@ -26,7 +26,7 @@
     <Setting Name="ExpanderHeaderPlacement" Type="System.Windows.Controls.Dock" Scope="User">
       <Value Profile="(Default)">Left</Value>
     </Setting>
-    <Setting Name="useBackgroundColors" Type="System.Boolean" Scope="User">
+    <Setting Name="UseBackgroundColors" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="BuiltinConsoleWindowHeight" Type="System.Double" Scope="User">
@@ -41,22 +41,22 @@
     <Setting Name="BuiltinConsoleWindowLeft" Type="System.Double" Scope="User">
       <Value Profile="(Default)">200</Value>
     </Setting>
-    <Setting Name="showColumnLineNo" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowColumnLineNo" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="autoSizeColumns" Type="System.Boolean" Scope="User">
+    <Setting Name="AutoSizeColumns" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="showConsoleOnError" Type="System.Boolean" Scope="User">
+    <Setting Name="ShowConsoleOnError" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="useOwnFontSize" Type="System.Boolean" Scope="User">
+    <Setting Name="UseOwnFontSize" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="FontSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">11</Value>
     </Setting>
-    <Setting Name="useOwnFontFamily" Type="System.Boolean" Scope="User">
+    <Setting Name="UseOwnFontFamily" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="UIResources_LoggerName" Type="System.String" Scope="Application">

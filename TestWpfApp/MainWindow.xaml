@@ -70,8 +70,8 @@
         
         <!-- Test CheckBoxes -->
         <StackPanel Orientation="Horizontal" Grid.Row="1" >
-            <CheckBox Content=" activate error view on error" Margin="10,3,0,0" IsChecked="{Binding Source={x:Static Logging:LogBox.Instance}, Path=Console.activateErrorViewOnError, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
-            <CheckBox Content=" Built-in window is modal"     Margin="30,3,0,0" IsChecked="{Binding Source={x:Static Logging:LogBox.Instance}, Path=isFloatingConsoleModal, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+            <CheckBox Content=" activate error view on error" Margin="10,3,0,0" IsChecked="{Binding Source={x:Static Logging:LogBox.Instance}, Path=Console.ActivateErrorViewOnError, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+            <CheckBox Content=" Built-in window is modal"     Margin="30,3,0,0" IsChecked="{Binding Source={x:Static Logging:LogBox.Instance}, Path=IsFloatingConsoleModal, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
         </StackPanel>
         
         <!-- Embed LoggingConsole ConsoleView using Data Binding -->

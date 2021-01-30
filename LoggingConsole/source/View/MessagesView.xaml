@@ -47,19 +47,19 @@
                 <Style.Triggers>
                     
                     <!-- Font Family -->
-                    <DataTrigger Value="True" Binding="{Binding Path=Console.useOwnFontFamily}">
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.UseOwnFontFamily}">
                         <Setter Property="FontFamily" Value="Courier New" />
                     </DataTrigger>
                     
                     <!-- Font Size -->
-                    <DataTrigger Value="True" Binding="{Binding Path=Console.useOwnFontSize}">
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.UseOwnFontSize}">
                         <Setter Property="FontSize" Value="{Binding Path=Console.FontSize, Mode=OneWay}" />
                     </DataTrigger>
                     
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding Path=Console.useOwnFontSize}"   Value="False"/>
-                            <Condition Binding="{Binding Path=Console.useOwnFontFamily}" Value="True" />
+                            <Condition Binding="{Binding Path=Console.UseOwnFontSize}"   Value="False"/>
+                            <Condition Binding="{Binding Path=Console.UseOwnFontFamily}" Value="True" />
                         </MultiDataTrigger.Conditions>
                         <Setter Property="FontSize" Value="{Binding Path=Console.FontSize, Mode=OneWay}" />
                     </MultiDataTrigger>
@@ -78,7 +78,7 @@
         <ListView.Background>
             <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelBackgroundConverter}">
                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="LogLevel" />
-                <Binding Path="Console.useBackgroundColors" />
+                <Binding Path="Console.UseBackgroundColors" />
             </MultiBinding>
         </ListView.Background>
         
@@ -90,7 +90,7 @@
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_SerialNo, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
-                        Visibility="{Binding Path=Console.showColumnLineNo, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        Visibility="{Binding Path=Console.ShowColumnLineNo, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         >
                     </GridViewColumnHeader>
                     
@@ -108,7 +108,7 @@
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Date, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
-                        Visibility="{Binding Path=Console.showColumnDate, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        Visibility="{Binding Path=Console.ShowColumnDate, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
                 </GridViewColumn>
@@ -119,7 +119,7 @@
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Time, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
-                        Visibility="{Binding Path=Console.showColumnTime, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        Visibility="{Binding Path=Console.ShowColumnTime, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
                 </GridViewColumn>
@@ -130,7 +130,7 @@
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Level, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
-                        Visibility="{Binding Path=Console.showColumnLevel, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        Visibility="{Binding Path=Console.ShowColumnLevel, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
                 </GridViewColumn>
@@ -141,7 +141,7 @@
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Source, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
-                        Visibility="{Binding Path=Console.showColumnSource, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
+                        Visibility="{Binding Path=Console.ShowColumnSource, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
                 </GridViewColumn>

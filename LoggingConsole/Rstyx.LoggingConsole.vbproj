@@ -81,6 +81,7 @@
     <Import Include="Microsoft.VisualBasic" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Settings.vb" />
     <Compile Include="source\Cultures\CultureResources.vb" />
     <Compile Include="source\Cultures\Resources.Designer.vb">
       <AutoGen>True</AutoGen>

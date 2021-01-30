@@ -28,7 +28,7 @@
         <Style x:Key="FontSizeTextBoxEnabler" TargetType="{x:Type TextBox}">
             <Setter Property="IsEnabled" Value="False" />
             <Style.Triggers>
-                <DataTrigger Value="True" Binding="{Binding Path=Console.useOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
+                <DataTrigger Value="True" Binding="{Binding Path=Console.UseOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
                     <Setter Property="IsEnabled" Value="True" />
                 </DataTrigger>
             </Style.Triggers>
@@ -149,19 +149,19 @@
                             <!-- GroupBox ColumnDisplay -->
                             <GroupBox Header="{Binding Path=ConsoleView_Header_ColumnDisplay, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
                                 <StackPanel Orientation="Vertical">
-                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_LineNo, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnLineNo, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
-                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Date,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnDate,   Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
-                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Time,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnTime,   Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
-                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Level,  Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnLevel,  Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
-                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Source, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.showColumnSource, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_LineNo, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.ShowColumnLineNo, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Date,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.ShowColumnDate,   Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Time,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.ShowColumnTime,   Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Level,  Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.ShowColumnLevel,  Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Tasks_Source, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.ShowColumnSource, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" />
                                 </StackPanel>
                             </GroupBox>
                             
                             <!-- GroupBox Behavior -->
                             <GroupBox Header="{Binding Path=ConsoleView_Header_Behavior, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
                                 <StackPanel Orientation="Vertical">
-                                    <CheckBox Content="{Binding Path=ConsoleView_Behavior_ErrorPopup,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=showConsoleOnError,      Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Behavior_ErrorPopup_ToolTip,   Source={x:Static Logging:CultureResources.ResourceProvider}}" />
-                                    <CheckBox Content="{Binding Path=ConsoleView_Behavior_AutoColWidth, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.autoSizeColumns, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Behavior_AutoColWidth_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Behavior_ErrorPopup,   Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=ShowConsoleOnError,      Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Behavior_ErrorPopup_ToolTip,   Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Behavior_AutoColWidth, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,0" IsChecked="{Binding Path=Console.AutoSizeColumns, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Behavior_AutoColWidth_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                                 </StackPanel>
                             </GroupBox>
                             
@@ -220,16 +220,16 @@
                                 <StackPanel Orientation="Vertical">
                                     
                                     <!-- BackgroundColors -->
-                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_BackgroundColors, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.useBackgroundColors, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_BackgroundColors_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_BackgroundColors, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.UseBackgroundColors, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_BackgroundColors_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                                     
                                     <!-- Font Family -->
-                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_OwnFontFamily, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.useOwnFontFamily, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_OwnFontFamily_ToolTip,    Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_OwnFontFamily, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.UseOwnFontFamily, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_OwnFontFamily_ToolTip,    Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                                     
                                     <!-- Font Size -->
                                     <DockPanel Margin="0,0,0,1" LastChildFill="False">
-                                        <CheckBox Name="useOwnFontSizeCheckBox"
+                                        <CheckBox Name="UseOwnFontSizeCheckBox"
                                                   Content="{Binding Path=ConsoleView_Appearence_OwnFontSize, Source={x:Static Logging:CultureResources.ResourceProvider}}" 
-                                                  IsChecked="{Binding Path=Console.useOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" 
+                                                  IsChecked="{Binding Path=Console.UseOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" 
                                                   ToolTip="{Binding Path=ConsoleView_Appearence_OwnFontSize_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" 
                                                   VerticalAlignment="Center" 
                                                   />
