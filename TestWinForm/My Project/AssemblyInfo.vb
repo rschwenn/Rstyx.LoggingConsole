@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("LoggingConsole WinForm Demo")> 
-<Assembly: AssemblyCopyright("")> 
+<Assembly: AssemblyCopyright("© 2011-2021 Robert Schwenn")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -32,6 +32,6 @@ Imports System.Runtime.InteropServices
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
 '<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyFileVersion("1.0.1.0")> 
 
-<assembly: AssemblyVersionAttribute("0.9.4.1")>
+<assembly: AssemblyVersion("1.0.1.0")>
