@@ -211,36 +211,30 @@ Public NotInheritable Class Console
             End Set
         End Property
 
-#End Region
-#Region "Settings"
-
-#End Region
-
-#Region "Settings"
-
-    ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
-    ''' <returns> Boolean </returns>
-    ''' <remarks> This is an "application setting". </remarks>
-    Public Function GetAutoSizeColumns() As Boolean
-        Return My.Settings.AutoSizeColumns
-    End Function
-
-#End Region
-
-#Region "Settings"
-
-    ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
-    ''' <param name="Value"> Boolean </param>
-    ''' <remarks> This is an "application setting". </remarks>
-    Public Sub SetAutoSizeColumns(value As Boolean)
-        My.Settings.AutoSizeColumns = value
-    End Sub
-
-    ''' <summary> Show the "Line No" column in the Log View? </summary>
-    ''' <value>   Boolean </value>
-    ''' <returns> Boolean </returns>
-    ''' <remarks> This is an "application setting". </remarks>
-    Public Property ShowColumnLineNo() As Boolean
+    #End Region
+    
+    #Region "Settings"
+        
+        ''' <summary> Automatically set the width of the Log View columns to fit the largest item? </summary>
+         ''' <value>   Boolean </value>
+         ''' <returns> Boolean </returns>
+         ''' <remarks> This is an "application setting". </remarks>
+        Public Property AutoSizeColumns() As Boolean
+            Get
+                Return My.Settings.AutoSizeColumns
+            End Get
+            Set(value As Boolean)
+                If (value XOR My.Settings.AutoSizeColumns) Then
+                    My.Settings.AutoSizeColumns = value
+                End If
+            End Set
+        End Property
+        
+        ''' <summary> Show the "Line No" column in the Log View? </summary>
+         ''' <value>   Boolean </value>
+         ''' <returns> Boolean </returns>
+         ''' <remarks> This is an "application setting". </remarks>
+        Public Property ShowColumnLineNo() As Boolean
             Get
                 Return My.Settings.ShowColumnLineNo
             End Get

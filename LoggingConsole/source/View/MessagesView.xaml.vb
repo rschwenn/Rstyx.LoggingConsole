@@ -7,9 +7,9 @@ Partial Public Class MessagesView
     
     #Region "Private Fields"
         
-        Private Shared InternalLogger  As Logger = LogBox.GetLogger("LogBox.MessagesView")
+        Private Shared ReadOnly InternalLogger  As Logger = LogBox.GetLogger("LogBox.MessagesView")
         
-        Private _LogLevel              As LogLevelEnum = LogLevelEnum.Info
+        Private ReadOnly _LogLevel     As LogLevelEnum = LogLevelEnum.Info
         
         Private DeferredScrollAction   As DeferredAction
         Private ReadOnly ScrollDelay   As TimeSpan = TimeSpan.FromMilliseconds(100)
@@ -46,11 +46,11 @@ Partial Public Class MessagesView
                     CollectionChangedHandlerAdded = True
                 End If
                 
-                DeferredScrollAction = New DeferredAction(AddressOf scrollToEndOfLog, Me.Dispatcher)
-                DeferredAdjustAction = New DeferredAction(AddressOf adjustGridViewColumnWidths, Me.Dispatcher)
+                DeferredScrollAction = New DeferredAction(AddressOf ScrollToEndOfLog, Me.Dispatcher)
+                DeferredAdjustAction = New DeferredAction(AddressOf AdjustGridViewColumnWidths, Me.Dispatcher)
                 
                 If (CollectionHasChanged) Then
-                    scrollToEndOfLog()
+                    ScrollToEndOfLog()
                 Else
                     ' Select the last selected line. *** doesn't work because LastSelectedIndex is always = -1.
                     'If (MessagesListView.Items.Count >= LastSelectedIndex) Then
@@ -136,7 +136,7 @@ Partial Public Class MessagesView
             Try
                 If (e.Property.Name = "Visibility") Then
                     Dim header As System.Windows.Controls.GridViewColumnHeader = TryCast(sender, System.Windows.Controls.GridViewColumnHeader)
-                    If (header IsNot Nothing) Then syncColumnVisibilityWithHeader(header)
+                    If (header IsNot Nothing) Then SyncColumnVisibilityWithHeader(header)
                 End If
             Catch ex As System.Exception
                 InternalLogger.LogError(ex, String.Format(My.Resources.Resources.Global_UnexpectedErrorIn, System.Reflection.MethodBase.GetCurrentMethod().Name))
@@ -163,8 +163,8 @@ Partial Public Class MessagesView
          ''' When a column is made visible, it's done by setting it's width to the last value.
          ''' </para>
          ''' </remarks>
-        Private Sub syncColumnVisibilityWithHeader(Header As System.Windows.Controls.GridViewColumnHeader)
-            If ((Not Header is Nothing) AndAlso (Not Header.Column is Nothing)) Then
+        Private Sub SyncColumnVisibilityWithHeader(Header As System.Windows.Controls.GridViewColumnHeader)
+            If ((Header IsNot Nothing) AndAlso (Header.Column IsNot Nothing)) Then
                 If (Header.Visibility = System.Windows.Visibility.Collapsed) Then
                     ' Hide the column (remember current width).
                     Header.Tag = Header.Column.Width
@@ -185,11 +185,11 @@ Partial Public Class MessagesView
         End Sub
         
         ''' <summary> Adjust the width of all visible GridViewColumns to fit the largest visible (!) item (if Console.AutoSizeColumns = True). </summary>
-        Private Sub adjustGridViewColumnWidths()
+        Private Sub AdjustGridViewColumnWidths()
             Try
                 ' Me.DataContext is Null when this is called for the leaved tab...
-                If (Not Me.DataContext Is Nothing) Then
-                    If (CType(Me.DataContext, LogBox).Console.GetAutoSizeColumns()) then
+                If (Me.DataContext IsNot Nothing) Then
+                    If (CType(Me.DataContext, LogBox).Console.AutoSizeColumns) then
                         For Each column As System.Windows.Controls.GridViewColumn In Me.MessagesGridView.Columns
                             If (column.ActualWidth > 0) then
                                 column.Width = column.ActualWidth + 1
@@ -203,7 +203,7 @@ Partial Public Class MessagesView
         End Sub
         
         ''' <summary> Scroll to make the last message visible. </summary>
-        Private Sub scrollToEndOfLog()
+        Private Sub ScrollToEndOfLog()
             Try
                 Dim LastIndex As Integer = MessagesListView.Items.Count - 1
                 If (LastIndex > 0) then
