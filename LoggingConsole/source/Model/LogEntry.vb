@@ -62,7 +62,7 @@ Public Class LogEntry
         End Property
         
         ''' <summary> Indicates the severity of this log entry as it's been given to the constructer. </summary>
-        Public ReadOnly Property Level As String
+        Public ReadOnly Property Level As LogLevelEnum
             Get
                 Level = _Level
             End Get

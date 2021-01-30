@@ -299,6 +299,18 @@ Namespace My
                 Return CType(Me("UIResources_IconResourcesUri"),String)
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property UseForegroundColors() As Boolean
+            Get
+                Return CType(Me("UseForegroundColors"),Boolean)
+            End Get
+            Set
+                Me("UseForegroundColors") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

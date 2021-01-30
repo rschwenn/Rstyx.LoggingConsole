@@ -252,6 +252,12 @@
   <data name="ConsoleView_Appearence_BackgroundColors_ToolTip" xml:space="preserve">
     <value>Use different Background Colors</value>
   </data>
+  <data name="ConsoleView_Appearence_ForegroundColors" xml:space="preserve">
+    <value> Text Colors</value>
+  </data>
+  <data name="ConsoleView_Appearence_ForegroundColors_ToolTip" xml:space="preserve">
+    <value>Use different Text Colors</value>
+  </data>
   <data name="ConsoleView_Appearence_OwnFontSize" xml:space="preserve">
     <value> Font Size:</value>
   </data>

@@ -320,6 +320,21 @@ Public NotInheritable Class Console
             End Set
         End Property
         
+        ''' <summary> Use different foreground colors in the Log View? </summary>
+         ''' <value>   Boolean </value>
+         ''' <returns> Boolean </returns>
+         ''' <remarks> This is an "application setting". </remarks>
+        Public Property UseForegroundColors() As Boolean
+            Get
+                Return My.Settings.UseForegroundColors
+            End Get
+            Set(value As Boolean)
+                If (value XOR My.Settings.UseForegroundColors) Then
+                    My.Settings.UseForegroundColors = value
+                End If
+            End Set
+        End Property
+        
         ''' <summary> Use Courier New instead of the inherited font.  </summary>
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>

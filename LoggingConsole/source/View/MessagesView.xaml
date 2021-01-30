@@ -31,11 +31,10 @@
                 
             </CollectionViewSource>
             
-            <!-- Filter="LogLevelFilter" *** very poor performance -->
-            <!--<CollectionViewSource
-                x:Key="MessagesListViewSource"
-                Source="{Binding Path=MessageStore.Messages[{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}]}"
-            />-->
+            <Style TargetType="{x:Type GridViewColumnHeader}">
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="Padding" Value="8,1,5,1" />
+            </Style>
             
             <!-- Needed in order to justify the line number to the right in conjunction with: TextBlock .. TextAlignment="Right" -->
             <Style TargetType="ListViewItem">
@@ -84,72 +83,126 @@
         
         <ListView.View>
             <GridView x:Name="MessagesGridView" >
-                <GridViewColumn
-                    x:Name="gvcSerialNo"
-                    >
+                <GridViewColumn x:Name="gvcSerialNo" >
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_SerialNo, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
                         Visibility="{Binding Path=Console.ShowColumnLineNo, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         >
                     </GridViewColumnHeader>
-                    
-                    <!-- Right align the number -->
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=LineNo}" TextAlignment="Right"/>
+                            <TextBlock Text="{Binding Path=LineNo}" TextAlignment="Right" >
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
+                                        <Binding Path="Level" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
+                            </TextBlock>
                         </DataTemplate>
                     </GridViewColumn.CellTemplate>
                 </GridViewColumn>
                 
-                <GridViewColumn
-                    x:Name="gvcDate"
-                    DisplayMemberBinding="{Binding Path=Date}">
+                <GridViewColumn x:Name="gvcDate" >
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Date, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
                         Visibility="{Binding Path=Console.ShowColumnDate, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Date}" >
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
+                                        <Binding Path="Level" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
                 
-                <GridViewColumn
-                    x:Name="gvcTime"
-                    DisplayMemberBinding="{Binding Path=Time}">
+                <GridViewColumn x:Name="gvcTime" >
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Time, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
                         Visibility="{Binding Path=Console.ShowColumnTime, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Time}" >
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
+                                        <Binding Path="Level" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
                 
-                <GridViewColumn
-                    x:Name="gvcLevel"
-                    DisplayMemberBinding="{Binding Path=Level, Converter={x:Static Logging:WpfUtils.LogLevelConverter}}">
+                <GridViewColumn x:Name="gvcLevel" >
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Level, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
                         Visibility="{Binding Path=Console.ShowColumnLevel, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Level, Converter={x:Static Logging:WpfUtils.LogLevelConverter}}" >
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
+                                        <Binding Path="Level" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
                 
-                <GridViewColumn
-                    x:Name="gvcSource"
-                    DisplayMemberBinding="{Binding Path=Source}">
+                <GridViewColumn x:Name="gvcSource" >
                     <GridViewColumnHeader 
                         Content="{Binding Path=MessagesView_gvch_Source, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                         TargetUpdated="OnGridViewColumnHeaderVisibilityUpdated" 
                         Visibility="{Binding Path=Console.ShowColumnSource, Converter={x:Static Logging:WpfUtils.ColumnHeaderVisibilityConverter}, Mode=OneWay, NotifyOnTargetUpdated=True}"
                         > 
                     </GridViewColumnHeader> 
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Source}" >
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
+                                        <Binding Path="Level" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
                 
-                <GridViewColumn
-                    x:Name="gvcMessage"
+                <GridViewColumn x:Name="gvcMessage"
                     Header="{Binding Path=MessagesView_gvch_Message, Source={x:Static Logging:CultureResources.ResourceProvider}}"
-                    DisplayMemberBinding="{Binding Path=Message, NotifyOnTargetUpdated=True}">
+                    >
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Message, NotifyOnTargetUpdated=True}">
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
+                                        <Binding Path="Level" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
                 </GridViewColumn>
             </GridView>
         </ListView.View>

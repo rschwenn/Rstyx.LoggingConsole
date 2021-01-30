@@ -14,6 +14,7 @@ Public Class WpfUtils
         Private Shared _LogLevelConverter                As LogLevelValueConverter
         Private Shared _LogLevelTabIndexConverter        As LogLevelTabIndexValueConverter
         Private Shared _LogLevelBackgroundConverter      As LogLevelBackgroundValueConverter
+        Private Shared _LogLevelForegroundConverter      As LogLevelForegroundValueConverter
         Private Shared _ColumnWidthConverter             As ColumnWidthValueConverter
         Private Shared _ColumnHeaderVisibilityConverter  As ColumnHeaderVisibilityValueConverter
         Private Shared _CheckboxConverter                As CheckboxValueConverter
@@ -70,6 +71,21 @@ Public Class WpfUtils
                 SyncLock (SyncHandle)
                     If (_LogLevelBackgroundConverter Is Nothing) Then _LogLevelBackgroundConverter = New LogLevelBackgroundValueConverter()
                     Return _LogLevelBackgroundConverter
+                End SyncLock
+            End Get
+        End Property
+        
+        ''' <summary> Returns an instance of WpfUtils.LogLevelForegroundValueConverter </summary>
+         ''' <returns> WpfUtils.LogLevelForegroundValueConverter (WPF Binding IMultiValueConverter) </returns>
+         ''' <remarks> 
+         ''' The returned Converter converts LogLevelEnum and Boolean property to ListView Foreground Brush. <br></br>
+         ''' This allows the ListView to set a Foreground color depending on LogLevel and the "useForegroundColors" setting.
+         ''' </remarks>
+        Public Shared ReadOnly Property LogLevelForegroundConverter() As IMultiValueConverter
+            Get
+                SyncLock (SyncHandle)
+                    If (_LogLevelForegroundConverter Is Nothing) Then _LogLevelForegroundConverter = New LogLevelForegroundValueConverter()
+                    Return _LogLevelForegroundConverter
                 End SyncLock
             End Get
         End Property
@@ -282,10 +298,9 @@ Public Class WpfUtils
             
             Public Sub New()
                 ConvertDict.add(LogLevelEnum.Debug,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LightGray))
-                'ConvertDict.add(LogLevelEnum.Info,    New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Honeydew))
                 ConvertDict.add(LogLevelEnum.Info,    SystemWindowColor)
-                ConvertDict.add(LogLevelEnum.Warning, New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.PeachPuff))
-                ConvertDict.add(LogLevelEnum.Error,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Pink))
+                ConvertDict.add(LogLevelEnum.Warning, New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.BlanchedAlmond))
+                ConvertDict.add(LogLevelEnum.Error,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.MistyRose))
             End Sub
             
             ''' <summary> Converts a LogLevelEnum value to a SolidColorBrush. </summary>
@@ -315,6 +330,53 @@ Public Class WpfUtils
              ''' <returns>                  The input value itself. </returns>
             Public Function ConvertBack(value As Object, targetTypes As Type(), parameter As Object, culture As System.Globalization.CultureInfo) As Object() Implements IMultiValueConverter.ConvertBack
                 System.Diagnostics.Trace.WriteLine("LogLevelBackgroundValueConverter[ConvertBack]: This is Not Implemented => return input value!")
+                Return value
+            End Function
+        End Class
+        
+        ''' <summary> Converts LogLevelEnum and Boolean property to ListView Foreground Brush. </summary>
+         ''' <remarks> This allows the ListView to set a Foreground color depending on LogLevel and the "useForegroundColors" setting. </remarks>
+        <ValueConversion(GetType(LogLevelEnum), GetType(System.Windows.Media.SolidColorBrush))>
+        Private Class LogLevelForegroundValueConverter
+            Implements IMultiValueConverter
+            
+            Private ReadOnly ConvertDict        As New Dictionary(Of LogLevelEnum, System.Windows.Media.SolidColorBrush)
+            Private ReadOnly SystemWindowColor  As New System.Windows.Media.SolidColorBrush(System.Windows.SystemColors.WindowTextColor)
+            
+            Public Sub New()
+                ConvertDict.add(LogLevelEnum.Debug,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue))
+                ConvertDict.add(LogLevelEnum.Info,    SystemWindowColor)
+                ConvertDict.add(LogLevelEnum.Warning, New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.DarkOrange))
+                ConvertDict.add(LogLevelEnum.Error,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red))
+            End Sub
+            
+            ''' <summary> Converts a LogLevelEnum value to a SolidColorBrush. </summary>
+             ''' <param name="values">     LogLevelEnum and useForegroundColors. </param>
+             ''' <param name="targetType"> System.Type to convert to. </param>
+             ''' <param name="parameter">  Ignored. </param>
+             ''' <param name="culture">    Ignored. </param>
+             ''' <returns>                 The display string. On error the input value itself is returned. </returns>
+            Public Function Convert(values As Object(), targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IMultiValueConverter.Convert
+                Try
+                    Dim returnColor As System.Windows.Media.SolidColorBrush = SystemWindowColor
+                    If ((values(1).GetType.Name = "Boolean")) Then
+                        If (values(1)) Then returnColor = ConvertDict(values(0))
+                    End if
+                    Return returnColor
+                Catch ex As System.Exception
+                    System.Diagnostics.Trace.WriteLine(ex)
+                    Return values
+                End Try
+            End Function
+            
+            ''' <summary> Not Implemented. </summary>
+             ''' <param name="value">       Input value. </param>
+             ''' <param name="targetTypes"> System.Type to convert to. </param>
+             ''' <param name="parameter">   Ignored. </param>
+             ''' <param name="culture">     Ignored. </param>
+             ''' <returns>                  The input value itself. </returns>
+            Public Function ConvertBack(value As Object, targetTypes As Type(), parameter As Object, culture As System.Globalization.CultureInfo) As Object() Implements IMultiValueConverter.ConvertBack
+                System.Diagnostics.Trace.WriteLine("LogLevelForegroundValueConverter[ConvertBack]: This is Not Implemented => return input value!")
                 Return value
             End Function
         End Class
