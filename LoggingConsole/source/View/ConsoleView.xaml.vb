@@ -4,8 +4,8 @@ Imports System
 Partial Public Class ConsoleView
     Inherits System.Windows.Controls.UserControl
     
-    Private InternalLogger      As Logger  = LogBox.GetLogger("LogBox.ConsoleView")
-    Private _ConnectToConsole   As Boolean = False
+    Private ReadOnly InternalLogger     As Logger  = LogBox.GetLogger("LogBox.ConsoleView")
+    Private ReadOnly _ConnectToConsole  As Boolean = False
     
     Public Sub New()
         Me.New(ConnectToConsole:=True)

@@ -9,16 +9,15 @@ Partial Public Class MessagesView
         
         Private Shared ReadOnly InternalLogger  As Logger = LogBox.GetLogger("LogBox.MessagesView")
         
-        Private ReadOnly _LogLevel     As LogLevelEnum = LogLevelEnum.Info
+        Private ReadOnly _LogLevel              As LogLevelEnum = LogLevelEnum.Info
         
-        Private DeferredScrollAction   As DeferredAction
-        Private ReadOnly ScrollDelay   As TimeSpan = TimeSpan.FromMilliseconds(100)
+        Private DeferredScrollAction            As DeferredAction
+        Private ReadOnly ScrollDelay            As TimeSpan = TimeSpan.FromMilliseconds(100)
         
-        Private DeferredAdjustAction   As DeferredAction
-        Private ReadOnly AdjustDelay   As TimeSpan = TimeSpan.FromMilliseconds(100)
+        Private DeferredAdjustAction            As DeferredAction
+        Private ReadOnly AdjustDelay            As TimeSpan = TimeSpan.FromMilliseconds(100)
         
-        'Private LastSelectedIndex      As Integer = 0
-        Private CollectionHasChanged   As Boolean = True
+        Private CollectionHasChanged            As Boolean = True
         Private CollectionChangedHandlerAdded   As Boolean = False
         
     #End Region

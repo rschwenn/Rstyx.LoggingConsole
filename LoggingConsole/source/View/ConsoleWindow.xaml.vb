@@ -4,7 +4,7 @@ Imports System
 Partial Class ConsoleWindow
     Inherits System.Windows.Window
     
-    Private InternalLogger As Logger  = LogBox.GetLogger("LogBox.ConsoleWindow")
+    Private ReadOnly InternalLogger As Logger  = LogBox.GetLogger("LogBox.ConsoleWindow")
     
     ''' <summary>
     ''' Focus the Window on Activate to get keyboard events.
