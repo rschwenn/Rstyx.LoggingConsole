@@ -48,7 +48,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="ShowConsoleOnError" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="UseOwnFontSize" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

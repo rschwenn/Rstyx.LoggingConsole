@@ -16,54 +16,60 @@
     -->
     
     <UserControl.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
-        
-        <Style x:Key="MainBorderStyle" TargetType="{x:Type Border}">
-            <!--<Setter Property="Background" Value="WhiteSmoke" />-->
-            <Setter Property="BorderBrush" Value="DarkGray" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="CornerRadius" Value="7" />
-        </Style>
-        
-        <Style x:Key="FontSizeTextBoxEnabler" TargetType="{x:Type TextBox}">
-            <Setter Property="IsEnabled" Value="False" />
-            <Style.Triggers>
-                <DataTrigger Value="True" Binding="{Binding Path=Console.UseOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
-                    <Setter Property="IsEnabled" Value="True" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-        
-        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}" >
-            <Setter Property="Padding" Value="2"/>
-            <Setter Property="Margin"  Value="3" />
-        </Style>
-        
-        <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}" >
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
-        
-        <Style TargetType="{x:Type GroupBox}">
-            <Setter Property="Padding" Value="2,5,2,2" />
-            <Setter Property="Margin"  Value="4" />
-        </Style>
-        
-        <Style TargetType="{x:Type TextBlock}">
-            <Setter Property="VerticalAlignment" Value="Center" />
-        </Style>
-        
-        <!--<Style TargetType="{x:Type ContentPresenter}" >
-            <Setter Property="VerticalAlignment" Value="Stretch" />
-        </Style>-->
-        
-        <!-- TabItem Header: Binding LogLevelEnum Name to Tab Header Caption -->
-        <DataTemplate x:Key="TabItemTemplate">
-            <ContentControl 
-                Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem, AncestorLevel=1}, Path=DataContext.LogLevel, Converter={x:Static Logging:WpfUtils.LogLevelConverter}}"
-                VerticalAlignment="Center" />
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Rstyx.LoggingConsole;component/source/Resources/IconResources.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            
+            <Style x:Key="MainBorderStyle" TargetType="{x:Type Border}">
+                <!--<Setter Property="Background" Value="WhiteSmoke" />-->
+                <Setter Property="BorderBrush" Value="DarkGray" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="CornerRadius" Value="7" />
+            </Style>
+            
+            <Style x:Key="FontSizeTextBoxEnabler" TargetType="{x:Type TextBox}">
+                <Setter Property="IsEnabled" Value="False" />
+                <Style.Triggers>
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.UseOwnFontSize, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
+                        <Setter Property="IsEnabled" Value="True" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}" >
+                <Setter Property="Padding" Value="2"/>
+                <Setter Property="Margin"  Value="3" />
+            </Style>
+            
+            <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}" >
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="VerticalAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+            
+            <Style TargetType="{x:Type GroupBox}">
+                <Setter Property="Padding" Value="2,5,2,2" />
+                <Setter Property="Margin"  Value="4" />
+            </Style>
+            
+            <Style TargetType="{x:Type TextBlock}">
+                <Setter Property="VerticalAlignment" Value="Center" />
+            </Style>
+            
+            <!--<Style TargetType="{x:Type ContentPresenter}" >
+                <Setter Property="VerticalAlignment" Value="Stretch" />
+            </Style>-->
+            
+            <!-- TabItem Header: Binding LogLevelEnum Name to Tab Header Caption -->
+            <DataTemplate x:Key="TabItemTemplate">
+                <ContentControl 
+                    Content="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=TabItem, AncestorLevel=1}, Path=DataContext.LogLevel, Converter={x:Static Logging:WpfUtils.LogLevelConverter}}"
+                    VerticalAlignment="Center" />
+            </DataTemplate>
+        </ResourceDictionary>
     </UserControl.Resources>
     
     <Border Style="{StaticResource MainBorderStyle}" >
@@ -74,18 +80,15 @@
                 ExpandDirection="{Binding RelativeSource={RelativeSource Self}, Path=(DockPanel.Dock), Converter={x:Static Logging:WpfUtils.ExpandDirectionConverter}}"
                 HorizontalAlignment="Left" 
                 VerticalContentAlignment="Top" 
+                Cursor="Hand"
+                ToolTip="{Binding Path=ConsoleView_Header_OptionPane, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                 >
                 <Expander.Header>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                          <RowDefinition Height="Auto" />
-                          <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        
-                        <StackPanel Name="SettingsExpanderHeaderButtons"
-                            Grid.Row="0"
+                    <DockPanel VerticalAlignment="Bottom">
+                        <StackPanel  DockPanel.Dock="Top" Name="SettingsExpanderHeaderButtons"
                             Orientation="Vertical"
                             Visibility="{Binding Path=Console.ActionButtonsAlwaysVisible, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            Cursor="Arrow" 
                             >
                             
                             <Button Margin="3" Height="24" Width="24"
@@ -107,20 +110,16 @@
                             </Button>
                         </StackPanel>
                         
-                        <!-- This button conflicts with the user option to show/hide tool bar ... -->
-                        <!--<Button Name="HideButton" Margin="3,13,3,3" Height="24" Width="24"
-                            Command="{Binding Path=HideFloatingConsoleViewCommand}"
-                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}"
-                            IsCancel="True"
-                            Grid.Row="1"
-                            VerticalAlignment="Bottom"
-                            Visibility="Visible"
-                            >
-                            <Button.Content>
-                                <Rectangle Height="16" Width="16" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
-                            </Button.Content>
-                        </Button>-->
-                    </Grid>
+                        <!--<Rectangle DockPanel.Dock="Bottom"
+                            Margin="3,30,3,3"
+                            Height="24"
+                            Width="24"
+                            Stretch="UniformToFill"
+                            Opacity="0.9"
+                            ToolTip="{Binding Path=ConsoleView_Header_OptionPane, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                            Fill="{StaticResource Tango_Gear1_IconBrush}">
+                        </Rectangle>-->
+                    </DockPanel>
                 </Expander.Header>
                 
                 <!-- OptionPane -->
