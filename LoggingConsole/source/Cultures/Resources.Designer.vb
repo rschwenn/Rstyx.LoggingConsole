@@ -146,11 +146,29 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Use different Background Colors ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Use different background colors ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ConsoleView_Appearence_BackgroundColors_ToolTip() As String
             Get
                 Return ResourceManager.GetString("ConsoleView_Appearence_BackgroundColors_ToolTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die  Dark Color Schema ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ConsoleView_Appearence_DarkColorSchema() As String
+            Get
+                Return ResourceManager.GetString("ConsoleView_Appearence_DarkColorSchema", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die Use dark background colors. ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ConsoleView_Appearence_DarkColorSchema_ToolTip() As String
+            Get
+                Return ResourceManager.GetString("ConsoleView_Appearence_DarkColorSchema_ToolTip", resourceCulture)
             End Get
         End Property
         
@@ -164,7 +182,7 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Sucht eine lokalisierte Zeichenfolge, die Use different Text Colors ähnelt.
+        '''  Sucht eine lokalisierte Zeichenfolge, die Use different text colors ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ConsoleView_Appearence_ForegroundColors_ToolTip() As String
             Get

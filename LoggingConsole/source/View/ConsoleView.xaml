@@ -219,10 +219,13 @@
                             <GroupBox Header="{Binding Path=ConsoleView_Header_Appearence_Textarea, Source={x:Static Logging:CultureResources.ResourceProvider}}" >
                                 <StackPanel Orientation="Vertical">
                                     
+                                    <!-- Dark Color Schema -->
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_DarkColorSchema, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.UseDarkColorSchema, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_DarkColorSchema_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    
                                     <!-- BackgroundColors -->
                                     <CheckBox Content="{Binding Path=ConsoleView_Appearence_BackgroundColors, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.UseBackgroundColors, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_BackgroundColors_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                                     
-                                    <!-- ForegroundColors -->
+                                    <!-- Text Colors -->
                                     <CheckBox Content="{Binding Path=ConsoleView_Appearence_ForegroundColors, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,3" IsChecked="{Binding Path=Console.UseForegroundColors, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_ForegroundColors_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                                     
                                     <!-- Font Family -->

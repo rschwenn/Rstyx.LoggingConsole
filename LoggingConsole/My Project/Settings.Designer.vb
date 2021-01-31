@@ -311,6 +311,18 @@ Namespace My
                 Me("UseForegroundColors") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+        Public Property UseDarkColorSchema() As Boolean
+            Get
+                Return CType(Me("UseDarkColorSchema"),Boolean)
+            End Get
+            Set
+                Me("UseDarkColorSchema") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

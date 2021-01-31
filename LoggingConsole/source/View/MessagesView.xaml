@@ -78,6 +78,7 @@
             <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelBackgroundConverter}">
                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="LogLevel" />
                 <Binding Path="Console.UseBackgroundColors" />
+                <Binding Path="Console.UseDarkColorSchema" />
             </MultiBinding>
         </ListView.Background>
         
@@ -97,6 +98,7 @@
                                     <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
                                         <Binding Path="Level" />
                                         <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseDarkColorSchema" />
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -118,6 +120,7 @@
                                     <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
                                         <Binding Path="Level" />
                                         <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseDarkColorSchema" />
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -139,6 +142,7 @@
                                     <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
                                         <Binding Path="Level" />
                                         <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseDarkColorSchema" />
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -160,6 +164,7 @@
                                     <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
                                         <Binding Path="Level" />
                                         <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseDarkColorSchema" />
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -181,6 +186,7 @@
                                     <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
                                         <Binding Path="Level" />
                                         <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseDarkColorSchema" />
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>
@@ -193,11 +199,12 @@
                     >
                     <GridViewColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Path=Message, NotifyOnTargetUpdated=True}">
+                            <TextBlock Text="{Binding Path=Message, NotifyOnTargetUpdated=True}" >
                                 <TextBlock.Foreground>
                                     <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelForegroundConverter}">
                                         <Binding Path="Level" />
                                         <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseForegroundColors" />
+                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="DataContext.Console.UseDarkColorSchema" />
                                     </MultiBinding>
                                 </TextBlock.Foreground>
                             </TextBlock>

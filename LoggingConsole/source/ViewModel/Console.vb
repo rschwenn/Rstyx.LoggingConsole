@@ -335,6 +335,21 @@ Public NotInheritable Class Console
             End Set
         End Property
         
+        ''' <summary> Use dark color schema in the Log View? </summary>
+         ''' <value>   Boolean </value>
+         ''' <returns> Boolean </returns>
+         ''' <remarks> This is an "application setting". </remarks>
+        Public Property UseDarkColorSchema() As Boolean
+            Get
+                Return My.Settings.UseDarkColorSchema
+            End Get
+            Set(value As Boolean)
+                If (value XOR My.Settings.UseDarkColorSchema) Then
+                    My.Settings.UseDarkColorSchema = value
+                End If
+            End Set
+        End Property
+        
         ''' <summary> Use Courier New instead of the inherited font.  </summary>
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>

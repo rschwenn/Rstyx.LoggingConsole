@@ -2,6 +2,7 @@
 Imports System
 Imports System.Diagnostics
 Imports System.Windows.Data
+Imports System.Windows.Media
 Imports System.Globalization
 Imports System.Collections.Generic
 
@@ -190,8 +191,8 @@ Public Class WpfUtils
         ''' <summary> creates a BitmapImage from a file path </summary>
          ''' <param name="path">File path, i.e. for a project resource: "/ProjectName;component/Resources/save.png"</param>
          ''' <returns> The BitmapImage generated from the given file. </returns>
-        Public Shared Function GetImageFromPath(path As String) As System.Windows.Media.Imaging.BitmapImage
-            Dim bi As New System.Windows.Media.Imaging.BitmapImage()
+        Public Shared Function GetImageFromPath(path As String) As Imaging.BitmapImage
+            Dim bi As New Imaging.BitmapImage()
             SyncLock (SyncHandle)
                 bi.BeginInit()
                 bi.UriSource = New Uri(path, UriKind.RelativeOrAbsolute)
@@ -289,32 +290,44 @@ Public Class WpfUtils
         
         ''' <summary> Converts LogLevelEnum and Boolean property to ListView Background Brush. </summary>
          ''' <remarks> This allows the ListView to set a background color depending on LogLevel and the "useBackgroundColors" setting. </remarks>
-        <ValueConversion(GetType(LogLevelEnum), GetType(System.Windows.Media.SolidColorBrush))>
+        <ValueConversion(GetType(LogLevelEnum), GetType(SolidColorBrush))>
         Private Class LogLevelBackgroundValueConverter
             Implements IMultiValueConverter
             
-            Private ReadOnly ConvertDict        As New Dictionary(Of LogLevelEnum, System.Windows.Media.SolidColorBrush)
-            Private ReadOnly SystemWindowColor  As New System.Windows.Media.SolidColorBrush(System.Windows.SystemColors.WindowColor)
+            Private ReadOnly BgColorsDefault As New Dictionary(Of LogLevelEnum, SolidColorBrush)
+            Private ReadOnly BgColorsDark    As New Dictionary(Of LogLevelEnum, SolidColorBrush)
             
             Public Sub New()
-                ConvertDict.add(LogLevelEnum.Debug,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.LightGray))
-                ConvertDict.add(LogLevelEnum.Info,    SystemWindowColor)
-                ConvertDict.add(LogLevelEnum.Warning, New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.BlanchedAlmond))
-                ConvertDict.add(LogLevelEnum.Error,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.MistyRose))
+                ' Background colors default schema:
+                BgColorsDefault.add(LogLevelEnum.Debug,   New SolidColorBrush(Colors.LightGray))
+                BgColorsDefault.add(LogLevelEnum.Info,    New SolidColorBrush(System.Windows.SystemColors.WindowColor))
+                BgColorsDefault.add(LogLevelEnum.Warning, New SolidColorBrush(Colors.PeachPuff))
+                BgColorsDefault.add(LogLevelEnum.Error,   New SolidColorBrush(Colors.Pink))
+
+                ' Background colors dark schema:
+                BgColorsDark.add(LogLevelEnum.Debug,      New SolidColorBrush(Colors.DimGray))
+                BgColorsDark.add(LogLevelEnum.Info,       New SolidColorBrush(Color.FromRgb(65,65,75)))
+                BgColorsDark.add(LogLevelEnum.Warning,    New SolidColorBrush(Color.FromRgb(85,40,25)))
+                BgColorsDark.add(LogLevelEnum.Error,      New SolidColorBrush(Color.FromRgb(85,35,35)))
+                'BgColorsDark.add(LogLevelEnum.Error,      New SolidColorBrush(Color.FromRgb(80,25,25)))
             End Sub
             
             ''' <summary> Converts a LogLevelEnum value to a SolidColorBrush. </summary>
-             ''' <param name="values">     LogLevelEnum and useBackgroundColors. </param>
+             ''' <param name="values">     LogLevelEnum, UseBackgroundColors and UseDarkColorSchema. </param>
              ''' <param name="targetType"> System.Type to convert to. </param>
              ''' <param name="parameter">  Ignored. </param>
              ''' <param name="culture">    Ignored. </param>
              ''' <returns>                 The display string. On error the input value itself is returned. </returns>
             Public Function Convert(values As Object(), targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IMultiValueConverter.Convert
                 Try
-                    Dim returnColor As System.Windows.Media.SolidColorBrush = SystemWindowColor
-                    If ((values(1).GetType.Name = "Boolean")) Then
-                        If (values(1)) Then returnColor = ConvertDict(values(0))
-                    End if
+                    Dim returnColor   As SolidColorBrush
+                    Dim BgColorSchema As Dictionary(Of LogLevelEnum, SolidColorBrush) = BgColorsDefault
+                    If ((values(2).GetType.Name = "Boolean") AndAlso values(2)) Then BgColorSchema = BgColorsDark
+                    If ((values(1).GetType.Name = "Boolean") AndAlso values(1)) Then
+                        returnColor = BgColorSchema(values(0))
+                    Else
+                        returnColor = BgColorSchema(LogLevelEnum.Info)
+                    End If
                     Return returnColor
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
@@ -336,32 +349,43 @@ Public Class WpfUtils
         
         ''' <summary> Converts LogLevelEnum and Boolean property to ListView Foreground Brush. </summary>
          ''' <remarks> This allows the ListView to set a Foreground color depending on LogLevel and the "useForegroundColors" setting. </remarks>
-        <ValueConversion(GetType(LogLevelEnum), GetType(System.Windows.Media.SolidColorBrush))>
+        <ValueConversion(GetType(LogLevelEnum), GetType(SolidColorBrush))>
         Private Class LogLevelForegroundValueConverter
             Implements IMultiValueConverter
             
-            Private ReadOnly ConvertDict        As New Dictionary(Of LogLevelEnum, System.Windows.Media.SolidColorBrush)
-            Private ReadOnly SystemWindowColor  As New System.Windows.Media.SolidColorBrush(System.Windows.SystemColors.WindowTextColor)
+            Private ReadOnly TextColorsDefault  As New Dictionary(Of LogLevelEnum, SolidColorBrush)
+            Private ReadOnly TextColorsDark     As New Dictionary(Of LogLevelEnum, SolidColorBrush)
             
             Public Sub New()
-                ConvertDict.add(LogLevelEnum.Debug,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Blue))
-                ConvertDict.add(LogLevelEnum.Info,    SystemWindowColor)
-                ConvertDict.add(LogLevelEnum.Warning, New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.DarkOrange))
-                ConvertDict.add(LogLevelEnum.Error,   New System.Windows.Media.SolidColorBrush(System.Windows.Media.Colors.Red))
+                ' Text colors default schema:
+                TextColorsDefault.add(LogLevelEnum.Debug,   New SolidColorBrush(Colors.Blue))
+                TextColorsDefault.add(LogLevelEnum.Info,    New SolidColorBrush(System.Windows.SystemColors.WindowTextColor))
+                TextColorsDefault.add(LogLevelEnum.Warning, New SolidColorBrush(Colors.DarkOrange))
+                TextColorsDefault.add(LogLevelEnum.Error,   New SolidColorBrush(Colors.Red))
+                
+                ' Text colors dark schema:
+                TextColorsDark.add(LogLevelEnum.Debug,      New SolidColorBrush(Colors.LightBlue))
+                TextColorsDark.add(LogLevelEnum.Info,       New SolidColorBrush(Colors.Ivory))
+                TextColorsDark.add(LogLevelEnum.Warning,    New SolidColorBrush(Colors.Goldenrod))
+                TextColorsDark.add(LogLevelEnum.Error,      New SolidColorBrush(Colors.Pink))
             End Sub
             
             ''' <summary> Converts a LogLevelEnum value to a SolidColorBrush. </summary>
-             ''' <param name="values">     LogLevelEnum and useForegroundColors. </param>
+             ''' <param name="values">     LogLevelEnum, UseForegroundColors and UseDarkColorSchema. </param>
              ''' <param name="targetType"> System.Type to convert to. </param>
              ''' <param name="parameter">  Ignored. </param>
              ''' <param name="culture">    Ignored. </param>
              ''' <returns>                 The display string. On error the input value itself is returned. </returns>
             Public Function Convert(values As Object(), targetType As Type, parameter As Object, culture As System.Globalization.CultureInfo) As Object Implements IMultiValueConverter.Convert
                 Try
-                    Dim returnColor As System.Windows.Media.SolidColorBrush = SystemWindowColor
-                    If ((values(1).GetType.Name = "Boolean")) Then
-                        If (values(1)) Then returnColor = ConvertDict(values(0))
-                    End if
+                    Dim returnColor     As SolidColorBrush
+                    Dim TextColorSchema As Dictionary(Of LogLevelEnum, SolidColorBrush) = TextColorsDefault
+                    If ((values(2).GetType.Name = "Boolean") AndAlso values(2)) Then TextColorSchema = TextColorsDark
+                    If ((values(1).GetType.Name = "Boolean") AndAlso values(1)) Then
+                        returnColor = TextColorSchema(values(0))
+                    Else
+                        returnColor = TextColorSchema(LogLevelEnum.Info)
+                    End If
                     Return returnColor
                 Catch ex As System.Exception
                     System.Diagnostics.Trace.WriteLine(ex)
