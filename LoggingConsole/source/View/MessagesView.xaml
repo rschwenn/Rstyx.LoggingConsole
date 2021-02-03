@@ -36,12 +36,19 @@
                 <Setter Property="Padding" Value="8,1,5,1" />
             </Style>
             
-            <!-- Needed in order to justify the line number to the right in conjunction with: TextBlock .. TextAlignment="Right" -->
             <Style TargetType="ListViewItem">
+                <!-- Needed in order to justify the line number to the right in conjunction with: TextBlock .. TextAlignment="Right" -->
                 <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                <Style.Triggers> 
+                    <Trigger Property="IsSelected" Value="True" > 
+                        <Setter Property="Background" Value="{x:Null}" /> 
+                        <Setter Property="BorderBrush" Value="Blue" /> 
+                        <Setter Property="BorderThickness" Value="0" /> 
+                    </Trigger> 
+                </Style.Triggers> 
             </Style>
             
-            <!-- Style for the whole  -->
+            <!-- Style for the whole MessagesView -->
             <Style x:Key="MessagesViewStyle" TargetType="ListView">
                 <Style.Triggers>
                     
@@ -65,7 +72,7 @@
                     
                 </Style.Triggers>
             </Style>
-            
+
         </ResourceDictionary>
     </UserControl.Resources>
     
@@ -73,7 +80,7 @@
         ItemsSource="{Binding Source={StaticResource MessagesListViewSource}}"
         Style="{DynamicResource MessagesViewStyle}"
         >
-        
+                        
         <ListView.Background>
             <MultiBinding Converter="{x:Static Logging:WpfUtils.LogLevelBackgroundConverter}">
                 <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType=UserControl, AncestorLevel=1}" Path="LogLevel" />

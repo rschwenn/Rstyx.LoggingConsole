@@ -68,7 +68,7 @@
     <ProductTitle>
     </ProductTitle>
     <VendorName>Rstyx</VendorName>
-    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <HelpFileFormat>MSHelpViewer</HelpFileFormat>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <CleanIntermediates>True</CleanIntermediates>
     <CatalogName>

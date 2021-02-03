@@ -110,15 +110,15 @@
                             </Button>
                         </StackPanel>
                         
-                        <!--<Rectangle DockPanel.Dock="Bottom"
-                            Margin="3,30,3,3"
+                        <Rectangle DockPanel.Dock="Bottom"
+                            Margin="3,7,3,3"
                             Height="24"
                             Width="24"
                             Stretch="UniformToFill"
                             Opacity="0.9"
                             ToolTip="{Binding Path=ConsoleView_Header_OptionPane, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                             Fill="{StaticResource Tango_Gear1_IconBrush}">
-                        </Rectangle>-->
+                        </Rectangle>
                     </DockPanel>
                 </Expander.Header>
                 

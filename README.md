@@ -5,7 +5,6 @@ LoggingConsole is a .NET Class Library designed for easyly adding lightweight an
 
 The viewer is called Console here because it also contains the interface for complete user interaction with the logger: changing options and solve maintaining tasks.
 
-There's also a simple VBA version
 
 
 Intention
