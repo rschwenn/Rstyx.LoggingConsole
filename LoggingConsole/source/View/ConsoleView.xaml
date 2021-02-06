@@ -84,42 +84,37 @@
                 ToolTip="{Binding Path=ConsoleView_Header_OptionPane, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                 >
                 <Expander.Header>
-                    <DockPanel VerticalAlignment="Bottom">
-                        <StackPanel  DockPanel.Dock="Top" Name="SettingsExpanderHeaderButtons"
-                            Orientation="Vertical"
-                            Visibility="{Binding Path=Console.ActionButtonsAlwaysVisible, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Cursor="Arrow" 
-                            >
-                            
-                            <Button Margin="3" Height="24" Width="24"
-                                Command="{Binding Path=ClearLogCommand}"
-                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}"
-                                >
-                                <Button.Content>
-                                    <Rectangle Stretch="UniformToFill" Opacity="0.9" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
-                                </Button.Content>
-                            </Button>
-                            
-                            <Button Margin="3" Height="24" Width="24" 
-                                Command="{Binding Path=SaveLogCommand}"
-                                ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
-                                >
-                                <Button.Content>
-                                    <Rectangle Stretch="UniformToFill" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
-                                </Button.Content>
-                            </Button>
-                        </StackPanel>
+                    <StackPanel Name="SettingsExpanderHeaderButtons"
+                        Orientation="Vertical"
+                        Visibility="{Binding Path=Console.ActionButtonsAlwaysVisible, Mode=TwoWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Cursor="Arrow" 
+                        >
                         
-                        <Rectangle DockPanel.Dock="Bottom"
-                            Margin="3,7,3,3"
-                            Height="24"
-                            Width="24"
+                        <Button Margin="3" Height="24" Width="24"
+                            Command="{Binding Path=ClearLogCommand}"
+                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}"
+                            >
+                            <Button.Content>
+                                <Rectangle Stretch="UniformToFill" Opacity="0.9" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
+                            </Button.Content>
+                        </Button>
+                        
+                        <Button Margin="3" Height="24" Width="24" 
+                            Command="{Binding Path=SaveLogCommand}"
+                            ToolTip="{Binding RelativeSource={RelativeSource Self}, Path=Command.Description}" 
+                            >
+                            <Button.Content>
+                                <Rectangle Stretch="UniformToFill" Fill="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=Button, AncestorLevel=1}, Path=Command.IconBrush}" />
+                            </Button.Content>
+                        </Button>
+                        
+                        <Rectangle Margin="3,7,3,3" Height="24" Width="24"
                             Stretch="UniformToFill"
                             Opacity="0.9"
                             ToolTip="{Binding Path=ConsoleView_Header_OptionPane, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                             Fill="{StaticResource Tango_Gear1_IconBrush}">
                         </Rectangle>
-                    </DockPanel>
+                    </StackPanel>
                 </Expander.Header>
                 
                 <!-- OptionPane -->
