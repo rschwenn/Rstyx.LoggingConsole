@@ -39,7 +39,7 @@ Imports System.Windows.Media.Imaging
             
             ''' <summary> Creates a new command that can always execute. </summary>
              ''' <param name="ExecuteMethod"> The execution logic. </param>
-             ''' <exception cref="T:ArgumentNullException"> <paramref name="ExecuteMethod"/> is <see langword="null"/>. </exception>
+             ''' <exception cref="ArgumentNullException"> <paramref name="ExecuteMethod"/> is <see langword="null"/>. </exception>
             Public Sub New(ByVal ExecuteMethod As Action(Of Object))
                 Me.New(ExecuteMethod, Nothing)
             End Sub
@@ -47,7 +47,7 @@ Imports System.Windows.Media.Imaging
             ''' <summary> Creates a new command. </summary>
              ''' <param name="ExecuteMethod"> The execution logic. </param>
              ''' <param name="CanExecuteMethod"> The execution status logic. </param>
-             ''' <exception cref="T:ArgumentNullException"> <paramref name="ExecuteMethod"/> is <see langword="null"/>. </exception>
+             ''' <exception cref="ArgumentNullException"> <paramref name="ExecuteMethod"/> is <see langword="null"/>. </exception>
             Public Sub New(ByVal ExecuteMethod As Action(Of Object), ByVal CanExecuteMethod As Predicate(Of Object))
                 
                 If (ExecuteMethod Is Nothing) Then Throw New ArgumentNullException("ExecuteMethod", "Delegate commands can not be null")

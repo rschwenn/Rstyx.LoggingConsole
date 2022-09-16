@@ -48,7 +48,7 @@ Public NotInheritable Class Console
         
         ''' <summary> Creates a new instance of the Console ViewModel. </summary>
          ''' <param name="parentLogBox"> The LogBox instance which holds this Console. </param>
-         ''' <exception cref="T:System.ArgumentNullException"> <paramref name="parentLogBox"/> is <see langword="null"/>. </exception>
+         ''' <exception cref="System.ArgumentNullException"> <paramref name="parentLogBox"/> is <see langword="null"/>. </exception>
         Friend Sub New(parentLogBox As LogBox)
             
             If (parentLogBox Is Nothing) Then Throw New ArgumentNullException("parentLogBox")

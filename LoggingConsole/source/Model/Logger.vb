@@ -38,7 +38,7 @@ Public Class Logger
          ''' <remarks> 
          ''' This is called internally only. To get a Logger use the static <see cref="LogBox.getLogger"/> method.
          ''' </remarks>
-         ''' <exception cref="T:System.ArgumentNullException"> <paramref name="parentLogBox"/> is <see langword="null"/>. </exception>
+         ''' <exception cref="System.ArgumentNullException"> <paramref name="parentLogBox"/> is <see langword="null"/>. </exception>
         Friend Sub New(LoggerName As String, parentLogBox As LogBox)
             
             If (parentLogBox Is Nothing) Then Throw New ArgumentNullException("parentLogBox")

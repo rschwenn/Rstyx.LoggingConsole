@@ -40,7 +40,7 @@ Public Class MessageStore
         
         ''' <summary> Creates a new instance. </summary>
          ''' <param name="parentLogBox"> The <see cref="LogBox"/> instance which holds this MessageStore. </param>
-         ''' <exception cref="T:System.ArgumentNullException"> <paramref name="parentLogBox"/> is <see langword="null"/>. </exception>
+         ''' <exception cref="System.ArgumentNullException"> <paramref name="parentLogBox"/> is <see langword="null"/>. </exception>
         Friend Sub New(parentLogBox As LogBox)
             
             If (parentLogBox Is Nothing) Then Throw New System.ArgumentNullException("parentLogBox")
