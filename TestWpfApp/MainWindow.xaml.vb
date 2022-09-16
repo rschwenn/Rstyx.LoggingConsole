@@ -1,4 +1,7 @@
 ﻿
+Imports System.Threading
+
+
 'An assembly level attribute which tells log4net to read it's configuration from the xml file "log4net.config".
 <Assembly: log4net.Config.XmlConfigurator(ConfigFile:="log4net.config")>
 
@@ -14,12 +17,17 @@ Partial Class MainWindow
         'To not change the active view when an error is logged (see corresponding CheckBox):
         'Rstyx.LoggingConsole.LogBox.Instance.Console.activateErrorViewOnError = False 
         
-        for i As ULong = 1 to 1000
-          BuiltInLogger.LogDebug("Test debug")
-          BuiltInLogger.LogInfo("Test Info")
-          BuiltInLogger.LogWarning("Test Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning Warning")
-          BuiltInLogger.LogError("Test Error")
-        next
+        If (System.Windows.Application.Current IsNot Nothing) Then BuiltInLogger.LogDebug("MainWindow.Button1_Click(): WPF UI thread ID  = " & System.Windows.Application.Current.Dispatcher.Thread.ManagedThreadId.ToString())
+        BuiltInLogger.LogDebug("MainWindow.Button1_Click(): Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString())
+
+        For i As ULong = 1 To 1000
+            If (System.Windows.Application.Current IsNot Nothing) Then BuiltInLogger.LogDebug("MainWindow.Button1_Click(): WPF UI thread ID  = " & System.Windows.Application.Current.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogDebug("MainWindow.Button1_Click(): Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString())
+            BuiltInLogger.LogDebug("Test debug   Test debug   Test debug   Test debug   Test debug   Test debug   Test debug   Test debug")
+            BuiltInLogger.LogInfo("Test Info   Test Info   Test Info   Test Info   Test Info   Test Info   Test Info   Test Info   Test Info")
+            BuiltInLogger.LogWarning("Test Warning   Test Warning   Test Warning   Test Warning   Test Warning   Test Warning   Test Warning")
+            BuiltInLogger.LogError("Test Error   Test Error   Test Error   Test Error   Test Error   Test Error   Test Error   Test Error")
+        Next
     End Sub
     
     
