@@ -34,7 +34,10 @@ Public NotInheritable Class LogBox
     
     #Region "Private Fields"
         
-        Private Shared ReadOnly SyncHandle          As Object
+        Private Shared ReadOnly SyncHandle1         As Object
+        Private Shared ReadOnly SyncHandle2         As Object
+        Private Shared ReadOnly SyncHandle3         As Object
+
         Private Shared ReadOnly _LogBox             As LogBox
         Private Shared ReadOnly InternalLogger      As Logger
         
@@ -66,8 +69,11 @@ Public NotInheritable Class LogBox
         ''' <summary> The LogBox instance will be created and initialized. </summary>
          ''' <remarks> Explicit static constructor to tell C# compiler not to mark type as beforefieldinit. </remarks>
         Shared Sub New()
-            SyncHandle = New Object()
-            _LogBox    = New LogBox()
+            SyncHandle1 = New Object()
+            SyncHandle2 = New Object()
+            SyncHandle3 = New Object()
+
+            _LogBox     = New LogBox()
             
             'Listen for some events
             AddHandler _LogBox.MessageStore.ErrorLogged, AddressOf _LogBox.OnNewErrorLogged
@@ -157,9 +163,7 @@ Public NotInheritable Class LogBox
          ''' <returns> The requested <see cref="LoggingConsole.Logger"/> instance. </returns>
          ''' <remarks> If the Logger with the empty Name doesn't exist yet, it will be created and stored in the internal set of Loggers. </remarks>
         Public Shared Function GetLogger() As Logger
-            SyncLock (SyncHandle)
-                Return GetLogger(String.Empty)
-            End SyncLock
+            Return GetLogger(String.Empty)
         End Function
         
         ''' <summary> Returns the Logger instance with the given <see cref="LoggingConsole.Logger.Name"/>. </summary>
@@ -167,7 +171,7 @@ Public NotInheritable Class LogBox
          ''' <returns> The requested <see cref="LoggingConsole.Logger"/> instance. </returns>
          ''' <remarks>  If the Logger with the given Name doesn't exist yet, it will be created and stored in the internal set of Loggers.  </remarks>
         Public Shared Function GetLogger(ByVal LoggerName As String) As Logger
-            SyncLock (SyncHandle)
+            SyncLock (SyncHandle1)
                 ' Key for this new Logger in LoggerSet Dictionary.
                 Dim LoggerKey As String
                 If (String.IsNullOrWhiteSpace(LoggerName)) Then
@@ -193,7 +197,7 @@ Public NotInheritable Class LogBox
          ''' <remarks> The Console will be created if it doesn't exist yet </remarks>
         Public ReadOnly Property Console() As Console
             Get
-                SyncLock (SyncHandle)
+                SyncLock (SyncHandle2)
                     If (_Console Is Nothing) Then
                         _Console = New Console(Me)
                     End If
@@ -206,7 +210,7 @@ Public NotInheritable Class LogBox
          ''' <remarks> The MessageStore will be created if it doesn't exist yet </remarks>
         Public ReadOnly Property MessageStore() As MessageStore
             Get
-                SyncLock (SyncHandle)
+                SyncLock (SyncHandle3)
                     If (_MessageStore Is Nothing) Then
                         _MessageStore = New MessageStore(Me)
                     End If
