@@ -8,13 +8,13 @@ Imports System.Threading
 
 Partial Class MainWindow 
     
-    Private MainWindowLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Demo.MainWindow")
+    Private MainWindowLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
     
     ''' <summary>
     ''' Built-in logging
     ''' </summary>
     Private Sub Button1_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles Button1.Click
-        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Demo.MainWindow")
+        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
         
         'To not change the active view when an error is logged (see corresponding CheckBox):
         'Rstyx.LoggingConsole.LogBox.Instance.Console.activateErrorViewOnError = False 
@@ -40,9 +40,10 @@ Partial Class MainWindow
     End Sub
     
     Private Sub LogSomething()
-        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Demo.MainWindow")
+        'Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
+        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.LogSomething." & Thread.CurrentThread.ManagedThreadId.ToString())
         
-        For i As ULong = 1 To 10
+        For i As ULong = 1 To 100
             BuiltInLogger.LogDebug("LogSomething() Debug:    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
             BuiltInLogger.LogInfo("LogSomething() Info :    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
             BuiltInLogger.LogWarning("LogSomething() Warning:  Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())

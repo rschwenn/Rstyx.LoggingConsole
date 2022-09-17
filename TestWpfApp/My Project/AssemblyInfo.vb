@@ -15,7 +15,7 @@ Imports System.Windows
 <Assembly: AssemblyDescription("Demo of LoggingConsole")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("LoggingConsole WPF Demo")> 
-<Assembly: AssemblyCopyright("© 2011-2021 Robert Schwenn")> 
+<Assembly: AssemblyCopyright("© 2011-2022 Robert Schwenn")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
 
