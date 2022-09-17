@@ -40,10 +40,13 @@ Partial Class MainWindow
     End Sub
     
     Private Sub LogSomething()
+        ' One single Logger for all threads together.
         Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
+
+        ' One Logger for every single thread.
         'Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.LogSomething." & Thread.CurrentThread.ManagedThreadId.ToString())
         
-        For i As ULong = 1 To 100
+        For i As ULong = 1 To 1000
             BuiltInLogger.LogDebug("LogSomething() Debug:    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
             BuiltInLogger.LogInfo("LogSomething() Info :    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
             BuiltInLogger.LogWarning("LogSomething() Warning:  Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
