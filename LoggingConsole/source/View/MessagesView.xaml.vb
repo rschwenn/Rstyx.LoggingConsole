@@ -118,7 +118,7 @@ Partial Public Class MessagesView
          ''' <remarks> This method is only called if the MessagesView is currently loaded (resp. visible). </remarks>
         Private Sub OnCollectionChanged(sender As Object, e As System.Collections.Specialized.NotifyCollectionChangedEventArgs)
             Try
-                If (e.Action = System.Collections.Specialized.NotifyCollectionChangedAction.Add) then
+                If (e.Action = System.Collections.Specialized.NotifyCollectionChangedAction.Add) Then
                     CollectionHasChanged = True
                     If (DeferredScrollAction IsNot Nothing) Then
                         DeferredScrollAction.Defer(ScrollDelay)
