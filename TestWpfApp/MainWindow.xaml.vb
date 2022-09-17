@@ -8,28 +8,47 @@ Imports System.Threading
 
 Partial Class MainWindow 
     
+    Private MainWindowLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Demo.MainWindow")
+    
     ''' <summary>
     ''' Built-in logging
     ''' </summary>
     Private Sub Button1_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles Button1.Click
-        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Test.for Demo")
+        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Demo.MainWindow")
         
         'To not change the active view when an error is logged (see corresponding CheckBox):
         'Rstyx.LoggingConsole.LogBox.Instance.Console.activateErrorViewOnError = False 
         
-        If (System.Windows.Application.Current IsNot Nothing) Then BuiltInLogger.LogDebug("MainWindow.Button1_Click(): WPF UI thread ID  = " & System.Windows.Application.Current.Dispatcher.Thread.ManagedThreadId.ToString())
+        'If (System.Windows.Application.Current IsNot Nothing) Then BuiltInLogger.LogDebug("MainWindow.Button1_Click(): WPF UI thread ID  = " & System.Windows.Application.Current.Dispatcher.Thread.ManagedThreadId.ToString())
+        BuiltInLogger.LogDebug("MainWindow.Button1_Click(): WPF UI  thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
         BuiltInLogger.LogDebug("MainWindow.Button1_Click(): Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString())
 
-        For i As ULong = 1 To 1000
-            If (System.Windows.Application.Current IsNot Nothing) Then BuiltInLogger.LogDebug("MainWindow.Button1_Click(): WPF UI thread ID  = " & System.Windows.Application.Current.Dispatcher.Thread.ManagedThreadId.ToString())
-            BuiltInLogger.LogDebug("MainWindow.Button1_Click(): Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString())
-            BuiltInLogger.LogDebug("Test debug   Test debug   Test debug   Test debug   Test debug   Test debug   Test debug   Test debug")
-            BuiltInLogger.LogInfo("Test Info   Test Info   Test Info   Test Info   Test Info   Test Info   Test Info   Test Info   Test Info")
-            BuiltInLogger.LogWarning("Test Warning   Test Warning   Test Warning   Test Warning   Test Warning   Test Warning   Test Warning")
-            BuiltInLogger.LogError("Test Error   Test Error   Test Error   Test Error   Test Error   Test Error   Test Error   Test Error")
+        ' Prepare additional threads.
+        Dim ThreadCount As Integer = 10
+        Dim Threads(ThreadCount - 1) As Thread
+        For i As Integer = 0 To ThreadCount - 1
+            Threads(i) = New Thread(New ThreadStart(AddressOf LogSomething))
         Next
+
+        ' Log test from additional threads.
+        For i As Integer = 0 To ThreadCount - 1
+            Threads(i).Start()
+        Next
+
+        ' Log test from current thread.
+        LogSomething()
     End Sub
     
+    Private Sub LogSomething()
+        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("Demo.MainWindow")
+        
+        For i As ULong = 1 To 10
+            BuiltInLogger.LogDebug("LogSomething() Debug:    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogInfo("LogSomething() Info :    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogWarning("LogSomething() Warning:  Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogError("LogSomething() Error:    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+        Next
+    End Sub
     
     ''' <summary>
     ''' Show the built-in window
@@ -50,10 +69,12 @@ Partial Class MainWindow
     Private Sub Button3_Click(sender As System.Object , e As System.Windows.RoutedEventArgs) Handles Button3.Click
         Dim log4netLogger As log4net.ILog = log4net.LogManager.GetLogger("Test.log4net")
         
-        log4netLogger.Debug("Debug from log4net")
-        log4netLogger.Info("Info from log4net")
-        log4netLogger.Error("Error from log4net")
-        log4netLogger.Warn("Warn from log4net")
+        For i As ULong = 1 To 300
+            log4netLogger.Debug("Debug from log4net")
+            log4netLogger.Info("Info from log4net")
+            log4netLogger.Error("Error from log4net")
+            log4netLogger.Warn("Warn from log4net")
+        Next
     End Sub
     
     
