@@ -1,5 +1,6 @@
 ﻿
 Imports System
+Imports System.Windows.Threading
 
 ''' <summary> The Logger provides public methods to log messages. </summary>
  ''' <remarks>
@@ -30,7 +31,6 @@ Public Class Logger
         Protected _MessageStore               As MessageStore = Nothing
         
         Protected ReadOnly AddOneLineDelegate As addOneLine = Nothing
-        Protected ConsoleDispatcher           As System.Windows.Threading.Dispatcher = Nothing
         
     #End Region
     
@@ -200,10 +200,6 @@ Public Class Logger
             Try
                 Dim MsgLines() As String
                 
-                ' Get the ConsoleView's dispatcher.
-                Dim ConsoleViewExists = Me.Console.ConsoleViewExists
-                If (ConsoleViewExists) Then ConsoleDispatcher = Me.Console.ConsoleView.Dispatcher
-                
                 ' Split message into single lines.
                 If (Not String.IsNullOrEmpty(Message)) Then
                     MsgLines = Message.Split({Constants.vbNewLine}, StringSplitOptions.None)
@@ -212,11 +208,14 @@ Public Class Logger
                     MsgLines = {String.Empty}
                 End If
                 
+                ' Get ConsoleView's dispatcher.
+                Dim ConsoleDispatcher As Dispatcher = If(Me.Console.ConsoleViewExists, Me.Console.ConsoleView.Dispatcher, Nothing)
+                
                 ' Create the Message: Add each single line of the message as item to the Log.
                 For i As Long = MsgLines.GetLowerBound(0) To MsgLines.GetUpperBound(0)
                     
-                    If (ConsoleViewExists) Then
-                        Dim Operation As Object = ConsoleDispatcher.Invoke(AddOneLineDelegate, Level, MsgLines(i))
+                    If (ConsoleDispatcher IsNot Nothing) Then
+                        Dim DummyReturn As Object = ConsoleDispatcher.Invoke(AddOneLineDelegate, Level, MsgLines(i))
                     Else
                         AddOneLineDelegate.Invoke(Level, MsgLines(i))
                     End If
