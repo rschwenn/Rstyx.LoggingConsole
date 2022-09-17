@@ -40,8 +40,8 @@ Partial Class MainWindow
     End Sub
     
     Private Sub LogSomething()
-        'Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
-        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.LogSomething." & Thread.CurrentThread.ManagedThreadId.ToString())
+        Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
+        'Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.LogSomething." & Thread.CurrentThread.ManagedThreadId.ToString())
         
         For i As ULong = 1 To 100
             BuiltInLogger.LogDebug("LogSomething() Debug:    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())

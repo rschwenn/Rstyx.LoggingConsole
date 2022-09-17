@@ -23,14 +23,17 @@ Public Class Logger
     
     #Region "Protected Fields"
         
-        Protected ReadOnly _Name              As String = Nothing
+        Protected ReadOnly _Name                As String = Nothing
+
+        Private ReadOnly SyncHandle1            As Object
+        Private ReadOnly SyncHandle2            As Object
 
         ' Qick access links.
-        Protected ReadOnly _LogBox            As LogBox = Nothing
-        Protected _Console                    As Console = Nothing
-        Protected _MessageStore               As MessageStore = Nothing
+        Protected ReadOnly _LogBox              As LogBox = Nothing
+        Protected _Console                      As Console = Nothing
+        Protected _MessageStore                 As MessageStore = Nothing
         
-        Protected ReadOnly AddOneLineDelegate As addOneLine = Nothing
+        Protected ReadOnly AddOneLineDelegate   As addOneLine = Nothing
         
     #End Region
     
@@ -49,6 +52,9 @@ Public Class Logger
             
             _Name   = LoggerName
             _LogBox = ParentLogBox
+
+            SyncHandle1 = New Object()
+            SyncHandle2 = New Object()
             
             ' Delegate for running in the UI thread.
             AddOneLineDelegate = New addOneLine(AddressOf AddMessageLine)
@@ -78,10 +84,12 @@ Public Class Logger
          ''' <remarks> This is for internal use only. </remarks>
         Protected ReadOnly Property Console() As Console
             Get
-                If (_Console Is Nothing) Then
-                    _Console = _LogBox.Console
-                End If
-                Return _Console
+                SyncLock (SyncHandle1)
+                    If (_Console Is Nothing) Then
+                        _Console = _LogBox.Console
+                    End If
+                    Return _Console
+                End SyncLock
             End Get
         End Property
         
@@ -89,10 +97,12 @@ Public Class Logger
          ''' <remarks> This is for internal use only. </remarks>
         Protected ReadOnly Property MessageStore() As MessageStore
             Get
-                If (_MessageStore Is Nothing) Then
-                    _MessageStore = _LogBox.MessageStore
-                End If
-                Return _MessageStore
+                SyncLock (SyncHandle2)
+                    If (_MessageStore Is Nothing) Then
+                        _MessageStore = _LogBox.MessageStore
+                    End If
+                    Return _MessageStore
+                End SyncLock
             End Get
         End Property
         
