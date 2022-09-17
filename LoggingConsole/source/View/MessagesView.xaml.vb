@@ -7,7 +7,7 @@ Partial Public Class MessagesView
     
     #Region "Private Fields"
         
-        Private Shared ReadOnly InternalLogger  As Logger = LogBox.GetLogger("LogBox.MessagesView")
+        Private ReadOnly InternalLogger         As Logger = LogBox.GetLogger("LogBox.MessagesView")
         
         Private ReadOnly _LogLevel              As LogLevelEnum = LogLevelEnum.Info
         
