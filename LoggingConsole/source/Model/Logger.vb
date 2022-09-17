@@ -20,13 +20,17 @@ Imports System
  ''' </remarks>
 Public Class Logger
     
-    #Region "Private Fields"
+    #Region "Protected Fields"
         
-        Private ReadOnly _LogBox            As LogBox = Nothing
-        Private ReadOnly _Name              As String = Nothing
+        Protected ReadOnly _Name              As String = Nothing
+
+        ' Qick access links.
+        Protected ReadOnly _LogBox            As LogBox = Nothing
+        Protected _Console                    As Console = Nothing
+        Protected _MessageStore               As MessageStore = Nothing
         
-        Private ReadOnly AddOneLineDelegate As addOneLine = Nothing
-        Private ConsoleDispatcher           As System.Windows.Threading.Dispatcher = Nothing
+        Protected ReadOnly AddOneLineDelegate As addOneLine = Nothing
+        Protected ConsoleDispatcher           As System.Windows.Threading.Dispatcher = Nothing
         
     #End Region
     
@@ -34,17 +38,17 @@ Public Class Logger
         
         ''' <summary> Creates a Logger with the given name. </summary>
          ''' <param name="LoggerName">   The desired Name, may be empty. </param>
-         ''' <param name="parentLogBox"> The LogBox instance which holds this Logger. </param>
+         ''' <param name="ParentLogBox"> The LogBox instance which holds this Logger. </param>
          ''' <remarks> 
          ''' This is called internally only. To get a Logger use the static <see cref="LogBox.getLogger"/> method.
          ''' </remarks>
-         ''' <exception cref="System.ArgumentNullException"> <paramref name="parentLogBox"/> is <see langword="null"/>. </exception>
-        Friend Sub New(LoggerName As String, parentLogBox As LogBox)
+         ''' <exception cref="System.ArgumentNullException"> <paramref name="ParentLogBox"/> is <see langword="null"/>. </exception>
+        Friend Sub New(LoggerName As String, ParentLogBox As LogBox)
             
-            If (parentLogBox Is Nothing) Then Throw New ArgumentNullException("parentLogBox")
+            If (ParentLogBox Is Nothing) Then Throw New ArgumentNullException("parentLogBox")
             
-            _Name = LoggerName
-            _LogBox = parentLogBox
+            _Name   = LoggerName
+            _LogBox = ParentLogBox
             
             ' Delegate for running in the UI thread.
             AddOneLineDelegate = New addOneLine(AddressOf AddMessageLine)
@@ -54,6 +58,14 @@ Public Class Logger
     
     #Region "Properties"
         
+        ''' <summary> Returns this Logger's Name. </summary>
+         ''' <remarks> The Name is used to indicate the source of the message. </remarks>
+        Public ReadOnly Property Name() As String
+            Get
+                Name = _Name
+            End Get
+        End Property
+        
         ''' <summary> Returns the LogBox instance which this Logger is connected to. </summary>
          ''' <remarks> This is for internal use only. </remarks>
         Friend ReadOnly Property LogBox() As LogBox
@@ -62,11 +74,25 @@ Public Class Logger
             End Get
         End Property
         
-        ''' <summary> Returns this Logger's Name. </summary>
-         ''' <remarks> The Name is used to indicate the source of the message. </remarks>
-        Public ReadOnly Property Name() As String
+        ''' <summary> Returns the Console instance which this Logger is connected to via LogBox. </summary>
+         ''' <remarks> This is for internal use only. </remarks>
+        Protected ReadOnly Property Console() As Console
             Get
-                Name = _Name
+                If (_Console Is Nothing) Then
+                    _Console = _LogBox.Console
+                End If
+                Return _Console
+            End Get
+        End Property
+        
+        ''' <summary> Returns the MessageStore instance which this Logger is connected to via LogBox. </summary>
+         ''' <remarks> This is for internal use only. </remarks>
+        Protected ReadOnly Property MessageStore() As MessageStore
+            Get
+                If (_MessageStore Is Nothing) Then
+                    _MessageStore = _LogBox.MessageStore
+                End If
+                Return _MessageStore
             End Get
         End Property
         
@@ -164,19 +190,19 @@ Public Class Logger
         
     #End Region
     
-    #Region "Private Members"
+    #Region "Protected Members"
         
         ''' <summary> Adds a message of given level to the MessageStore. </summary>
          ''' <param name="Level"> The LogLevel </param>
          ''' <param name="Message"> The message itself (may contain line breaks). </param>
          ''' <remarks> If the message contains line breaks, every contained line is logged as a separate LogEntry. </remarks>
-        Private Sub LogMessage(ByVal Level As LogLevelEnum, ByVal Message As String)
+        Protected Sub LogMessage(ByVal Level As LogLevelEnum, ByVal Message As String)
             Try
                 Dim MsgLines() As String
                 
                 ' Get the ConsoleView's dispatcher.
-                Dim ConsoleViewExists = _LogBox.Console.ConsoleViewExists
-                If (ConsoleViewExists) Then ConsoleDispatcher = _LogBox.Console.ConsoleView.Dispatcher
+                Dim ConsoleViewExists = Me.Console.ConsoleViewExists
+                If (ConsoleViewExists) Then ConsoleDispatcher = Me.Console.ConsoleView.Dispatcher
                 
                 ' Split message into single lines.
                 If (Not String.IsNullOrEmpty(Message)) Then
@@ -203,13 +229,13 @@ Public Class Logger
         ''' <summary> Delegate for adding one line of the message to the log. => Intended for invoking in UI thread. </summary>
          ''' <param name="Level">       The log Level. </param>
          ''' <param name="MessageLine"> The text of the message line. </param>
-        Private Delegate Sub addOneLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
+        Protected Delegate Sub addOneLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
         
         ''' <summary> Adds one line of the message to the log. It's encapsulated for use as <see cref="addOneLine"/> Delegate. </summary>
          ''' <param name="Level">       The log Level. </param>
          ''' <param name="MessageLine"> The text of the message line. </param>
-        Private Sub AddMessageLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
-            _LogBox.MessageStore.AddMessage(Level, Me.Name, MessageLine)
+        Protected Sub AddMessageLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
+            Me.MessageStore.AddMessage(Level, Me.Name, MessageLine)
         End Sub
         
         ''' <summary> Returns the Logger instance with the empty <see cref="LoggingConsole.Logger.Name"/>. </summary>
@@ -218,7 +244,7 @@ Public Class Logger
          ''' If the Logger with the empty Name doesn't exist yet, 
          ''' it will be created and stored in the internal set of Loggers. 
          ''' </remarks>
-        Private Function GetTargetName(ex as Exception) As String
+        Protected Function GetTargetName(ex as Exception) As String
             Return If(ex.TargetSite Is Nothing, "?", ex.TargetSite.Name)
         End Function
         
