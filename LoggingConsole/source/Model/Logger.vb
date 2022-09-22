@@ -1,5 +1,6 @@
 ﻿
 Imports System
+Imports System.Threading.Tasks
 Imports System.Windows.Threading
 
 ''' <summary> The Logger provides public methods to log messages. </summary>
@@ -33,7 +34,7 @@ Public Class Logger
         Protected _Console                      As Console = Nothing
         Protected _MessageStore                 As MessageStore = Nothing
         
-        Protected ReadOnly AddOneLineDelegate   As addOneLine = Nothing
+        Protected ReadOnly AddOneLineDelegate   As AddOneLine = Nothing
         
     #End Region
     
@@ -48,16 +49,16 @@ Public Class Logger
          ''' <exception cref="System.ArgumentNullException"> <paramref name="ParentLogBox"/> is <see langword="null"/>. </exception>
         Friend Sub New(LoggerName As String, ParentLogBox As LogBox)
             
-            If (ParentLogBox Is Nothing) Then Throw New ArgumentNullException("parentLogBox")
-            
-            _Name   = LoggerName
-            _LogBox = ParentLogBox
+            If (ParentLogBox Is Nothing) Then Throw New ArgumentNullException("ParentLogBox")
 
             SyncHandle1 = New Object()
             SyncHandle2 = New Object()
             
+            _Name   = LoggerName
+            _LogBox = ParentLogBox
+            
             ' Delegate for running in the UI thread.
-            AddOneLineDelegate = New addOneLine(AddressOf AddMessageLine)
+            AddOneLineDelegate = New AddOneLine(AddressOf AddMessageLine)
         End Sub
         
     #End Region
@@ -208,28 +209,27 @@ Public Class Logger
          ''' <remarks> If the message contains line breaks, every contained line is logged as a separate LogEntry. </remarks>
         Protected Sub LogMessage(ByVal Level As LogLevelEnum, ByVal Message As String)
             Try
-                Dim MsgLines() As String
-                
-                ' Split message into single lines.
-                If (Not String.IsNullOrEmpty(Message)) Then
-                    MsgLines = Message.Split({Constants.vbNewLine}, StringSplitOptions.None)
-                Else
-                    ' Add the empty message.
-                    MsgLines = {String.Empty}
-                End If
-                
-                ' Get ConsoleView's dispatcher.
-                Dim ConsoleDispatcher As Dispatcher = If(Me.Console.ConsoleViewExists, Me.Console.ConsoleView.Dispatcher, Nothing)
-                
-                ' Create the Message: Add each single line of the message as item to the Log.
-                For i As Long = MsgLines.GetLowerBound(0) To MsgLines.GetUpperBound(0)
+                'Task.Factory.StartNew(Sub()
                     
-                    If (ConsoleDispatcher IsNot Nothing) Then
-                        Dim DummyReturn As Object = ConsoleDispatcher.Invoke(AddOneLineDelegate, Level, MsgLines(i))
+                    Dim MsgLines() As String
+                    
+                    ' Split message into single lines.
+                    If (Not String.IsNullOrEmpty(Message)) Then
+                        MsgLines = Message.Split({Constants.vbNewLine}, StringSplitOptions.None)
                     Else
-                        AddOneLineDelegate.Invoke(Level, MsgLines(i))
+                        ' Add the empty message.
+                        MsgLines = {String.Empty}
                     End If
-                Next
+                    
+                    ' Get matching dispatcher.
+                    Dim LogDispatcher As Dispatcher = If(Me.Console.ConsoleViewExists, Me.Console.ConsoleView.Dispatcher, Dispatcher.CurrentDispatcher)
+                    
+                    ' Create the Message: Add each single line of the message as item to the Log.
+                    For i As Long = MsgLines.GetLowerBound(0) To MsgLines.GetUpperBound(0)
+                        LogDispatcher.Invoke(AddOneLineDelegate, Level, MsgLines(i))
+                    Next
+                'End Sub)
+
             Catch ex As System.Exception
                 System.Diagnostics.Debug.Fail("logMessage() failed!")
             End Try
@@ -238,9 +238,9 @@ Public Class Logger
         ''' <summary> Delegate for adding one line of the message to the log. => Intended for invoking in UI thread. </summary>
          ''' <param name="Level">       The log Level. </param>
          ''' <param name="MessageLine"> The text of the message line. </param>
-        Protected Delegate Sub addOneLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
+        Protected Delegate Sub AddOneLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
         
-        ''' <summary> Adds one line of the message to the log. It's encapsulated for use as <see cref="addOneLine"/> Delegate. </summary>
+        ''' <summary> Adds one line of the message to the log. It's encapsulated for use as <see cref="AddOneLine"/> Delegate. </summary>
          ''' <param name="Level">       The log Level. </param>
          ''' <param name="MessageLine"> The text of the message line. </param>
         Protected Sub AddMessageLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
