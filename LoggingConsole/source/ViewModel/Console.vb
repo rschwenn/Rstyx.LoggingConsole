@@ -38,9 +38,9 @@ Public NotInheritable Class Console
         Private IsActiveViewInitialized     As Boolean = False
         Private _ActivateErrorViewOnError   As Boolean = True
         
-        Private ReadOnly InternalLogger     As Logger = LogBox.GetLogger("LogBox.Console")
+        Private ReadOnly InternalLogger     As Logger
         
-        Private Shared ReadOnly SyncHandle  As New Object()
+        Private ReadOnly SyncHandle         As New Object()
         
     #End Region
     
@@ -61,6 +61,8 @@ Public NotInheritable Class Console
             
             'Listen for logging of new error messages
             AddHandler Me.LogBox.MessageStore.ErrorLogged, AddressOf OnNewErrorLogged
+            
+            InternalLogger = LogBox.GetLogger("LogBox.Console")
         End Sub
         
         '' <summary> Won't be called as long as there are active event handlers! </summary>

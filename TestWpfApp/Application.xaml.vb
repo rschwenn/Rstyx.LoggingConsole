@@ -1,6 +1,9 @@
 ﻿
 Partial Public Class Application
     
+    ' 19.09.2022: This new trial prevents the UI window to appear - threading dead lock?
+    'Private ReadOnly Logger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.getLogger("TestWpfApp")    
+    
     ''' <summary>
     ''' Code for Testing other Cultures.
     ''' </summary>

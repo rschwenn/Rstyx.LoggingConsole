@@ -27,12 +27,17 @@ Public Class MessageStore
     
     #Region "Private Fields"
         
-        Private ReadOnly InternalLogger As Logger = LogBox.GetLogger("LogBox.MessageStore")
+        Private ReadOnly InternalLogger As Logger
         
         Private ReadOnly _LogBox        As LogBox = Nothing
         Private _HighestLevelInLog      As LogLevelEnum = LogLevelEnum.Debug
         Private _Messages               As Collection(Of ObservableCollection(Of LogEntry)) = Nothing
         Private _TotalMessagesCount     As Long = 0
+        
+        Private ReadOnly SyncHandle1    As Object
+        Private ReadOnly SyncHandle2    As Object
+        Private ReadOnly SyncHandle3    As Object
+        Private ReadOnly SyncHandle4    As Object
         
     #End Region
     
@@ -45,9 +50,16 @@ Public Class MessageStore
             
             If (parentLogBox Is Nothing) Then Throw New System.ArgumentNullException("parentLogBox")
             
+            SyncHandle1 = New Object()
+            SyncHandle2 = New Object()
+            SyncHandle3 = New Object()
+            SyncHandle4 = New Object()
+            
             _LogBox = parentLogBox
             _Messages = Me.Messages
             
+            InternalLogger = LogBox.GetLogger("LogBox.MessageStore")
+
             'Creates endless loop (isn't worth to investigate ;-)
             'InternalLogger.logDebug(My.Resources.Resources.MessageStore_Initialized)
         End Sub
@@ -67,14 +79,16 @@ Public Class MessageStore
         ''' <summary> Returns the messages (one Collection per log level). </summary>
         Public ReadOnly Property Messages() As Collection(Of ObservableCollection(Of LogEntry))
             Get
-                If (_Messages Is Nothing) Then
-                    _Messages = New Collection(Of ObservableCollection(Of LogEntry))
-                    _Messages.Add(New ObservableCollection(Of LogEntry))
-                    _Messages.Add(New ObservableCollection(Of LogEntry))
-                    _Messages.Add(New ObservableCollection(Of LogEntry))
-                    _Messages.Add(New ObservableCollection(Of LogEntry))
-                End If
-                Messages = _Messages
+                SyncLock (SyncHandle1)
+                    If (_Messages Is Nothing) Then
+                        _Messages = New Collection(Of ObservableCollection(Of LogEntry))
+                        _Messages.Add(New ObservableCollection(Of LogEntry))
+                        _Messages.Add(New ObservableCollection(Of LogEntry))
+                        _Messages.Add(New ObservableCollection(Of LogEntry))
+                        _Messages.Add(New ObservableCollection(Of LogEntry))
+                    End If
+                    Messages = _Messages
+                End SyncLock
             End Get
         End Property
         
@@ -115,10 +129,12 @@ Public Class MessageStore
                 MaxLogLength = My.Settings.MaxLogLength
             End Get
             Set(value As UInteger)
-                If (Not (value = My.Settings.MaxLogLength)) Then
-                    My.Settings.MaxLogLength = value
-                    LimitLog()
-                End If 
+                SyncLock (SyncHandle2)
+                    If (Not (value = My.Settings.MaxLogLength)) Then
+                        My.Settings.MaxLogLength = value
+                        LimitLog()
+                    End If 
+                End SyncLock
             End Set
         End Property
         
@@ -132,45 +148,50 @@ Public Class MessageStore
          ''' <param name="Message"> This is passed to the <see cref="LoggingConsole.LogEntry"/> constructor. </param>
          ''' <remarks> This is called internally only. </remarks>
         Friend Sub AddMessage(ByVal Level As LogLevelEnum, ByVal Source As String, ByVal Message As String)
-            
-            ' Adds a new Message with the specified level to every relevant Messages Collection.
-            _TotalMessagesCount += 1
-            Dim oLogEntry as LogEntry = New LogEntry(_TotalMessagesCount, Level, Source, Message)
-            
-            _Messages(LogLevelEnum.Debug).Add(oLogEntry)
-            If (Not (Level < LogLevelEnum.Info))    Then _Messages(LogLevelEnum.Info).Add(oLogEntry)
-            If (Not (Level < LogLevelEnum.Warning)) Then _Messages(LogLevelEnum.Warning).Add(oLogEntry)
-            If (Not (Level < LogLevelEnum.Error))   Then _Messages(LogLevelEnum.Error).Add(oLogEntry)
-            
-            ' Cut the Log if it exceeds Me.MaxLogLength.
-            LimitLog()
-            
-            ' Update Me.HighestLevelInLog.
-            If (Level > _HighestLevelInLog) Then
-                _HighestLevelInLog = Level
-                MyBase.OnPropertyChanged("HighestLevelInLog")
-            End If
-            
-            ' If an error was logged, then fire the ErrorLogged event.
-            If (Level = LogLevelEnum.Error) then
-                Me.OnErrorLogged()
-            End If
+            SyncLock (SyncHandle3)
+                ' Adds a new Message with the specified level to every relevant Messages Collection.
+                _TotalMessagesCount += 1
+                Dim oLogEntry as LogEntry = New LogEntry(_TotalMessagesCount, Level, Source, Message)
+                
+                _Messages(LogLevelEnum.Debug).Add(oLogEntry)
+                If (Not (Level < LogLevelEnum.Info))    Then _Messages(LogLevelEnum.Info).Add(oLogEntry)
+                If (Not (Level < LogLevelEnum.Warning)) Then _Messages(LogLevelEnum.Warning).Add(oLogEntry)
+                If (Not (Level < LogLevelEnum.Error))   Then _Messages(LogLevelEnum.Error).Add(oLogEntry)
+                
+                ' Cut the Log if it exceeds Me.MaxLogLength.
+                LimitLog()
+                
+                ' Update Me.HighestLevelInLog.
+                If (Level > _HighestLevelInLog) Then
+                    _HighestLevelInLog = Level
+                    MyBase.OnPropertyChanged("HighestLevelInLog")
+                End If
+                
+                ' If an error was logged, then fire the ErrorLogged event.
+                If (Level = LogLevelEnum.Error) then
+                    Me.OnErrorLogged()
+                End If
+            End SyncLock
         End Sub
         
         ''' <summary> Clears the entire Log. </summary>
         Friend Sub ClearLog()
-            For each LogList as ObservableCollection(Of LogEntry) in _Messages
-                LogList.Clear
-            Next
-            _HighestLevelInLog = LogLevelEnum.Debug
-            _TotalMessagesCount = 0
-            InternalLogger.LogDebug(My.Resources.Resources.MessageStore_LogCleared)
+            SyncLock (SyncHandle4)
+                For Each LogList as ObservableCollection(Of LogEntry) in _Messages
+                    LogList.Clear
+                Next
+                _HighestLevelInLog = LogLevelEnum.Debug
+                _TotalMessagesCount = 0
+                InternalLogger.LogDebug(My.Resources.Resources.MessageStore_LogCleared)
+            End SyncLock
         End Sub
         
         ''' <summary> Removes old messages from the Log to respect the <see cref="MaxLogLength"/> Property. </summary>
         Friend Sub LimitLog()
             'Cuts the Collection if it exceeds the maximum number of lines.
             Const cutPercent As Long = 20  'part to cut away in percent (ca.)
+
+            ' No SyncLock, because calls to this methods are already synchronized.
             
             Dim OldLen  As UInteger
             Dim MaxLen  As UInteger

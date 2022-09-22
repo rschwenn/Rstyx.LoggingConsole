@@ -1,4 +1,5 @@
 ﻿
+Imports System.Diagnostics
 Imports System.Threading
 
 
@@ -8,8 +9,17 @@ Imports System.Threading
 
 Partial Class MainWindow 
     
-    Private MainWindowLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
-    
+    Private MainWindowLogger As Rstyx.LoggingConsole.Logger
+
+    Public Sub New()
+
+        ' Dieser Aufruf ist für den Designer erforderlich.
+        InitializeComponent()
+
+        ' Fügen Sie Initialisierungen nach dem InitializeComponent()-Aufruf hinzu.
+        MainWindowLogger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.MainWindow")
+    End Sub
+
     ''' <summary>
     ''' Built-in logging
     ''' </summary>
@@ -30,6 +40,9 @@ Partial Class MainWindow
             Threads(i) = New Thread(New ThreadStart(AddressOf LogSomething))
         Next
 
+        Dim Watch As New Stopwatch()
+        Watch.Start()
+
         ' Log test from additional threads.
         For i As Integer = 0 To ThreadCount - 1
             Threads(i).Start()
@@ -37,6 +50,8 @@ Partial Class MainWindow
 
         ' Log test from current thread.
         LogSomething()
+
+        BuiltInLogger.LogInfo("Button1_Click():  " & CStr(Watch.Elapsed.Seconds) & " seconds")
     End Sub
     
     Private Sub LogSomething()
@@ -47,10 +62,10 @@ Partial Class MainWindow
         'Dim BuiltInLogger As Rstyx.LoggingConsole.Logger = Rstyx.LoggingConsole.LogBox.GetLogger("Demo.LogSomething." & Thread.CurrentThread.ManagedThreadId.ToString())
         
         For i As ULong = 1 To 1000
-            BuiltInLogger.LogDebug("LogSomething() Debug:    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
-            BuiltInLogger.LogInfo("LogSomething() Info :    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
-            BuiltInLogger.LogWarning("LogSomething() Warning:  Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
-            BuiltInLogger.LogError("LogSomething() Error:    Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogDebug("LogSomething() Debug   #" & CStr(i) & ":   Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogInfo("LogSomething() Info    #" & CStr(i) & ":   Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogWarning("LogSomething() Warning #" & CStr(i) & ":   Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
+            BuiltInLogger.LogError("LogSomething() Error   #" & CStr(i) & ":   Current thread ID = " & Thread.CurrentThread.ManagedThreadId.ToString() & ",  WPF UI thread ID = " & Me.Dispatcher.Thread.ManagedThreadId.ToString())
         Next
     End Sub
     
