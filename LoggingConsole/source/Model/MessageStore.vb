@@ -1,5 +1,6 @@
 ﻿
 Imports System.Collections.ObjectModel
+Imports System.Threading.Tasks.Dataflow
 
 ''' <summary> The MessageStore contains the List of messages and maintaining methods. </summary>
  ''' <remarks> 
