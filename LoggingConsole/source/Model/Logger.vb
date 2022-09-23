@@ -29,12 +29,10 @@ Public Class Logger
         Private ReadOnly SyncHandle1            As Object
         Private ReadOnly SyncHandle2            As Object
 
-        ' Qick access links.
+        ' Quick access links.
         Protected ReadOnly _LogBox              As LogBox = Nothing
         Protected _Console                      As Console = Nothing
         Protected _MessageStore                 As MessageStore = Nothing
-        
-        Protected ReadOnly AddOneLineDelegate   As AddOneLine = Nothing
         
     #End Region
     
@@ -56,9 +54,6 @@ Public Class Logger
             
             _Name   = LoggerName
             _LogBox = ParentLogBox
-            
-            ' Delegate for running in the UI thread.
-            AddOneLineDelegate = New AddOneLine(AddressOf AddMessageLine)
         End Sub
         
     #End Region
@@ -75,7 +70,7 @@ Public Class Logger
         
         ''' <summary> Returns the LogBox instance which this Logger is connected to. </summary>
          ''' <remarks> This is for internal use only. </remarks>
-        Friend ReadOnly Property LogBox() As LogBox
+        Protected ReadOnly Property LogBox() As LogBox
             Get
                 Return _LogBox
             End Get
@@ -204,55 +199,19 @@ Public Class Logger
     #Region "Protected Members"
         
         ''' <summary> Adds a message of given level to the MessageStore. </summary>
-         ''' <param name="Level"> The LogLevel </param>
+         ''' <param name="Level">   The LogLevel </param>
          ''' <param name="Message"> The message itself (may contain line breaks). </param>
-         ''' <remarks> If the message contains line breaks, every contained line is logged as a separate LogEntry. </remarks>
+         ''' <remarks> In fact this method only enqueues the message as a <see cref="LogJob"/> into the LogJobQueue of <see cref="MessageStore"/>. </remarks>
         Protected Sub LogMessage(ByVal Level As LogLevelEnum, ByVal Message As String)
             Try
-                'Task.Factory.StartNew(Sub()
-                    
-                    Dim MsgLines() As String
-                    
-                    ' Split message into single lines.
-                    If (Not String.IsNullOrEmpty(Message)) Then
-                        MsgLines = Message.Split({Constants.vbNewLine}, StringSplitOptions.None)
-                    Else
-                        ' Add the empty message.
-                        MsgLines = {String.Empty}
-                    End If
-                    
-                    ' Get matching dispatcher.
-                    Dim LogDispatcher As Dispatcher = If(Me.Console.ConsoleViewExists, Me.Console.ConsoleView.Dispatcher, Dispatcher.CurrentDispatcher)
-                    
-                    ' Create the Message: Add each single line of the message as item to the Log.
-                    For i As Long = MsgLines.GetLowerBound(0) To MsgLines.GetUpperBound(0)
-                        LogDispatcher.Invoke(AddOneLineDelegate, Level, MsgLines(i))
-                    Next
-                'End Sub)
-
+                Me.MessageStore.EnqueueLogJob(New LogJob(Level, Me.Name, Message))
             Catch ex As System.Exception
                 System.Diagnostics.Debug.Fail("logMessage() failed!")
             End Try
         End Sub
         
-        ''' <summary> Delegate for adding one line of the message to the log. => Intended for invoking in UI thread. </summary>
-         ''' <param name="Level">       The log Level. </param>
-         ''' <param name="MessageLine"> The text of the message line. </param>
-        Protected Delegate Sub AddOneLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
-        
-        ''' <summary> Adds one line of the message to the log. It's encapsulated for use as <see cref="AddOneLine"/> Delegate. </summary>
-         ''' <param name="Level">       The log Level. </param>
-         ''' <param name="MessageLine"> The text of the message line. </param>
-        Protected Sub AddMessageLine(ByVal Level As LogLevelEnum, ByVal MessageLine As String)
-            Me.MessageStore.AddMessage(Level, Me.Name, MessageLine)
-        End Sub
-        
-        ''' <summary> Returns the Logger instance with the empty <see cref="LoggingConsole.Logger.Name"/>. </summary>
-         ''' <returns> The requested <see cref="LoggingConsole.Logger"/> instance </returns>
-         ''' <remarks> 
-         ''' If the Logger with the empty Name doesn't exist yet, 
-         ''' it will be created and stored in the internal set of Loggers. 
-         ''' </remarks>
+        ''' <summary> Returns the name of the failed method. </summary>
+         ''' <returns> The name of the failed method. </returns>
         Protected Function GetTargetName(ex as Exception) As String
             Return If(ex.TargetSite Is Nothing, "?", ex.TargetSite.Name)
         End Function

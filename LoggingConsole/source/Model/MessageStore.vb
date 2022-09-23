@@ -1,6 +1,39 @@
 ﻿
+Imports System
 Imports System.Collections.ObjectModel
+Imports System.Windows.Threading
 Imports System.Threading.Tasks.Dataflow
+
+''' <summary> One single Log job for the LogQueue. </summary>
+Public Class LogJob
+    
+    #Region "Public Fields"
+        
+        Public ReadOnly Level   As LogLevelEnum = LogLevelEnum.Info
+        Public ReadOnly Source  As String = String.Empty
+        Public ReadOnly Message As String = String.Empty
+        
+    #End Region
+    
+    #Region "Constuctor"
+        
+        ''' <summary> Creates a new LogJob with all needed information, that cannot be changed afterwards. </summary>
+         ''' <param name="LogLevel">   Indicates the severity of this log job (<see cref="LoggingConsole.LogLevelEnum"/>). </param>
+         ''' <param name="LogSource">  Indicates the source or origin of this log entry. In general this is the logger name. </param>
+         ''' <param name="LogMessage"> A one or multi line message. If empty or <see langword="null"/>, it leads to an empty message line. </param>
+         ''' <exception cref="System.ArgumentNullException"> <paramref name="LogSource"/> is <see langword="null"/>. </exception>
+        Public Sub New(LogLevel As LogLevelEnum, LogSource As String, LogMessage As String)
+            
+            If ((LogSource Is Nothing) OrElse (Trim(LogSource) = String.Empty)) Then Throw New System.ArgumentNullException("Source")
+
+            Level   = LogLevel
+            Source  = LogSource
+            Message = If(LogMessage, String.Empty)
+        End Sub
+        
+    #End Region
+
+End Class
 
 ''' <summary> The MessageStore contains the List of messages and maintaining methods. </summary>
  ''' <remarks> 
@@ -26,19 +59,28 @@ Imports System.Threading.Tasks.Dataflow
 Public Class MessageStore
     Inherits ViewModelBase
     
-    #Region "Private Fields"
+    #Region "Protected Fields"
         
-        Private ReadOnly InternalLogger As Logger
+        Protected ReadOnly InternalLogger As Logger
         
-        Private ReadOnly _LogBox        As LogBox = Nothing
-        Private _HighestLevelInLog      As LogLevelEnum = LogLevelEnum.Debug
-        Private _Messages               As Collection(Of ObservableCollection(Of LogEntry)) = Nothing
-        Private _TotalMessagesCount     As Long = 0
+        Protected ReadOnly _LogBox        As LogBox = Nothing
+        Protected _HighestLevelInLog      As LogLevelEnum = LogLevelEnum.Debug
+        Protected _Messages               As Collection(Of ObservableCollection(Of LogEntry)) = Nothing
+        Protected _TotalMessagesCount     As Long = 0
         
-        Private ReadOnly SyncHandle1    As Object
-        Private ReadOnly SyncHandle2    As Object
-        Private ReadOnly SyncHandle3    As Object
-        Private ReadOnly SyncHandle4    As Object
+        Protected ReadOnly SyncHandle1    As Object
+        Protected ReadOnly SyncHandle2    As Object
+        Protected ReadOnly SyncHandle3    As Object
+        Protected ReadOnly SyncHandle4    As Object
+
+        ''' <summary> Delegate for running in the UI thread. </summary>
+        Protected ReadOnly AddOneLineDelegate   As Action(Of LogLevelEnum, String, String)
+
+        ''' <summary> Delegate for <see cref="LogJobQueue"/>. </summary>
+        Protected ReadOnly ExcuteLogJobDelegate As Action(Of LogJob)
+
+        ''' <summary> The internal Queue of <see cref="LogJob"/>'s. </summary>
+        Protected ReadOnly LogJobQueue          As ActionBlock(Of LogJob)
         
     #End Region
     
@@ -58,6 +100,11 @@ Public Class MessageStore
             
             _LogBox = parentLogBox
             _Messages = Me.Messages
+            
+            AddOneLineDelegate   = AddressOf AddMessage
+            ExcuteLogJobDelegate = AddressOf ExcuteLogJob
+
+            LogJobQueue    = New ActionBlock(Of LogJob)(ExcuteLogJobDelegate)
             
             InternalLogger = LogBox.GetLogger("LogBox.MessageStore")
 
@@ -143,14 +190,59 @@ Public Class MessageStore
     
     #Region "Methods"
         
+        ''' <summary> Enqueues a log job to the <see cref="MessageStore"/>'s  <see cref="LogJobQueue"/>. </summary>
+         ''' <param name="Job"> The LogJob to enqueue. </param>
+         ''' <remarks>
+         ''' The jobs of <see cref="LogJobQueue"/> will be processed in incoming order in a separate background thread by <see cref="ExcuteLogJob"/>. 
+         ''' </remarks>
+         ''' <exception cref="System.ArgumentNullException"> <paramref name="Job"/> is <see langword="null"/>. </exception>
+        Protected Friend Sub EnqueueLogJob(ByVal Job As LogJob)
+            If (Job Is Nothing) Then Throw New System.ArgumentNullException("Job")
+            LogJobQueue.Post(Job)
+        End Sub
+        
+        ''' <summary> Executes a log job, that is adding a message of given level to the MessageStore. </summary>
+         ''' <param name="Job"> The LogJob </param>
+         ''' <remarks>
+         ''' This method is invoked by the <see cref="LogJobQueue"/> in a background thread. 
+         ''' It splits the job's message into single lines and adds them to MessageStore by a delegate running in UI thread.
+         ''' </remarks>
+         ''' <exception cref="System.ArgumentNullException"> <paramref name="Job"/> is <see langword="null"/>. </exception>
+        Protected Sub ExcuteLogJob(ByVal Job As LogJob)
+
+            If (Job Is Nothing) Then Throw New System.ArgumentNullException("Job")
+            Try
+                Dim MsgLines() As String
+                
+                ' Split message into single lines.
+                If (Not String.IsNullOrEmpty(Job.Message)) Then
+                    MsgLines = Job.Message.Split({Constants.vbNewLine}, StringSplitOptions.None)
+                Else
+                    ' Add the empty message.
+                    MsgLines = {String.Empty}
+                End If
+                
+                ' Get matching dispatcher.
+                Dim LogDispatcher As Dispatcher = If(Me.LogBox.Console.ConsoleViewExists, Me.LogBox.Console.ConsoleView.Dispatcher, Dispatcher.CurrentDispatcher)
+                
+                ' Create the Message: Add each single line of the message as item to the Log.
+                For i As Long = MsgLines.GetLowerBound(0) To MsgLines.GetUpperBound(0)
+                    LogDispatcher.Invoke(AddOneLineDelegate, Job.Level, Job.Source, MsgLines(i))
+                Next
+
+            Catch ex As System.Exception
+                System.Diagnostics.Debug.Fail("ExcuteLogJob() failed!")
+            End Try
+        End Sub
+        
         ''' <summary> This is the one and only method which really adds a new message to the log. </summary>
          ''' <param name="Level">   This is passed to the <see cref="LoggingConsole.LogEntry"/> constructor. </param>
          ''' <param name="Source">  This is passed to the <see cref="LoggingConsole.LogEntry"/> constructor. </param>
          ''' <param name="Message"> This is passed to the <see cref="LoggingConsole.LogEntry"/> constructor. </param>
-         ''' <remarks> This is called internally only. </remarks>
-        Friend Sub AddMessage(ByVal Level As LogLevelEnum, ByVal Source As String, ByVal Message As String)
+         ''' <remarks> This should run in UI thread. It's invoked by <see cref="ExcuteLogJob"/>. </remarks>
+        Protected Sub AddMessage(ByVal Level As LogLevelEnum, ByVal Source As String, ByVal Message As String)
             SyncLock (SyncHandle3)
-                ' Adds a new Message with the specified level to every relevant Messages Collection.
+                ' Adds a new LogMessage with the specified level to every relevant Messages Collection.
                 _TotalMessagesCount += 1
                 Dim oLogEntry as LogEntry = New LogEntry(_TotalMessagesCount, Level, Source, Message)
                 
@@ -176,7 +268,7 @@ Public Class MessageStore
         End Sub
         
         ''' <summary> Clears the entire Log. </summary>
-        Friend Sub ClearLog()
+        Protected Friend Sub ClearLog()
             SyncLock (SyncHandle4)
                 For Each LogList as ObservableCollection(Of LogEntry) in _Messages
                     LogList.Clear
@@ -188,7 +280,7 @@ Public Class MessageStore
         End Sub
         
         ''' <summary> Removes old messages from the Log to respect the <see cref="MaxLogLength"/> Property. </summary>
-        Friend Sub LimitLog()
+        Protected Friend Sub LimitLog()
             'Cuts the Collection if it exceeds the maximum number of lines.
             Const cutPercent As Long = 20  'part to cut away in percent (ca.)
 
