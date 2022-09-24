@@ -73,6 +73,9 @@ Public Class MessageStore
         Protected ReadOnly SyncHandle3    As Object
         Protected ReadOnly SyncHandle4    As Object
 
+        Protected ReadOnly OnErrorLoggedDeferredAction As DeferredAction
+        Protected ReadOnly OnErrorLoggedDelay          As TimeSpan = TimeSpan.FromMilliseconds(300)
+
         ''' <summary> Delegate for running in the UI thread. </summary>
         Protected ReadOnly AddOneLineDelegate   As Action(Of LogLevelEnum, String, String)
 
@@ -107,6 +110,8 @@ Public Class MessageStore
             LogJobQueue    = New ActionBlock(Of LogJob)(ExcuteLogJobDelegate)
             
             InternalLogger = LogBox.GetLogger("LogBox.MessageStore")
+
+            OnErrorLoggedDeferredAction = New DeferredAction(AddressOf OnErrorLogged)
 
             'Creates endless loop (isn't worth to investigate ;-)
             'InternalLogger.logDebug(My.Resources.Resources.MessageStore_Initialized)
@@ -262,7 +267,8 @@ Public Class MessageStore
                 
                 ' If an error was logged, then fire the ErrorLogged event.
                 If (Level = LogLevelEnum.Error) then
-                    Me.OnErrorLogged()
+                    'Me.OnErrorLogged()
+                    OnErrorLoggedDeferredAction.Defer(OnErrorLoggedDelay)
                 End If
             End SyncLock
         End Sub
