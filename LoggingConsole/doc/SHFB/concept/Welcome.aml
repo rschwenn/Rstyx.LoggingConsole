@@ -33,7 +33,7 @@
         <content>
             <list class="bullet">
                 <listItem>
-                    .NET Framework 4.0
+                    .NET Framework 4.62
                     <!--<externalLink>
                         <linkText> .NET Framework 3.5 SP1 </linkText>
                         <linkUri>  "http://www.microsoft.com/download/en/details.aspx?DisplayLang=en&&id=22" </linkUri>
