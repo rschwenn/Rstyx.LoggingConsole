@@ -13,6 +13,7 @@ Partial Public Class MessagesView
         
         Private DeferredScrollAction            As DeferredAction
         Private ReadOnly ScrollDelay            As TimeSpan = TimeSpan.FromMilliseconds(100)
+        Private ReadOnly MaxScrollDelay         As TimeSpan = TimeSpan.FromMilliseconds(900)
         
         Private DeferredAdjustAction            As DeferredAction
         Private ReadOnly AdjustDelay            As TimeSpan = TimeSpan.FromMilliseconds(100)
@@ -49,7 +50,7 @@ Partial Public Class MessagesView
                 DeferredAdjustAction = New DeferredAction(AddressOf AdjustGridViewColumnWidths, Me.Dispatcher)
                 
                 If (CollectionHasChanged) Then
-                    ScrollToEndOfLog()
+                    ScrollToEndOfLog(DeferredScrollAction)
                 Else
                     ' Select the last selected line. *** doesn't work because LastSelectedIndex is always = -1.
                     'If (MessagesListView.Items.Count >= LastSelectedIndex) Then
@@ -121,7 +122,7 @@ Partial Public Class MessagesView
                 If (e.Action = System.Collections.Specialized.NotifyCollectionChangedAction.Add) Then
                     CollectionHasChanged = True
                     If (DeferredScrollAction IsNot Nothing) Then
-                        DeferredScrollAction.Defer(ScrollDelay)
+                        DeferredScrollAction.Defer(ScrollDelay, MaxScrollDelay)
                     End If
                 End If
             Catch ex As System.Exception
@@ -200,15 +201,18 @@ Partial Public Class MessagesView
             Catch ex As System.Exception
             End Try
         End Sub
-        
+
         ''' <summary> Scroll to make the last message visible. </summary>
-        Private Sub ScrollToEndOfLog()
+        Private Sub ScrollToEndOfLog(State As DeferredAction)
             Try
                 Dim LastIndex As Integer = MessagesListView.Items.Count - 1
                 If (LastIndex > 0) then
                     MessagesListView.SelectedIndex = LastIndex
                     MessagesListView.ScrollIntoView(MessagesListView.Items(LastIndex))
                     CollectionHasChanged = False
+                End If
+                If (State IsNot Nothing) Then
+                    State.IsDeferring = False
                 End If
             Catch ex As System.Exception
             End Try
