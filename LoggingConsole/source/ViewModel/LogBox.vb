@@ -596,7 +596,7 @@ Public NotInheritable Class LogBox
                     Try
                         AboutBox.Owner = OwnerWindow
                     Catch ex As Exception
-                        Debug.Print(ex.Message)
+                        Debug.Print("ShowAboutBox(): " & ex.Message)
                     End Try
                     
                     If (AboutBox.Owner Is Nothing) Then
@@ -702,7 +702,7 @@ Public NotInheritable Class LogBox
                         End If
                         FloatingWindow.Owner = OwnerWindow
                     Catch ex As Exception
-                        Debug.Print(ex.Message)
+                        Debug.Print("ShowBuiltinFloatingConsoleView(): " & ex.Message)
                     End Try
                 End If
                 

@@ -178,7 +178,7 @@ Public NotInheritable Class CultureResources
                                         End If
                                     End If
                                 Catch ex As Exception
-                                    Debug.Print(ex.ToString())
+                                    Debug.Print("SupportedCultures(): " & ex.ToString())
                                 End Try
                             Next
                         End If

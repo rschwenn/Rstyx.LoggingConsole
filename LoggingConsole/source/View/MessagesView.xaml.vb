@@ -1,5 +1,6 @@
 ﻿
 Imports System
+Imports System.Threading
 Imports System.Windows.Controls
 
 Partial Public Class MessagesView
@@ -12,11 +13,11 @@ Partial Public Class MessagesView
         Private ReadOnly _LogLevel              As LogLevelEnum = LogLevelEnum.Info
         
         Private DeferredScrollAction            As DeferredAction
-        Private ReadOnly ScrollDelay            As TimeSpan = TimeSpan.FromMilliseconds(100)
-        Private ReadOnly MaxScrollDelay         As TimeSpan = TimeSpan.FromMilliseconds(900)
+        Private ReadOnly ScrollDelay            As TimeSpan = TimeSpan.FromMilliseconds(200)
+        Private ReadOnly MaxScrollDelay         As TimeSpan = Timeout.InfiniteTimeSpan        ' Scroll is very expensive => no max delay.
         
         Private DeferredAdjustAction            As DeferredAction
-        Private ReadOnly AdjustDelay            As TimeSpan = TimeSpan.FromMilliseconds(100)
+        Private ReadOnly AdjustDelay            As TimeSpan = TimeSpan.FromMilliseconds(200)
         
         Private CollectionHasChanged            As Boolean = True
         Private CollectionChangedHandlerAdded   As Boolean = False
