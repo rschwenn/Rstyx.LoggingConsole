@@ -14,7 +14,7 @@ Partial Public Class MessagesView
         
         Private DeferredScrollAction            As DeferredAction
         Private ReadOnly ScrollDelay            As TimeSpan = TimeSpan.FromMilliseconds(200)
-        Private ReadOnly MaxScrollDelay         As TimeSpan = Timeout.InfiniteTimeSpan        ' Scroll is very expensive => no max delay.
+        Private ReadOnly MaxScrollDelay         As TimeSpan = Timeout.InfiniteTimeSpan  ' Scroll is very expensive => no max delay (Timeout.InfiniteTimeSpan).
         
         Private DeferredAdjustAction            As DeferredAction
         Private ReadOnly AdjustDelay            As TimeSpan = TimeSpan.FromMilliseconds(200)
@@ -51,7 +51,7 @@ Partial Public Class MessagesView
                 DeferredAdjustAction = New DeferredAction(AddressOf AdjustGridViewColumnWidths, Me.Dispatcher)
                 
                 If (CollectionHasChanged) Then
-                    ScrollToEndOfLog(DeferredScrollAction)
+                    ScrollToEndOfLog()
                 Else
                     ' Select the last selected line. *** doesn't work because LastSelectedIndex is always = -1.
                     'If (MessagesListView.Items.Count >= LastSelectedIndex) Then
@@ -204,16 +204,13 @@ Partial Public Class MessagesView
         End Sub
 
         ''' <summary> Scroll to make the last message visible. </summary>
-        Private Sub ScrollToEndOfLog(State As DeferredAction)
+        Private Sub ScrollToEndOfLog()
             Try
                 Dim LastIndex As Integer = MessagesListView.Items.Count - 1
                 If (LastIndex > 0) then
                     MessagesListView.SelectedIndex = LastIndex
                     MessagesListView.ScrollIntoView(MessagesListView.Items(LastIndex))
                     CollectionHasChanged = False
-                End If
-                If (State IsNot Nothing) Then
-                    State.IsDeferring = False
                 End If
             Catch ex As System.Exception
             End Try
