@@ -2,7 +2,6 @@
     Name ="MainWindow"
     Title="{Binding Source={x:Static Logging:LogBox.Instance}, Path=DisplayName}"
     WindowStyle="SingleBorderWindow"
-    Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
     
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -19,6 +18,17 @@
     Top   ="{Binding Source={x:Static global:MySettings.Default}, Path=WindowTop,    Mode=TwoWay}"
     Left  ="{Binding Source={x:Static global:MySettings.Default}, Path=WindowLeft,   Mode=TwoWay}"
     >
+    <!--Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"-->
+    <!--Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"-->
+    <!--<Window.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#FF41414B" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="White" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="Red" />
+        </ResourceDictionary>
+    </Window.Resources>-->
+
     
     <!-- Content -->
     <Grid>
@@ -31,8 +41,8 @@
         <!-- Test Buttons -->
         <StackPanel Orientation="Horizontal" Grid.Row="0" >
             <Button Name="Button1" Content="Built-in logging"      Margin="6" Height="40" Width="110" />
-            <Button Name="Button3" Content="Logging from log4net"  Margin="6" Height="40" Width="150" />
-            <Button Name="Button2" Content="Show Built-in Window"  Margin="6" Height="40" Width="150" />
+            <Button Name="Button2" Content="Logging from log4net"  Margin="6" Height="40" Width="150" />
+            <Button Name="Button3" Content="Show Built-in Window"  Margin="6" Height="40" Width="150" />
             
             <!--<TextBlock Margin="6" Height="40" Width="150" >
                 <Hyperlink TextDecorations="None"
@@ -66,6 +76,7 @@
             </Button>-->
             
             <Button Name="Button4" Content="Embed ConsoleWindow"   Margin="6" Height="40" Width="150" />
+            <Button Name="Button5" Content="Color Test" Margin="6" Height="40" Width="150" />
         </StackPanel>     
         
         <!-- Test CheckBoxes -->

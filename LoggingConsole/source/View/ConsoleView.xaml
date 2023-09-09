@@ -23,6 +23,8 @@
             
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             
+            <!--<SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="White" />-->
+            
             <Style x:Key="MainBorderStyle" TargetType="{x:Type Border}">
                 <!--<Setter Property="Background" Value="WhiteSmoke" />-->
                 <Setter Property="BorderBrush" Value="DarkGray" />
@@ -39,23 +41,52 @@
                 </Style.Triggers>
             </Style>
             
+            <Style x:Key="TextBlockWhiteEnabler" TargetType="{x:Type TextBlock}" >
+                <Style.Triggers>
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.OptionsForegroundWhite, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
+                        <Setter Property="Foreground" Value="White" />
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+            
             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}" >
-                <Setter Property="Padding" Value="2"/>
-                <Setter Property="Margin"  Value="3" />
+                <Setter Property="Padding"         Value="2" />
+                <Setter Property="Margin"          Value="3" />
+                <!--<Setter Property="Background"      Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" />-->
+                <!--<Setter Property="Foreground"      Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />-->
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+            
+            <Style TargetType="{x:Type GridViewColumnHeader}" BasedOn="{StaticResource {x:Type GridViewColumnHeader}}" >
+                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                <Setter Property="Padding" Value="8,1,5,1" />
+                <!--<Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.ControlDarkDarkBrushKey}}" />-->
+                <!--<Setter Property="Foreground" Value="Black" />-->
             </Style>
             
             <Style TargetType="{x:Type CheckBox}" BasedOn="{StaticResource {x:Type CheckBox}}" >
                 <Setter Property="HorizontalAlignment" Value="Left" />
                 <Setter Property="VerticalAlignment" Value="Center" />
                 <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Style.Triggers>
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.OptionsForegroundWhite, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
+                        <Setter Property="Foreground" Value="White" />
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
             
-            <Style TargetType="{x:Type GroupBox}">
+            <Style TargetType="{x:Type GroupBox}" >
                 <Setter Property="Padding" Value="2,5,2,2" />
                 <Setter Property="Margin"  Value="4" />
+                <Setter Property="BorderBrush" Value="DarkGray" />
+                <Style.Triggers>
+                    <DataTrigger Value="True" Binding="{Binding Path=Console.OptionsForegroundWhite, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}">
+                        <Setter Property="Foreground" Value="White" />
+                    </DataTrigger>
+                </Style.Triggers>
             </Style>
             
-            <Style TargetType="{x:Type TextBlock}">
+            <Style TargetType="{x:Type TextBlock}" >
                 <Setter Property="VerticalAlignment" Value="Center" />
             </Style>
             
@@ -124,6 +155,7 @@
                         <!-- OptionPane Header -->
                         <DockPanel DockPanel.Dock="Top" Margin="10,5,10,0" LastChildFill="False">
                             <TextBlock FontWeight="Bold" FontSize="12" TextWrapping="NoWrap"
+                                       Style="{StaticResource TextBlockWhiteEnabler}"
                                        Text="{Binding Path=ConsoleView_Header_OptionPane, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                             
                             <!-- ShowAboutBoxCommand -->
@@ -167,7 +199,8 @@
                                              ToolTip="{Binding Path=ConsoleView_LogLength_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}"
                                              HorizontalContentAlignment="Right" />
                                     <TextBlock Margin="0,3,0,0"
-                                               Text="{Binding Path=ConsoleView_LogLength_Lines, Source={x:Static Logging:CultureResources.ResourceProvider}}" 
+                                               Text="{Binding Path=ConsoleView_LogLength_Lines, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                                               Style="{StaticResource TextBlockWhiteEnabler}"
                                                ToolTip="{Binding Path=ConsoleView_LogLength_ToolTip, Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                                 </StackPanel>
                             </GroupBox>
@@ -178,7 +211,9 @@
                                     
                                     <!-- Language -->
                                     <DockPanel Margin="0,0,0,3" LastChildFill="False">
-                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_Language, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,5,0" />
+                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_Language, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                                                   Style="{StaticResource TextBlockWhiteEnabler}"
+                                                   Margin="0,3,5,0" />
                                         <ComboBox DockPanel.Dock="Right"
                                                   ItemsSource="{Binding Source={x:Static Logging:CultureResources.SupportedCultures}, Converter={x:Static Logging:WpfUtils.CultureInfoConverter}}"
                                                   SelectedItem="{Binding Path=CurrentCulture, Source={x:Static Logging:CultureResources.InstanceProvider}, Converter={x:Static Logging:WpfUtils.CultureInfoConverter}, Mode=TwoWay}" 
@@ -188,7 +223,9 @@
                                     
                                     <!-- Tab Position -->
                                     <DockPanel Margin="0,0,0,3" LastChildFill="False">
-                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_TabPosition, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,5,0" />
+                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_TabPosition, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                                                   Style="{StaticResource TextBlockWhiteEnabler}"
+                                                   Margin="0,3,5,0" />
                                         <ComboBox DockPanel.Dock="Right"
                                                   ItemsSource="{Binding Path=Console.TabStripPlacementOptions, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}"
                                                   SelectedItem="{Binding Path=Console.TabStripPlacement, Mode=TwoWay, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}" >
@@ -197,7 +234,9 @@
                                     
                                     <!-- Optionpane Position -->
                                     <DockPanel Margin="0,0,0,3" LastChildFill="False">
-                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_OptionpanePosition, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,5,0" />
+                                        <TextBlock Text="{Binding Path=ConsoleView_Appearence_OptionpanePosition, Source={x:Static Logging:CultureResources.ResourceProvider}}"
+                                                   Style="{StaticResource TextBlockWhiteEnabler}"
+                                                   Margin="0,3,5,0" />
                                         <ComboBox DockPanel.Dock="Right"
                                                   ItemsSource="{Binding Path=Console.ExpanderHeaderPlacementOptions, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}"
                                                   SelectedItem="{Binding Path=Console.ExpanderHeaderPlacement, Mode=TwoWay, Converter={x:Static Logging:WpfUtils.DockEnumConverter}}" >
@@ -205,7 +244,10 @@
                                     </DockPanel>
                                     
                                     <!-- Toolbar -->
-                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_Toolbar, Source={x:Static Logging:CultureResources.ResourceProvider}}"          Margin="0,3,0,2" IsChecked="{Binding Path=Console.ActionButtonsAlwaysVisible, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_Toolbar_ToolTip,          Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_Toolbar, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,2" IsChecked="{Binding Path=Console.ActionButtonsAlwaysVisible, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_Toolbar_ToolTip,  Source={x:Static Logging:CultureResources.ResourceProvider}}" />
+                                    
+                                    <!-- Options Foreground White -->
+                                    <CheckBox Content="{Binding Path=ConsoleView_Appearence_OptionsForegroundWhite, Source={x:Static Logging:CultureResources.ResourceProvider}}" Margin="0,3,0,2" IsChecked="{Binding Path=Console.OptionsForegroundWhite, Converter={x:Static Logging:WpfUtils.CheckboxConverter}}" ToolTip="{Binding Path=ConsoleView_Appearence_OptionsForegroundWhite_ToolTip,  Source={x:Static Logging:CultureResources.ResourceProvider}}" />
                                 </StackPanel>
                             </GroupBox>
                             

@@ -449,6 +449,21 @@ Public NotInheritable Class Console
             End Set
         End Property
         
+        ''' <summary> Show white labels in options pane expander (instead of black/default)? </summary>
+         ''' <value>   Boolean </value>
+         ''' <returns> Boolean </returns>
+         ''' <remarks> This is an "application setting". </remarks>
+        Public Property OptionsForegroundWhite() As Boolean
+            Get
+                Return My.Settings.OptionsForegroundWhite
+            End Get
+            Set(value As Boolean)
+                If (value XOR My.Settings.OptionsForegroundWhite) Then
+                    My.Settings.OptionsForegroundWhite = value
+                End If
+            End Set
+        End Property
+        
         ''' <summary> Where to place the tab strip? </summary>
          ''' <value>   Boolean </value>
          ''' <returns> Boolean </returns>

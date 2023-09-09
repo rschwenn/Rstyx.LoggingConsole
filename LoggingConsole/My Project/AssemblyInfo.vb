@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Simple in-memory Logger with integrated viewer")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("Logging Console")> 
-<Assembly: AssemblyCopyright("© 2011-2022 Robert Schwenn")> 
+<Assembly: AssemblyCopyright("© 2011-2023 Robert Schwenn")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -33,7 +33,7 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.4.1.0")> 
-<Assembly: AssemblyFileVersion("1.4.1.0")> 
+<Assembly: AssemblyVersion("1.4.2.0")> 
+<Assembly: AssemblyFileVersion("1.4.2.0")> 
 
 <assembly: NeutralResourcesLanguageAttribute("en")>

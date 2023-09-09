@@ -31,10 +31,10 @@
                 
             </CollectionViewSource>
             
-            <Style TargetType="{x:Type GridViewColumnHeader}">
+            <!--<Style TargetType="{x:Type GridViewColumnHeader}">
                 <Setter Property="HorizontalContentAlignment" Value="Left" />
                 <Setter Property="Padding" Value="8,1,5,1" />
-            </Style>
+            </Style>-->
             
             <Style TargetType="ListViewItem">
                 <!-- Needed in order to justify the line number to the right in conjunction with: TextBlock .. TextAlignment="Right" -->

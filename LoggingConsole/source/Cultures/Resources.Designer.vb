@@ -209,6 +209,24 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die  White Option Labels ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ConsoleView_Appearence_OptionsForegroundWhite() As String
+            Get
+                Return ResourceManager.GetString("ConsoleView_Appearence_OptionsForegroundWhite", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Sucht eine lokalisierte Zeichenfolge, die White Labels in Settings Area? ähnelt.
+        '''</summary>
+        Public Shared ReadOnly Property ConsoleView_Appearence_OptionsForegroundWhite_ToolTip() As String
+            Get
+                Return ResourceManager.GetString("ConsoleView_Appearence_OptionsForegroundWhite_ToolTip", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Sucht eine lokalisierte Zeichenfolge, die  Fixed Width Font ähnelt.
         '''</summary>
         Public Shared ReadOnly Property ConsoleView_Appearence_OwnFontFamily() As String

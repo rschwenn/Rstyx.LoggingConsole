@@ -372,4 +372,10 @@
   <data name="Global_UnexpectedErrorIn" xml:space="preserve">
     <value>Unexpected error in {0}().</value>
   </data>
+  <data name="ConsoleView_Appearence_OptionsForegroundWhite" xml:space="preserve">
+    <value> White Option Labels</value>
+  </data>
+  <data name="ConsoleView_Appearence_OptionsForegroundWhite_ToolTip" xml:space="preserve">
+    <value>White Labels in Settings Area?</value>
+  </data>
 </root>
