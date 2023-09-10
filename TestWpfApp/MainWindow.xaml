@@ -17,6 +17,8 @@
     Width ="{Binding Source={x:Static global:MySettings.Default}, Path=WindowWidth,  Mode=TwoWay}"
     Top   ="{Binding Source={x:Static global:MySettings.Default}, Path=WindowTop,    Mode=TwoWay}"
     Left  ="{Binding Source={x:Static global:MySettings.Default}, Path=WindowLeft,   Mode=TwoWay}"
+    
+    Background="WhiteSmoke"
     >
     <!--Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"-->
     <!--Background="{DynamicResource {x:Static SystemColors.ActiveCaptionBrushKey}}"-->
