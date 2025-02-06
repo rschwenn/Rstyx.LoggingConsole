@@ -1,7 +1,7 @@
 Rstyx.LoggingConsole
 ====================
 
-LoggingConsole is a .NET Class Library designed for easyly adding lightweight and straightforward in-memory logging as well as a log viewer to Your WPF or Windows Forms application. 
+LoggingConsole is a .NET Class Library designed for easyly adding simple and straightforward in-memory logging as well as a log viewer to Your WPF or Windows Forms application. 
 
 The viewer is called Console here because it also contains the interface for complete user interaction with the logger: changing options and solve maintaining tasks.
 
@@ -30,7 +30,7 @@ Also, You could have a look at the [website] (http://www.rstyx.de/LoggingConsole
 
 Dependencies
 ------------
- - .NET Framework 4.0
+ - .NET Framework 4.62
  - [Apache log4net](http://logging.apache.org/log4net/) (only at design time)
 
 License
