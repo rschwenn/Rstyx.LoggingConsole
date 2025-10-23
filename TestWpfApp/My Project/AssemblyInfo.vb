@@ -15,7 +15,7 @@ Imports System.Windows
 <Assembly: AssemblyDescription("Demo of LoggingConsole")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("LoggingConsole WPF Demo")> 
-<Assembly: AssemblyCopyright("© 2011-2022 Robert Schwenn")> 
+<Assembly: AssemblyCopyright("© 2011-2025 Robert Schwenn")> 
 <Assembly: AssemblyTrademark("")> 
 <Assembly: ComVisible(false)>
 
@@ -55,5 +55,5 @@ Imports System.Windows
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.2.0")> 
-<Assembly: AssemblyFileVersion("1.1.0.0")> 
+<Assembly: AssemblyVersion("1.1.3.0")> 
+<Assembly: AssemblyFileVersion("1.1.3.0")> 
