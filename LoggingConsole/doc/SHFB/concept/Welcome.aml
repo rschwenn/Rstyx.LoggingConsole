@@ -46,7 +46,7 @@
                         <linkUri>  http://logging.apache.org/log4net/ </linkUri>
                         <linkTarget>_blank</linkTarget>
                     </externalLink>
-                    (only at design time)
+                    (at least at design time)
                 </listItem>
             </list>
         </content>
