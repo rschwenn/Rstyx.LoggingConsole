@@ -52,7 +52,7 @@
     </ComponentConfigurations>
     <IncludeFavorites>False</IncludeFavorites>
     <FeedbackEMailAddress>devel%40rstyx.de</FeedbackEMailAddress>
-    <CopyrightText>Copyright &amp;#169%3b 2011-2025 Robert Schwenn</CopyrightText>
+    <CopyrightText>Copyright &amp;#169%3b 2011-2026 Robert Schwenn</CopyrightText>
     <FrameworkVersion>.NET Framework 4.6.2</FrameworkVersion>
     <PlugInConfigurations>
       <PlugInConfig id="Additional Reference Links" enabled="False">
@@ -86,7 +86,7 @@
     <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
     <CppCommentsFixup>False</CppCommentsFixup>
     <SaveComponentCacheCapacity>100</SaveComponentCacheCapacity>
-    <HelpFileVersion>1.4.5</HelpFileVersion>
+    <HelpFileVersion>1.4.6</HelpFileVersion>
     <NamespaceGrouping>True</NamespaceGrouping>
     <MaximumGroupParts>2</MaximumGroupParts>
     <WarnOnMissingSourceContext>False</WarnOnMissingSourceContext>
